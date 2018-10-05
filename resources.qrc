@@ -1,0 +1,7 @@
+<RCC>
+    <qresource prefix="/">
+        <file>Resources/noise.png</file>
+	<file>Resources/icon-down.png</file>
+	<file>Resources/wating.gif</file>
+    </qresource>
+</RCC>

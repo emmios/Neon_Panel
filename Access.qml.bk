@@ -1,0 +1,270 @@
+import QtQuick 2.5
+import QtQuick.Window 2.0
+import QtQuick.Controls 1.2
+import QtGraphicalEffects 1.0
+
+
+ApplicationWindow {
+    id: acessoRapido
+    visible: false
+    x: main.width - 249
+    y: 0//main.y - 310//(310 + 5)
+    width: 320
+    height: main.y
+    title: qsTr("Neon Painel")
+    color: "transparent"
+    flags: Qt.Tool | Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint
+
+    property var acessText: acessText
+    property var acessItemsAdd: acessItemsAdd
+    property var qmlShowPlugin: qmlShowPlugin
+    property var tmpShowPlugin: []
+    property string accessDetail: "#fff"
+    property alias accessBlur: blur
+
+    onActiveChanged: {
+
+        for (var i = 0; i < importPluginShow.children.length; i++) {
+            importPluginShow.children[i].destroy()
+        }
+
+        importPluginShow.children = []
+
+        if (!active) {
+            acessItemsAdd.visible = true
+            qmlShowPlugin.visible = false
+            acessoRapido.visible = false
+            primaryPlugins.visible = true
+            blur.source = ""
+            accessOpened = true
+            arrowAside.text = '\uf106'
+            main.activeWindow()
+        }
+    }
+
+    Image {
+        id: blur
+        x: (~(Screen.width - acessoRapido.width)) - 70
+        height: acessoRapido.height
+        horizontalAlignment: Image.AlignRight
+        verticalAlignment: Image.AlignTop
+        source: "image://grab/crop"
+        clip: true
+    }
+
+    FastBlur {
+        id: fastBlur
+        anchors.fill: blur
+        source: blur
+        radius: 100
+    }
+
+    Blend {
+        id: blend
+        anchors.fill: fastBlur
+        source: fastBlur
+        foregroundSource: fastBlur
+        mode: "softLight"
+        opacity: 0.2
+    }
+
+    HueSaturation {
+        id: saturation
+        anchors.fill: blur
+        source: fastBlur
+        hue: 0
+        saturation: 1
+        lightness: 0
+    }
+
+    Image {
+        id: overlay
+        anchors.fill: blur
+        source: "qrc:/Resources/noise.png"
+        fillMode: Image.Tile
+    }
+
+    Blend {
+        id: blend2
+        anchors.fill: overlay
+        source: overlay
+        foregroundSource: saturation
+        mode: "addition"
+        opacity: 1
+    }
+
+    Rectangle {
+        anchors.fill: blur
+        opacity: 0.7//main.opc
+        color: "#161616"
+    }
+
+
+    Rectangle {
+        anchors.fill: parent
+        opacity: 1//main.opc
+        color: "transparent"//main.cor
+
+//        MouseArea {
+//            anchors.fill: parent
+//            hoverEnabled: true
+
+//            onExited: {
+//                acessoRapido.visible = false
+//                qmlShowPlugin.visible = false
+//                acessItemsAdd.visible = true
+//                primaryPlugins.visible = true
+//                blur.source = ""
+//            }
+//        }
+    }
+
+    Rectangle {
+        id: primaryPlugins
+        x: 0
+        y: 0
+        width: parent.width
+        height: 50
+        color: "transparent"
+
+        Text {
+            id: acessText
+            x: 15
+            y: 8
+            text: "Access Speed"
+            width: (parent.width / 2) - x
+            height: parent.height - y
+            color: accessDetail
+            font.pixelSize: 23
+            font.bold: false
+            font.family: "roboto light"
+        }
+/*
+        Image {
+            width: 20
+            height: 20
+            anchors.top: parent.top
+            anchors.topMargin: 12
+            anchors.right: parent.right
+            anchors.rightMargin: 8
+            source: "qrc:///Resources/conf.png"
+        }*/
+
+        Label {
+            anchors.top: parent.top
+            anchors.topMargin: 12
+            anchors.right: parent.right
+            anchors.rightMargin: 8
+            text: "\uf013"
+            color: accessDetail
+            font.pixelSize: 18
+            font.family: "Font Awesome 5 Free"
+        }
+    }
+
+
+    Rectangle {
+        x: 0
+        y: 50
+        width: parent.width
+        height: parent.height - 250
+        color: 'transparent'
+    }
+
+    ScrollView {
+        id: scrollItemsAdd
+        x: 0
+        y: parent.height - 200 //50
+        width: parent.width
+        height: 200//parent.height - 50
+
+        Item {
+            id: acessItemsAdd
+            x: 0
+            y: 0
+            width: parent.width
+            height: 10
+       }
+
+    }
+
+
+    Rectangle {
+        id: qmlShowPlugin
+        x: 0
+        y: 0
+        anchors.fill: parent
+        color: "transparent"//"#333333"
+        visible: false
+        z: 3
+
+        Text {
+            id: pluginName
+            x: 8
+            y: 8
+            text: "Access Speed"
+            width: (parent.width / 2) - x
+            height: parent.height - y
+            color: accessDetail
+            font.pixelSize: 24
+            font.bold: false
+
+        }
+/*
+        Rectangle {
+            id: pluginConfMore
+            width: 20
+            height: 20
+            radius: 10
+            anchors.top: parent.top
+            anchors.topMargin: 12
+            anchors.right: parent.right
+            anchors.rightMargin: 8
+            color: "#ffffff"
+        }*/
+
+        Label {
+            anchors.top: parent.top
+            anchors.topMargin: 12
+            anchors.right: parent.right
+            anchors.rightMargin: 8
+            text: "\uf013"
+            color: accessDetail
+            font.pixelSize: 18
+            font.family: "Font Awesome 5 Free"
+        }
+
+        Item {
+            id: importPluginShow
+            x: 0
+            y: 50
+            width: parent.width
+            height: parent.height - 50
+       }
+    }
+
+   Component.onCompleted: {
+
+       var btns = Context.plugins()
+       var accessBtn = Qt.createComponent("btn.qml")
+       var px = 0
+       var py = 0
+
+       for (var i = 0; i < btns.length; i++) {
+
+           var items = btns[i].split(";")
+           var obj = accessBtn.createObject(acessItemsAdd, {'x': px, 'y': py, 'btnName': items[0], 'iconName': items[1], 'qmlName': 'file://' + Context.basepath + '/plugins/' + items[2], 'libName': items[3]})
+
+           px += 83
+
+           if (px >= acessoRapido.width) {
+               py += 83
+               px = 0
+           }
+
+           if (i % 3 == 0) {
+               acessItemsAdd.height += 83
+           }
+       }
+   }
+}
