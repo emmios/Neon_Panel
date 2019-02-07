@@ -1,1 +1,1 @@
-# Neon_Panel
+# Synth-Panel
