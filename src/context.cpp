@@ -9,7 +9,7 @@ Context::Context()
     //MacBuntu-OS
     //this->defaultIconTheme = process.readLine().replace("\n", "");
 
-    this->defaultIconTheme = "Paper";
+    this->defaultIconTheme = "MacBuntu-OS";
     //process.close();
 
     QStringList localPrefix;
@@ -584,6 +584,65 @@ QString Context::defaultIcon()
     }
 
     return "";
+}
+
+QString Context::getAllWindows()
+{
+    QString arrayCreate;
+    unsigned long _items;
+    Window *list = this->xwindows(&_items);
+    Display* d = XOpenDisplay(0);
+
+    for (int i = 0; i < _items; i++)
+    {
+        QString type = QString(this->xwindowType(list[i]));
+        if (type == "_NET_WM_WINDOW_TYPE_NORMAL" || type == "_KDE_NET_WM_WINDOW_TYPE_OVERRIDE")
+        {
+            int status;
+            unsigned long nitems;
+            QString name = this->xwindowName(list[i]);
+            QString wclass = QString(this->xwindowClass(list[i])).toLower();
+
+            if (wclass != "unknow")
+            {
+                if (wclass != "Neon_Panel")
+                {
+                    arrayCreate += "|@|" + name + "=#=" + wclass + "=#=" + QString::number((int)list[i])  + "=#=" + QString::number((int)this->xwindowPid(list[i]))  + '=#=' + QString((char *)this->windowProperty(d, list[i], "_OB_APP_CLASS", &nitems, &status));
+                }
+            }
+        }
+    }
+
+    //XFree(d);
+    XCloseDisplay(d);
+
+    return arrayCreate;
+}
+
+QStringList Context::getAllFixedLaunchers()
+{
+    QSettings settings(this->basepath + "/data/launchers.txt", QSettings::NativeFormat);
+    QStringList launchers;
+
+    for (QString key : settings.allKeys())
+    {
+        launchers.append(settings.value(key).toString());
+    }
+
+    return launchers;
+}
+
+void Context::fixedLauncher(QString name, QString launchers, int remove)
+{
+    QSettings settings(this->basepath + "/data/launchers.txt", QSettings::NativeFormat);
+    if (remove == 0)
+    {
+        settings.setValue(name, launchers);
+    }
+    else
+    {
+        settings.remove(name);
+    }
 }
 
 QStringList Context::addLauncher(QString app)

@@ -1,5 +1,5 @@
 import QtQuick 2.7
-import QtQuick.Window 2.0
+import QtQuick.Window 2.2
 import QtQuick.Controls 1.4
 import QtGraphicalEffects 1.0
 import QtQuick.Controls.Styles 1.4
@@ -15,7 +15,7 @@ ApplicationWindow {
     height: Screen.height//main.y
     title: qsTr("Neon Painel")
     color: "transparent"
-    flags: Qt.Tool | Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint
+    flags: Qt.Tool | Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint | Qt.Popup
 
     property var acessText: acessText
     property string accessDetail: "#fff"
@@ -34,10 +34,12 @@ ApplicationWindow {
 
     Image {
         id: blur
-        x: (~(Screen.width - acessoRapido.width))
+        x: (~Screen.width) + (acessoRapido.width + 1) //(~(Screen.width - acessoRapido.width)) + 1
         y: 0
+        width: Screen.width
+        height: Screen.height
         source: "image://grab/crop"
-        clip: true
+        //clip: true
     }
 
     FastBlur {
@@ -53,7 +55,7 @@ ApplicationWindow {
         source: fastBlur
         foregroundSource: fastBlur
         mode: "softLight"
-        opacity: 0.2
+        opacity: 0.3//0.2
     }
 
     HueSaturation {
@@ -83,8 +85,8 @@ ApplicationWindow {
 
     Rectangle {
         anchors.fill: blur
-        opacity: 0.7//main.opc
-        color: "#161616"
+        opacity: 0.3//0.7//main.opc
+        color: '#fff'//"#161616"
     }
 
     Rectangle {
@@ -168,6 +170,276 @@ ApplicationWindow {
         color: "transparent"//"#f93"
 
         Item {
+            id: details
+            x: 0
+            y: 0
+            anchors.fill: parent
+            visible: false
+
+            property int light: 115
+
+            Rectangle {
+                x: 14
+                y: 70
+                width: 220
+                height: 12//8
+                color: "#666666"
+
+                Image {
+                    id: lightness
+                    anchors.fill: parent
+                    source: "file://" + Context.basepath + "/lightness.png"
+                }
+
+                Rectangle {
+                    id: brightIdicator
+                    x: 110 //0
+                    y: -1//-2.5
+                    width: 14
+                    height: 14
+                    radius: 7
+                    color: main.detailColor
+                    border.width: 0
+                }
+
+                MouseArea {
+                    anchors.fill: parent
+
+                    onClicked: {
+
+                        var _x = mouseX
+                        brightIdicator.x = _x  - 7
+                        _x = (_x * 100) / 220
+                        _x = parseInt(_x)
+
+                        if (_x == 99) _x = 100
+
+                        var _y = (_x * 255) / 100
+                        _y = parseInt(_y)
+
+                        details.light = _y.toString()
+                    }
+                }
+            }
+
+            Rectangle {
+                x: 14
+                y: 100
+                width: 220
+                height: 100
+                color: "transparent"
+
+                Image {
+                    id: hue
+                    anchors.fill: parent
+                    source: "file://" + Context.basepath + "/hue.png"
+                }
+
+                MouseArea {
+                    anchors.fill: parent
+
+                    onClicked: {
+
+                        var _x = (mouseX * 100) / 220
+                        _x = parseInt(_x)
+
+                        var _y = (_x * 360) / 100
+                        _y = parseInt(_y)
+
+                        main.detailColor = ContextPlugin.changeDatail(_y, details.light)
+                    }
+                }
+            }
+        }
+
+
+        Rectangle {
+            id: power
+            y: 0
+            anchors.fill: parent
+            color: "transparent"
+            visible: false
+
+            Rectangle {
+                anchors.fill: parent
+                color: "#fff"
+                opacity: 0.1
+            }
+
+            Label {
+                x: 100
+                y: 30
+                text: "\uf011"
+                color: "#fff"
+                font.pixelSize: 48
+                font.family: "Font Awesome 5 Free"
+                MouseArea {
+                    anchors.fill: parent
+                    onClicked: {
+                        ContextPlugin.shutdown()
+                    }
+                }
+            }
+
+            Label {
+                x:  100
+                y: 82
+                text: "Desligar"
+                color: "#fff"
+                font.pixelSize: 12
+                font.family: "Font Awesome 5 Free"
+            }
+
+            Label {
+                x: 100
+                y: 110
+                text: "\uf2f1"
+                color: "#fff"
+                font.pixelSize: 48
+                font.family: "Font Awesome 5 Free"
+                MouseArea {
+                    anchors.fill: parent
+                    onPressed: {
+                        ContextPlugin.restart()
+                    }
+                }
+            }
+
+            Label {
+                x:  100
+                y: 164
+                text: "Reeniciar"
+                color: "#fff"
+                font.pixelSize: 12
+                font.family: "Font Awesome 5 Free"
+            }
+
+            Label {
+                x: 100
+                y: 188
+                text: "\uf1ce"
+                color: "#fff"
+                font.pixelSize: 48
+                font.family: "Font Awesome 5 Free"
+                MouseArea {
+                    anchors.fill: parent
+                    onClicked: {
+                        ContextPlugin.logoff()
+                    }
+                }
+            }
+
+            Label {
+                x:  80
+                y: 240
+                text: "Encerrar Sessão"
+                color: "#fff"
+                font.pixelSize: 12
+                font.family: "Font Awesome 5 Free"
+            }
+
+            Label {
+                x: 98
+                y: 268
+                text: "\uf110"
+                color: "#fff"
+                font.pixelSize: 50
+                font.family: "Font Awesome 5 Free"
+                MouseArea {
+                    anchors.fill: parent
+                    onClicked: {
+                        ContextPlugin.suspend()
+                    }
+                }
+            }
+
+            Label {
+                x:  92
+                y: 324
+                text: "Suspender"
+                color: "#fff"
+                font.pixelSize: 12
+                font.family: "Font Awesome 5 Free"
+            }
+        }
+
+        Rectangle {
+            id: _volume
+            y: 0
+            anchors.fill: parent
+            color: "transparent"
+            visible: false
+
+            Rectangle {
+                anchors.fill: parent
+                color: "#fff"
+                opacity: 0.1
+            }
+
+            Label {
+                id: phone
+                x: 22
+                y: 30
+                text: "\uf028"
+                color: "#fff"
+                font.pixelSize: 22
+                font.family: "Font Awesome 5 Free"
+            }
+
+            Controller {
+                x: 58
+                y: 38
+                width: 160
+                height: 8
+                percentage: 92
+                bg.color: "#fff"
+                detail: main.detailColor
+
+                onChange: {
+
+                    if (perValue <= 0) {
+                        phone.text = "\uf026"
+                    } else {
+                        phone.text = "\uf028"
+                    }
+
+                    ContextPlugin.volume(perValue)
+                }
+            }
+
+            Label {
+                id: mic
+                x: 22
+                y: 90
+                text: "\uf130"
+                color: "#fff"
+                font.pixelSize: 24
+                font.family: "Font Awesome 5 Free"
+            }
+
+            Controller {
+                x: 58
+                y: 98
+                width: 160
+                height: 8
+                percentage: 92
+                bg.color: "#fff"
+                detail: main.detailColor
+
+                onChange: {
+
+                    if (perValue <= 0) {
+                        mic.text = "\uf131"
+                    } else {
+                        mic.text = "\uf130"
+                    }
+
+                    ContextPlugin.micro(perValue)
+                }
+            }
+        }
+
+        Item {
             id: display
             visible: false
             anchors.fill: parent
@@ -175,12 +447,34 @@ ApplicationWindow {
                 width: display.width
                 height: 400
                 Repeater {
-                    model: 3
+                    model: ContextPlugin.getDesktopsCount()
                     Rectangle {
-                        color: "#f93"
+                        color: "transparent"
                         width: display.width
                         height: 50
                         y: 0
+
+                        Rectangle {
+                            anchors.fill: parent
+                            color: "#fff"
+                            opacity: 0.3
+                        }
+
+                        Label {
+                            anchors.centerIn: parent
+                            y: 8
+                            text: "\uf108 Tela - " + index
+                            color: "#fff"
+                            font.pixelSize: 22
+                            font.family: "Font Awesome 5 Free"
+                        }
+
+                        MouseArea {
+                            anchors.fill: parent
+                            onPressed: {
+                                ContextPlugin.displayChange(index)
+                            }
+                        }
 
                         Component.onCompleted: {
                             y = 52 * index
@@ -505,7 +799,7 @@ ApplicationWindow {
                         height: animation.height
                         color: "transparent"
                         opacity: 1
-                        visible: true
+                        visible: false
                         antialiasing: true
                         AnimatedImage { id: animation; antialiasing: true; x: -2; source: "qrc:/Resources/wating.gif"}
                     }
@@ -737,6 +1031,7 @@ ApplicationWindow {
             width: parent.width
             height: 10
             Repeater {
+                id: btns
                 model: [
                     ["Audio", "\uf028"], ["Internet", "\uf1eb"], ["Calendar", "\uf073"], ["Color", "\uf043"], ["Power", "\uf011"], ["Display", "\uf108"]
                 ]
@@ -752,14 +1047,95 @@ ApplicationWindow {
                         anchors.fill: parent
 
                         onClicked: {
+
                             if (modelData[0] == "Internet") {
-                                pluginWifi.visible = true
+                                details.visible = false
+                                power.visible = false
+                                display.visible = false
                                 pluginCalendar.visible = false
+                                _volume.visible = false
+                                pluginWifi.visible = true
+
+                                for (var m in btns.model) {
+                                    btns.itemAt(m).children[4].color = "#fff"
+                                }
+
+                                acessIcon.color = main.detailColor
                             }
 
                             if (modelData[0] == "Calendar") {
+                                details.visible = false
+                                power.visible = false
+                                display.visible = false
                                 pluginWifi.visible = false
+                                _volume.visible = false
                                 pluginCalendar.visible = true
+
+                                for (var m in btns.model) {
+                                    btns.itemAt(m).children[4].color = "#fff"
+                                }
+
+                                acessIcon.color = main.detailColor
+                            }
+
+                            if (modelData[0] == "Display") {
+                                details.visible = false
+                                power.visible = false
+                                pluginWifi.visible = false
+                                pluginCalendar.visible = false
+                                _volume.visible = false
+                                display.visible = true
+
+                                for (var m in btns.model) {
+                                    btns.itemAt(m).children[4].color = "#fff"
+                                }
+
+                                acessIcon.color = main.detailColor
+                            }
+
+                            if (modelData[0] == "Audio") {
+                                details.visible = false
+                                power.visible = false
+                                pluginWifi.visible = false
+                                pluginCalendar.visible = false
+                                display.visible = false
+                                _volume.visible = true
+
+                                for (var m in btns.model) {
+                                    btns.itemAt(m).children[4].color = "#fff"
+                                }
+
+                                acessIcon.color = main.detailColor
+                            }
+
+                            if (modelData[0] == "Power") {
+                                details.visible = false
+                                pluginWifi.visible = false
+                                pluginCalendar.visible = false
+                                display.visible = false
+                                _volume.visible = false
+                                power.visible = true
+
+                                for (var m in btns.model) {
+                                    btns.itemAt(m).children[4].color = "#fff"
+                                }
+
+                                acessIcon.color = main.detailColor
+                            }
+
+                            if (modelData[0] == "Color") {
+                                pluginWifi.visible = false
+                                pluginCalendar.visible = false
+                                display.visible = false
+                                _volume.visible = false
+                                power.visible = false
+                                details.visible = true
+
+                                for (var m in btns.model) {
+                                    btns.itemAt(m).children[4].color = "#fff"
+                                }
+
+                                acessIcon.color = main.detailColor
                             }
                         }
                     }

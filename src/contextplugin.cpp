@@ -95,7 +95,46 @@ QString ContextPlugin::getWirelessIP()
 
 int ContextPlugin::getDesktopsCount()
 {
-    //_Display display;
-    //return display.getDesktopsCount();
-    return 0;
+    Tela tela;
+    return tela.getDesktopsCount();
+}
+
+void ContextPlugin::displayChange(int num)
+{
+    Tela tela;
+    tela.displayChange(num);
+}
+
+//power
+
+void ContextPlugin::shutdown()
+{
+    Power power;
+    power.shutdown();
+}
+
+void ContextPlugin::restart()
+{
+    Power power;
+    power.restart();
+}
+
+void ContextPlugin::suspend()
+{
+    Power power;
+    power.suspend();
+}
+
+void ContextPlugin::logoff()
+{
+    Power power;
+    power.logoff();
+}
+
+//Color
+
+QString ContextPlugin::changeDatail(int hue, int light)
+{
+    Color color;
+    return color.changeDatail(hue, light);
 }

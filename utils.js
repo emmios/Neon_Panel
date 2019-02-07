@@ -2,7 +2,6 @@
 
 function getTime() {
 
-    var dias = {'Sun': 'Dom', 'Mon': 'Seg', 'Tue': 'Ter', 'Wed': 'Qua', 'Thu': 'Qui', 'Fri': 'Sex', 'Sat': 'Sáb'}
     var d = new Date()
     var h, m, s, date;
     var day = d.getDate()
@@ -19,5 +18,5 @@ function getTime() {
     if (h < 10) h = '0' + h
     if (m < 10) m = '0' + m
 
-    return h + ':' + m + '|' + dias[d.toString().split(' ')[0]] + ' - ' + date;
+    return h + ':' + m + '|' + d.toString().split(' ')[0] + ' - ' + date
 }

@@ -27,7 +27,8 @@ public:
 
            if (pixel.isNull())
            {
-               pixel = ctx->xwindowTrayIcon(QString(id.split(";")[0]).toInt());
+               //pixel = ctx->xwindowTrayIcon(QString(id.split(";")[0]).toInt());
+               pixel = ctx->xwindowTrayIcon((Window)QString(id.split(";")[0]).toInt());
            }
 
            if (pixel.isNull())

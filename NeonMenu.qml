@@ -1,5 +1,5 @@
 import QtQuick 2.7
-import QtQuick.Window 2.0
+import QtQuick.Window 2.2
 import QtQuick.Controls 1.4
 import QtGraphicalEffects 1.0
 
@@ -9,11 +9,11 @@ ApplicationWindow {
     visible: false
     x: 0
     y: 0
-    width: 530
+    width: 470//530
     height: 530
     title: qsTr("Neon Menu")
     color: "transparent"
-    flags: Qt.Tool | Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint
+    flags: Qt.Tool | Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint | Qt.Popup
 
     property var menuElements: []
     property var textSearch: textSearch
@@ -73,18 +73,15 @@ ApplicationWindow {
         }
     }
 
-
     Image {
         id: blur
         x: 0
-        y: (~(neonMenu.y)) + 1
-        horizontalAlignment: Image.AlignLeft
-        verticalAlignment: Image.AlignTop
-        height: Screen.height - main.height
+        y: (~neonMenu.y) + 1
+        width: Screen.width
+        height: Screen.height //Screen.height - main.height
         source: "image://grab/crop"
         visible: false
-        cache: false
-        clip: true
+        //clip: true
     }
 
     FastBlur {
@@ -100,7 +97,7 @@ ApplicationWindow {
         source: fastBlur
         foregroundSource: fastBlur
         mode: "softLight"
-        opacity: 0.2
+        opacity: 0.3//0.2
     }
 
     HueSaturation {
@@ -130,8 +127,8 @@ ApplicationWindow {
 
     Rectangle {
         anchors.fill: blur
-        opacity: 0.7//main.opc
-        color: "#161616"
+        opacity: 0.3//0.7//main.opc
+        color: "#fff"//"#161616"
     }
 
 

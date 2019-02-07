@@ -21,6 +21,8 @@ ApplicationWindow {
             showAppInfo.visible = false
             showInfos.winIds = []
             listModel.clear()
+        } else {
+            main.unfix.visible = false
         }
     }
 
@@ -73,7 +75,6 @@ ApplicationWindow {
                     onPressed: {
 
                         if (!parent.closer) {
-
                             Context.windowActive(winId)
 
                         } else {
@@ -82,7 +83,8 @@ ApplicationWindow {
                                 Context.windowClose(winIds[i]);
                              }
 
-                             showAppInfo.close()
+                             //showAppInfo.close()
+                             showAppInfo.visible = false
                         }
                     }
 

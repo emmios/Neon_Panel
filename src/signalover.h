@@ -5,14 +5,20 @@
 #include <QObject>
 #include <QString>
 
-class SingnalOver : public QWindow
+class SignalOver : public QWindow
 {
     Q_OBJECT
 
+
+public slots:
+    void addWindow(QString arg);
+    void createWindow(QString arg);
+
 signals:
+    void createWin(QString arg);
     void create();
     void destroy();
-    void desktopWindow(QString nome, QString wmclass, int winId);
+    void removeAllWindows();
     void clearWindows();
     void activeWindow();
 

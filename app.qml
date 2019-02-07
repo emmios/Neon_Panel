@@ -33,16 +33,24 @@ Rectangle {
             property bool _pressed2: false
             property int mouseStart: 0
 
-            onClicked: { 
+//            onClicked: {
 
-                Context.exec(exec, launcherApp)
+//                Context.exec(exec, launcherApp)
 
-                neonMenu.visible = false
-                neonMenu.textSearch.focus = false
-                main.clickOpc = main.startOpc
-            }
+//                neonMenu.visible = false
+//                neonMenu.textSearch.focus = false
+//                main.clickOpc = main.startOpc
+//            }
 
             onPressedChanged: {
+
+                if (_pressed2) {
+                    Context.exec(exec, launcherApp)
+                    neonMenu.visible = false
+                    neonMenu.textSearch.focus = false
+                    main.clickOpc = main.startOpc
+                }
+
                 if (!_pressed) {
                     _pressed = true
                     _pressed2 = true

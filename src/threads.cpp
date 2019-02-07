@@ -9,7 +9,7 @@ void Threads::run()
 {
 
     Display* d = XOpenDisplay(0);
-    XSelectInput(d, DefaultRootWindow(d), SubstructureNotifyMask);
+    XSelectInput(d, DefaultRootWindow(d), SubstructureNotifyMask | SubstructureNotifyMask);
 
     SysTray tray;
     tray.startTray();
@@ -24,11 +24,14 @@ void Threads::run()
     XEvent e;
     XDamageNotifyEvent *dEvent;
 
-    this->msleep(200);
+
+    //this->msleep(200);
     unsigned long _items;
     Window *_list = ctx->xwindows(&_items);
 
     arrayCreate = "";
+
+    SignalOver signal;
 
     for (int i = 0; i < _items; i++)
     {
@@ -37,7 +40,6 @@ void Threads::run()
         {
             int status;
             unsigned long nitems;
-
             QString name = ctx->xwindowName(_list[i]);
             QString wclass = QString(ctx->xwindowClass(_list[i])).toLower();
 
@@ -92,50 +94,10 @@ void Threads::run()
                 }
             }
 
-            //this->msleep(100);
-//            unsigned long items;
-//            Window *list = ctx->xwindows(&items);
-
-//            arrayCreate = "";
-
-//            for (int i = 0; i < items; i++)
-//            {
-//                QString type = QString(ctx->xwindowType(list[i]));
-//                if (type == "_NET_WM_WINDOW_TYPE_NORMAL" || type == "_KDE_NET_WM_WINDOW_TYPE_OVERRIDE")
-//                {
-//                    int status;
-//                    unsigned long nitems;
-
-//                    QString name = ctx->xwindowName(list[i]);
-//                    QString wclass = QString(ctx->xwindowClass(list[i])).toLower();
-
-//                    if (wclass != "unknow")
-//                    {
-//                        if (wclass != "Neon_Panel")
-//                        {
-//                            arrayCreate += ";" + name + "," + wclass + "," + QString::number((int)list[i])  + "," + QString::number((int)ctx->xwindowPid(list[i]))  + ',' + QString((char *)ctx->windowProperty(d, list[i], "_OB_APP_CLASS", &nitems, &status));
-
-//                        }
-//                    }
-//                }
-
-//                this->msleep(100);
-//            }
-
-//            if (!arrayCreate.isEmpty())
-//            {
-//                QMetaObject::invokeMethod(this->main, "createWindow", Q_ARG(QVariant,  arrayCreate));
-//            }
-
-//            else if (arrayCreate.isEmpty())
-//            {
-//                QMetaObject::invokeMethod(this->main, "removeAllWindows");
-//            }
         }
-
-        if (e.type == DestroyNotify)
+        else if (e.type == DestroyNotify)
         {
-            //this->msleep(50);
+            this->msleep(100);
             unsigned long items;
             Window *list = ctx->xwindows(&items);
             arrayDestroy = "";
@@ -152,19 +114,20 @@ void Threads::run()
                     QString wclass = QString(ctx->xwindowClass(list[i])).toLower();
                     //arrayDestroy += ";" + QString::number((int)list[i]);
                     arrayDestroy += "|@|" + name + "=#=" + wclass + "=#=" + QString::number((int)list[i])  + "=#=" + QString::number((int)ctx->xwindowPid(list[i]))  + '=#=' + QString((char *)ctx->windowProperty(d, list[i], "_OB_APP_CLASS", &nitems, &status));
-                    this->msleep(50);
+                    //this->msleep(50);
                 }
             }
 
             if (!arrayDestroy.isEmpty())
             {
                 QMetaObject::invokeMethod(this->main, "createWindow", Q_ARG(QVariant, arrayDestroy));
-                //QMetaObject::invokeMethod(this->main, "removeWindow", Q_ARG(QVariant, arrayDestroy));
+                //QObject::connect(&signal, SIGNAL(createWin(QString)), this->main, SLOT(createWindow(QString)));
+                //emit signal.createWin(arrayDestroy);
             }
-
             else if (arrayDestroy.isEmpty())
             {
                 QMetaObject::invokeMethod(this->main, "removeAllWindows");
+                //QObject::connect(&signal, SIGNAL(removeAllWindows), this->main, SLOT(removeAllWindows));
             }
 
             for (int i = 0; i < trayList.length(); i++)
@@ -176,8 +139,7 @@ void Threads::run()
                 }
             }
         }
-
-        if (e.type == UnmapNotify || e.type == ClientMessage)
+        else if (e.type == UnmapNotify || e.type == ClientMessage)
         {
             //this->msleep(100);
             // tray notify
@@ -219,13 +181,24 @@ void Threads::run()
                 QMetaObject::invokeMethod(this->main, "notifications", Q_ARG(QVariant,  (int)id));
             }
         }
+        else if (e.type == ConfigureNotify)
+        {
+            int atual = (int)e.xconfigure.window;
+            //qDebug() << e.xconfigure.window;
+            if (activated != atual)
+            {
+                activated = atual;
+                QMetaObject::invokeMethod(this->main, "activeWindow");
+                //QObject::connect(&signal, SIGNAL(activeWindow), this->main, SLOT(activeWindow));
+                //this->msleep(50);
+            }
+        }
 
         //XDamageNotify
-        //qDebug() << ctx->xwindowClass(dEvent->drawable) << e.xclient.data.l[1] << dEvent->type + XDamageNotify << dEvent->type << e.type << ctx->xwindowClass(e.xclient.data.l[2]) << ctx->xwindowClass(e.xmap.window);
+        //qDebug() << e.type << ctx->xwindowClass(dEvent->drawable) << e.xclient.data.l[1] << dEvent->type + XDamageNotify << dEvent->type << ctx->xwindowClass(e.xclient.data.l[2]) << ctx->xwindowClass(e.xmap.window);
         // create icon systray
         if (e.xclient.data.l[1] == SYSTEM_TRAY_REQUEST_DOCK || e.xclient.data.l[1] > 1)
         {
-            this->msleep(50);
             Window id = e.xclient.data.l[2];
             QString wclass = QString(ctx->xwindowClass(id));
             bool add = true;
@@ -236,8 +209,20 @@ void Threads::run()
 //                wclass = ctx->xwindowClass(dEvent->drawable);
 //            }
 
+            if (wclass == "Neon_Panel")
+            {
+                add = false;
+            }
+
+            if (wclass == "Synth-Panel")
+            {
+                add = false;
+            }
+
             if (wclass != "unknow")
             {
+                //this->msleep(50);
+
                 QString type = QString(ctx->xwindowType(id));
 
                 if (type == "_NET_WM_WINDOW_TYPE_NORMAL" || type == "_KDE_NET_WM_WINDOW_TYPE_OVERRIDE")
@@ -269,9 +254,6 @@ void Threads::run()
 
                 if (add)
                 {
-                    int status;
-                    unsigned long nitems;
-
                     //QString args = QString(ctx->xwindowName(id)) + ";" + QString::number(id) + ";" + wclass + ";" + QString((char *)ctx->windowProperty(d, id, "_OB_APP_CLASS", &nitems, &status));
                     QString args = QString(ctx->xwindowName(id)) + "|@|" + QString::number(id) + "|@|" + wclass + "|@|" + QString::number(ctx->xwindowPid(id));
                     QMetaObject::invokeMethod(this->main, "addTryIcon", Q_ARG(QVariant,  args));
@@ -282,18 +264,9 @@ void Threads::run()
                 }
             }
         }
-
-        if (e.type == ConfigureNotify)
-        {
-            if (activated != (int)e.xany.window)
-            {
-                activated = (int)e.xmap.window;
-                QMetaObject::invokeMethod(this->main, "activeWindow");
-                this->msleep(50);
-            }
-        }
     }
 
-    XFree(d);
+    //XFree(d);
+    //XFlush(d);
     XCloseDisplay(d);
 }

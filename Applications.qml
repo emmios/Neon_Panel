@@ -66,8 +66,8 @@ Rectangle {
         width: 24
         height: 24
         source: "image://pixmap/" + winId + ';' + obclass + ',' + pidname
+        fillMode: Image.PreserveAspectFit//Image.Stretch
         antialiasing: true
-        fillMode: Image.Stretch
         cache: false
     }
 

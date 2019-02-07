@@ -1,7 +1,8 @@
 TEMPLATE = app
 
 QT += qml quick widgets x11extras dbus
-CONFIG += c++11
+CONFIG += c++14
+
 
 #DBUS_ADAPTORS += emmi.interface.background.xml
 
@@ -14,7 +15,6 @@ LIBS += -lX11 -lXdamage -lxcb -lxcb-util -lXrandr
 
 include(src/src.pri)
 include(plugins/plugins.pri)
-
 
 # Additional import path used to resolve QML modules in Qt Creator's code model
 QML_IMPORT_PATH =

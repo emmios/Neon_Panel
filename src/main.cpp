@@ -45,9 +45,6 @@ int main(int argc, char *argv[])
     window->xChanged(Qt::FramelessWindowHint| Qt::WindowStaysOnTopHint| Qt::WA_X11NetWmWindowTypeDock);
     //app.setAttribute(Qt::AA_X11InitThreads);
 
-    threads->main = window;
-    threads->ctx = ctx;
-
     ctx->xreservedSpace(window->winId(), window->height());
     ctx->xchangeProperty(window->winId(), "Desktop", "_OB_APP_TYPE", XA_STRING);
     //4294967295
@@ -64,6 +61,8 @@ int main(int argc, char *argv[])
     connection.connect("emmi.interface.background", "/", "emmi.interface.background", "BgConnect", &bg, SLOT(BgConnect()));
     connection.registerService("emmi.interface.background");
 
+    threads->main = window;
+    threads->ctx = ctx;
     threads->start();
 
     return app.exec();

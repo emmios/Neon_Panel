@@ -29,12 +29,16 @@ App {
     property int mainId: 0
 
     property var showAppInfo: Object
+    property var unfix: Object
     property var trayShowInfo: Object
     property var acessoRapido: Object
 
     property int launcherX: 0
     property var launcher: []
     property int trayIconsX: 0
+
+    property var subAppbar: subAppbar
+    property var applicationBar: applicationBar
 
     property int subLauncherX: 0
     property int subLauncherX2: 0
@@ -44,6 +48,18 @@ App {
 
     property bool accessOpened: true
     property alias arrowAside: arrowAside
+
+
+//    Rectangle {
+//        anchors.bottom: parent.bottom
+//        anchors.bottomMargin: 0
+//        anchors.left: parent.left
+//        anchors.leftMargin: 0
+//        anchors.right: parent.right
+//        anchors.rightMargin: 0
+//        height: 2
+//        color: "#000"
+//    }
 
 
     Image {
@@ -101,8 +117,8 @@ App {
 
     Rectangle {
         anchors.fill: blur
-        opacity: 0.7//main.opc
-        color: "#161616"
+        opacity: 0.3//main.opc
+        color: "#fff"//"#161616"
     }
 
     function blurRefresh(arg) {
@@ -122,89 +138,89 @@ App {
         subAppbar.children = []
     }
 
-    function deleteWindow(args) {
+//    function deleteWindow(args) {
 
-        for (var i = 0; i < subAppbar.children.length; i++) {
+//        for (var i = 0; i < subAppbar.children.length; i++) {
 
-            var remove = true
+//            var remove = true
 
-            for (var j = 1; j < args.length; j++) {
-                if (typeof(subAppbar.children[i]) !== "undefined") {
-                    if (subAppbar.children[i].winId === parseInt(wins[j])) {
-                        remove = false
-                        break
-                    }
-                }
-            }
+//            for (var j = 1; j < args.length; j++) {
+//                if (typeof(subAppbar.children[i]) !== "undefined") {
+//                    if (subAppbar.children[i].winId === parseInt(wins[j])) {
+//                        remove = false
+//                        break
+//                    }
+//                }
+//            }
 
-            if (remove) {
-                if (typeof(subAppbar.children[i]) !== "undefined") {
-                    subAppbar.children[i].destroy()
-                    subLauncherX -= defaultWidth
-                    delete subAppbar.children[i]
+//            if (remove) {
+//                if (typeof(subAppbar.children[i]) !== "undefined") {
+//                    subAppbar.children[i].destroy()
+//                    subLauncherX -= defaultWidth
+//                    delete subAppbar.children[i]
 
-                    var tmp = []
-                    var tmpX = 0
+//                    var tmp = []
+//                    var tmpX = 0
 
-                    for (var k = 0; k < subAppbar.children.length; k++) {
-                        if (typeof(subAppbar.children[k]) !== "undefined") {
-                            subAppbar.children[k].x = tmpX
-                            tmp[k] = subAppbar.children[k]
-                            tmpX += defaultWidth
-                        }
-                    }
+//                    for (var k = 0; k < subAppbar.children.length; k++) {
+//                        if (typeof(subAppbar.children[k]) !== "undefined") {
+//                            subAppbar.children[k].x = tmpX
+//                            tmp[k] = subAppbar.children[k]
+//                            tmpX += defaultWidth
+//                        }
+//                    }
 
-                    //subLauncher = tmp
-                    subAppbar.children = tmp
-                }
-            }
-        }
-    }
+//                    //subLauncher = tmp
+//                    subAppbar.children = tmp
+//                }
+//            }
+//        }
+//    }
 
-    function removeWindow(args) {
+//    function removeWindow(args) {
 
-        var wins = args.split('|@|')
+//        var wins = args.split('|@|')
 
-        for (var i = 0; i < subAppbar.children.length; i++) {
+//        for (var i = 0; i < subAppbar.children.length; i++) {
 
-            var remove = true
+//            var remove = true
 
-            for (var j = 1; j < wins.length; j++) {
-                if (typeof(subAppbar.children[i]) !== "undefined") {
-                    if (subAppbar.children[i].winId === parseInt(wins[j])) {
-                        remove = false
-                        break
-                    }
-                }
-            }
+//            for (var j = 1; j < wins.length; j++) {
+//                if (typeof(subAppbar.children[i]) !== "undefined") {
+//                    if (subAppbar.children[i].winId === parseInt(wins[j])) {
+//                        remove = false
+//                        break
+//                    }
+//                }
+//            }
 
-            if (remove) {
-                if (typeof(subAppbar.children[i]) !== "undefined") {
-                    subAppbar.children[i].destroy()
-                    subLauncherX -= defaultWidth
-                    delete subAppbar.children[i]
+//            if (remove) {
+//                if (typeof(subAppbar.children[i]) !== "undefined") {
+//                    subAppbar.children[i].destroy()
+//                    subLauncherX -= defaultWidth
+//                    delete subAppbar.children[i]
 
-                    var tmp = []
-                    var tmpX = 0
+//                    var tmp = []
+//                    var tmpX = 0
 
-                    for (var k = 0; k < subAppbar.children.length; k++) {
-                        if (typeof(subAppbar.children[k]) !== "undefined") {
-                            subAppbar.children[k].x = tmpX
-                            tmp[k] = subAppbar.children[k]
-                            tmpX += defaultWidth
-                        }
-                    }
+//                    for (var k = 0; k < subAppbar.children.length; k++) {
+//                        if (typeof(subAppbar.children[k]) !== "undefined") {
+//                            subAppbar.children[k].x = tmpX
+//                            tmp[k] = subAppbar.children[k]
+//                            tmpX += defaultWidth
+//                        }
+//                    }
 
-                    //subLauncher = tmp
-                    subAppbar.children = tmp
-                }
-            }
-        }
-    }
+//                    //subLauncher = tmp
+//                    subAppbar.children = tmp
+//                }
+//            }
+//        }
+//    }
 
     function addWindow(args) {
         var nitems = args.split('=#=')
-        if (nitems[1] != 'Neon_Panel') {
+        if (nitems[1] !== 'Neon_Panel') {
             desktopWindow(nitems[0], nitems[1], nitems[2], nitems[3], nitems[4])
         }
     }
@@ -218,40 +234,81 @@ App {
 
         for (var i = 1; i < wins.length; i++) {
            var nitems = wins[i].split('=#=')
-           if (nitems[1] != 'Neon_Panel') {
+           if (nitems[1] !== 'Neon_Panel') {
                desktopWindow(nitems[0], nitems[1], nitems[2], nitems[3], nitems[4])
            }
         }
-    }
 
-    function activeWindow() {
+        for (var k = 0; k < applicationBar.children.length; k++) {
+            if (typeof(applicationBar.children[k]) !== "undefined") {
 
-        for (var j = 0; j < subAppbar.children.length; j++) {
-            if (subAppbar.children[j].pidname === Context.windowFocused()) {
-                subAppbar.children[j].destak.height = 2
-            } else {
-                if (typeof(subAppbar.children[j].pidname) !== "undefined") {
-                    subAppbar.children[j].destak.height = 2
+                applicationBar.children[k]._instance = false
+                var setInstace = false
+
+                for (var j = 1; j < wins.length; j++) {
+
+                    var _nitems = wins[j].split('=#=')
+
+                    if (applicationBar.children[k].pidname === _nitems[1]) {
+                        setInstace = true
+                        break
+                    }
+                }
+
+                if (setInstace) {
+                    applicationBar.children[k]._instance = true
                 }
             }
         }
+    }
+
+    signal getCreateWindow(string arg)
+    onGetCreateWindow: createWindow(arg)
+
+    function activeWindow() {
+
+//        for (var j = 0; j < subAppbar.children.length; j++) {
+//            if (subAppbar.children[j].pidname === Context.windowFocused()) {
+//                subAppbar.children[j].destak.height = 2
+//            } else {
+//                if (typeof(subAppbar.children[j].pidname) !== "undefined") {
+//                    subAppbar.children[j].destak.height = 2
+//                }
+//            }
+//        }
 
         for (var t = 0; t < subAppbar.children.length; t++) {
             if (typeof(subAppbar.children[t]) !== "undefined") {
                 if (subAppbar.children[t].pidname === Context.windowFocused() || Context.windowFocusedId(subAppbar.children[t].pidname) === 1) {
-                    subAppbar.children[t].destak.height = 2
+                    //subAppbar.children[t].destak.height = 2
                     subAppbar.children[t].effect.glowRadius = 3
                     subAppbar.children[t].effect.opacity = 1
-                    subAppbar.children[t].bgOpc.opacity = 0.2
+                    subAppbar.children[t].bgOpc.opacity = 0.3
                     subAppbar.children[t].destacad = true
                 } else {
-                    if (typeof(subAppbar.children[t]) !== "undefined") {
-                        subAppbar.children[t].destak.height = 2
-                        subAppbar.children[t].effect.glowRadius = 0
-                        subAppbar.children[t].effect.opacity = 0
-                        subAppbar.children[t].bgOpc.opacity = 0
-                        subAppbar.children[t].destacad = false
-                    }
+                    //subAppbar.children[t].destak.height = 2
+                    subAppbar.children[t].effect.glowRadius = 0
+                    subAppbar.children[t].effect.opacity = 0
+                    subAppbar.children[t].bgOpc.opacity = 0
+                    subAppbar.children[t].destacad = false
+                }
+            }
+        }
+
+        for (var k = 0; k < applicationBar.children.length; k++) {
+            if (typeof(applicationBar.children[k]) !== "undefined") {
+                if (applicationBar.children[k].pidname === Context.windowFocused() || Context.windowFocusedId(applicationBar.children[k].pidname) === 1) {
+                    applicationBar.children[k].effect.glowRadius = 3
+                    applicationBar.children[k].effect.opacity = 1
+                    applicationBar.children[k].bgOpc.opacity = 0.3
+                    applicationBar.children[k].destacad = true
+                } else {
+                    try {
+                        applicationBar.children[k].effect.glowRadius = 0
+                        applicationBar.children[k].effect.opacity = 0
+                        applicationBar.children[k].bgOpc.opacity = 0
+                        applicationBar.children[k].destacad = false
+                    } catch (err) {}
                 }
             }
         }
@@ -283,47 +340,58 @@ App {
         }
     }
 
-    function clearWindows() {
+//    function clearWindows() {
 
-        for (var i = 0; i < subAppbar.children.length; i++) {
-            subAppbar.children[i].destroy()
-            delete subAppbar.children[i]
-        }
+//        for (var i = 0; i < subAppbar.children.length; i++) {
+//            subAppbar.children[i].destroy()
+//            delete subAppbar.children[i]
+//        }
 
-        //subLauncher = []
-        subAppbar.children = []
-        subLauncherStarted = true
-        //separatorBar.visible = false
-        windowVerify = false
+//        //subLauncher = []
+//        subAppbar.children = []
+//        subLauncherStarted = true
+//        //separatorBar.visible = false
+//        windowVerify = false
 
-        if (launcher.length > 0) {
-            subLauncherX = 10
-            subLauncherX2 = 0
-        } else {
-            subLauncherX = 0
-            subLauncherX2 = 0
-        }
-    }
+//        if (launcher.length > 0) {
+//            subLauncherX = 10
+//            subLauncherX2 = 0
+//        } else {
+//            subLauncherX = 0
+//            subLauncherX2 = 0
+//        }
+//    }
 
     function desktopWindow(_nome, wmclass, winId, pid, obclass) {
 
         //clearWindow()
 
         var fixicede = false
-        subAppbar.width = defaultWidth
+        //subAppbar.width = defaultWidth
 
-        for (var j = 0; j < subAppbar.children.length; j++) {
-            if (subAppbar.children[j].pidname === wmclass) {
-                fixicede = true
+//        for (var j = 0; j < subAppbar.children.length; j++) {
+//            if (subAppbar.children[j].pidname === wmclass) {
+//                fixicede = true
+//            }
+//        }
+
+        for (var k = 0; k < applicationBar.children.length; k++) {
+            if (typeof(applicationBar.children[k]) !== "undefined") {
+                if (applicationBar.children[k].pidname === wmclass) {
+                    applicationBar.children[k]._instance = true
+                    fixicede = true
+                }
             }
         }
 
-        for (var t = 0; t < subAppbar.children.length; t++) {
-            if (typeof(subAppbar.children[t]) !== "undefined") {
-                if (subAppbar.children[t].pidname === wmclass) {
-                    fixicede = true
+        if (!fixicede) {
+            for (var t = 0; t < subAppbar.children.length; t++) {
+                if (typeof(subAppbar.children[t]) !== "undefined") {
+                    if (subAppbar.children[t].pidname === wmclass) {
+                        fixicede = true
+                    }
+                    //subAppbar.width += defaultWidth
                 }
-                subAppbar.width += defaultWidth
             }
         }
 
@@ -424,7 +492,7 @@ App {
         var exist = false
 
         for (var k = 0; k < subAppbar.children.length; k++) {
-            if (subAppbar.children[k].winId == arg) {
+            if (subAppbar.children[k].winId === arg) {
                 exist = true
                 break
             }
@@ -432,10 +500,44 @@ App {
 
         if (!exist) {
             for (var i = 0; i < systray.children.length; i++) {
-                if (systray.children[i].winId == arg) {
+                if (systray.children[i].winId === arg) {
                     systray.children[i].hasNotification.visible = true
                     break
                 }
+            }
+        }
+    }
+
+    function fixLaunchers(files) {
+
+        if (applicationBar.x + applicationBar.width + 200 <  plugins.x) {
+
+            for (var i = 0; i < files.length; i++) {
+
+                var list = Context.addLauncher(files[i])
+                var fixed = false
+
+                for (var k = 0; k < applicationBar.children.length; k++) {
+                    if (typeof(applicationBar.children[k]) !== "undefined") {
+                        if (applicationBar.children[k].pidname === list[3]) {
+                            fixed = true
+                            break
+                        }
+                    }
+                }
+
+                if (list[0] !== "" && !fixed) {
+
+                    var component = Qt.createComponent("launchers/Application.qml")
+                    var obj = component.createObject(applicationBar, {'x': launcherX, 'y': 0, 'url': list[1], 'nome': list[0], 'exec': list[2], 'pidname': list[3]})
+
+                    launcherX += defaultWidth
+                    launcher.push(obj)
+                    applicationBar.width += defaultWidth
+                    subAppbar.x = applicationBar.x + applicationBar.width
+                    Context.fixedLauncher(list[3], files[i], 0)
+                }
+
             }
         }
     }
@@ -455,28 +557,8 @@ App {
 
         onDropped: {
 
-            if (applicationBar.x + applicationBar.width + 200 <  plugins.x) {
-
-                var files = drop.urls.toString().split(',');
-
-                for (var i = 0; i <  files.length; i++) {
-
-                    var list = Context.addLauncher(files[i])
-
-                    if (list[0] !== "") {
-
-                        var component = Qt.createComponent("launchers/Application.qml")
-                        var obj = component.createObject(applicationBar, {'x': launcherX, 'y': 0, 'url': list[1], 'nome': list[0], 'exec': list[2], 'pidname': list[3]})
-
-                        launcherX += defaultWidth
-                        launcher.push(obj)
-                        applicationBar.width += defaultWidth
-                        subAppbar.x = applicationBar.x + applicationBar.width
-                    }
-
-                }
-            }
-
+            var files = drop.urls.toString().split(',')
+            fixLaunchers(files)
             drop.acceptProposedAction()
         }
 
@@ -493,6 +575,8 @@ App {
             //neonMenu.addApps()
             showAppInfo.visible = false
             trayShowInfo.visible = false
+
+            unfix.visible = false
 
             btnCycle.border.color = "#fff"
 
@@ -562,8 +646,9 @@ App {
                     accessOpened = true
 
                     showAppInfo.visible = false
-                    neonMenu.x = 0;
-                    neonMenu.y = main.y - neonMenu.height//(neonMenu.height + 5)
+                    neonMenu.x = 0
+
+                    neonMenu.y = main.y - (neonMenu.height + 4) //(neonMenu.height + 5)
 
                     neonMenu.textSearch.text = ""
                     neonMenu.textSearch.focus = true
@@ -816,6 +901,17 @@ App {
         }
     }
 
+    Timer {
+        id: fixedLaunchers
+        interval: 1000
+        running: false
+        repeat: false
+        onTriggered: {
+            fixLaunchers(Context.getAllFixedLaunchers())
+            createWindow(Context.getAllWindows())
+        }
+    }
+
     Component.onCompleted: {
 
         var component_ = Qt.createComponent("qrc:/plugins/NeonMenu.qml")
@@ -825,6 +921,10 @@ App {
         var info = Qt.createComponent("qrc:/launchers/appShowInfo.qml")
         showAppInfo = info.createObject(applicationBar)
         showAppInfo.visible = false
+
+        var _unfix = Qt.createComponent("qrc:/launchers/appUnfix.qml")
+        unfix = _unfix.createObject(applicationBar)
+        unfix.visible = false
 
         var trayInfo = Qt.createComponent("qrc:/launchers/TrayShowInfo.qml")
         trayShowInfo = trayInfo.createObject(main)
@@ -836,6 +936,8 @@ App {
 
         Context.changeThemeColor(main.detailColor)
         main.visible = true
+
+        fixedLaunchers.start()
 
         //Context.libraryVoidLoad("write")
         //Context.libraryVoidLoad(17, "shenoisz", "showMsg")

@@ -75,6 +75,9 @@ public:
     Q_INVOKABLE int windowFocusedId(QString wmclass);
     Q_INVOKABLE void execute(QString app, QString wclass);
     Q_INVOKABLE void windowMap(int win);
+    Q_INVOKABLE QStringList getAllFixedLaunchers();
+    Q_INVOKABLE void fixedLauncher(QString name, QString launchers, int remove);
+    Q_INVOKABLE QString getAllWindows();
     QPixmap getIconByClass(QString winId, QString wmclass);
     QString defaultIconApplications;
     QString basepath;

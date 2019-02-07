@@ -28,7 +28,7 @@
         <file>Components/fontawesome-free-5.0.10/web-fonts-with-css/webfonts/fa-brands-400.woff</file>
         <file>Components/fontawesome-free-5.0.10/web-fonts-with-css/webfonts/fa-regular-400.woff</file>
         <file>Components/fontawesome-free-5.0.10/web-fonts-with-css/webfonts/fa-solid-900.woff</file>
-        <file>Components/ProgressBar.qml</file>
+        <!--<file>Components/ProgressBar.qml</file>-->
         <file>Components/WindowDecoration.qml</file>
     </qresource>
 </RCC>

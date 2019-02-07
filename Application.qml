@@ -13,13 +13,16 @@ Rectangle {
     property string nome: ""
     property string exec: ""
     property bool _instance: false
-    property int winId: 0
     property string pidname: ""
-    property string obclass: ""
     property bool minimize: true
+    //property int winId: 0
+    //property string obclass: ""
     //property var destak: destak
-    property bool tooTip: true
+    //property bool tooTip: true
     property alias destak: destak
+    property alias effect: effect
+    property alias bgOpc: bgOpc
+    property bool destacad: false
 
     //signal create
     //signal destroy
@@ -40,7 +43,7 @@ Rectangle {
         width: parent.width
         color: main.detailColor//"#007fff"
         visible: true
-        opacity: 0.5
+        opacity: 0.8//0.5
     }
 
     RectangularGlow {
@@ -50,6 +53,7 @@ Rectangle {
         spread: 0
         color: main.detailColor
         cornerRadius: destak.radius + glowRadius
+        opacity: 0
     }
 
     Rectangle {
@@ -66,9 +70,18 @@ Rectangle {
         width: 24
         height: 24
         source: url
-        fillMode: Image.Stretch
+        fillMode: Image.PreserveAspectFit//Image.Stretch
         antialiasing: true
         cache: false
+    }
+
+    Label {
+        x: 6
+        y: 4
+        text: "" //paperclip 
+        color: "#fff"
+        font.pixelSize: 6
+        //transform: Rotation {angle: -25}
     }
 
     MouseArea {
@@ -93,7 +106,6 @@ Rectangle {
                 //main.clickOpc = main.startOpc
 
                 if (!_instance) {
-
                     Context.exec(exec)
                     _instance = true
 
@@ -114,15 +126,24 @@ Rectangle {
 
             } else {
 
-                showAppInfo.winIds = Context.windowsBywmclass(pidname)
-                showAppInfo.y = main.y - 40
-                showAppInfo.x = Context.mouseX() - (showAppInfo.width / 2)
-                showAppInfo.setText()
-                showAppInfo.visible = true
-                showAppInfo.requestActivate()
-
-                //clickOpc = startOpc
-                neonMenu.textSearch.focus = false
+                if (_instance) {
+                    showAppInfo.winIds = Context.windowsBywmclass(pidname)
+                    showAppInfo.y = main.y - 40
+                    showAppInfo.x = ((Context.mouseX() - mouseX) + (applicationInfo.width / 2)) - (showAppInfo.width / 2)//Context.mouseX() - (showAppInfo.width / 2)
+                    showAppInfo.setText()
+                    showAppInfo.visible = true
+                    showAppInfo.requestActivate()
+                    //clickOpc = startOpc
+                    neonMenu.textSearch.focus = false
+                } else {
+                    unfix.wmclass = pidname
+                    unfix.y = main.y - 40
+                    unfix.x = ((Context.mouseX() - mouseX) + (applicationInfo.width / 2)) - (showAppInfo.width / 2)//Context.mouseX() - (showAppInfo.width / 2)
+                    unfix.visible = true
+                    unfix.requestActivate()
+                    //clickOpc = startOpc
+                    neonMenu.textSearch.focus = false
+                }
             }
         }
 
@@ -130,11 +151,17 @@ Rectangle {
         hoverEnabled: true
 
         onHoveredChanged: {
-            bgOpc.opacity = 0.2//0.75
+            //bgOpc.opacity = 0.2//0.75
+            effect.glowRadius = 3
+            effect.opacity = 1
         }
 
         onExited: {
-            bgOpc.opacity = 0.0
+            if (destacad == false) {
+                //bgOpc.opacity = 0
+                effect.glowRadius = 0
+                effect.opacity = 0
+            }
         }
 
     }
