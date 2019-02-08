@@ -46,7 +46,7 @@ ApplicationWindow {
         id: fastBlur
         anchors.fill: blur
         source: blur
-        radius: 100
+        radius: main.blurControl
     }
 
     Blend {
@@ -55,7 +55,7 @@ ApplicationWindow {
         source: fastBlur
         foregroundSource: fastBlur
         mode: "softLight"
-        opacity: 0.3//0.2
+        opacity: main.blurControlOpc
     }
 
     HueSaturation {
@@ -85,8 +85,8 @@ ApplicationWindow {
 
     Rectangle {
         anchors.fill: blur
-        opacity: 0.3//0.7//main.opc
-        color: '#fff'//"#161616"
+        opacity: main.blurColorOpc//0.7//main.opc
+        color: main.blurColor//"#161616"
     }
 
     Rectangle {

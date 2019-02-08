@@ -19,11 +19,13 @@ App {
 
     property var neonMenu: Object
     // yellow #FFFB00, purple "#7310A2", crimson #dc143c, black "#333333", blue "#007fff", red #FF0D00, orange #ff9900, green #00ff00
-    property string cor: "#000"
     property string detailColor: "#007fff"//"#7310A2"
     property int efeito1: 300
     property int efeito2: 600
-    property double opc: 0
+    property string blurColor: "#161616"//"#ffffff"
+    property double blurColorOpc: 0.3
+    property int blurControl: 100
+    property double blurControlOpc: 1
     property double clickOpc: 0.0
     property double startOpc: 0.0
     property int mainId: 0
@@ -78,7 +80,7 @@ App {
         id: fastBlur
         anchors.fill: blur
         source: blur
-        radius: 100
+        radius: blurControl
     }
 
     Blend {
@@ -87,7 +89,7 @@ App {
         source: fastBlur
         foregroundSource: fastBlur
         mode: "softLight"
-        opacity: 0.2
+        opacity: blurControlOpc
     }
 
     HueSaturation {
@@ -117,9 +119,10 @@ App {
 
     Rectangle {
         anchors.fill: blur
-        opacity: 0.3//main.opc
-        color: "#fff"//"#161616"
+        opacity: blurColorOpc//0.3
+        color: blurColor//"#161616"
     }
+
 
     function blurRefresh(arg) {
         blur.source = ""
@@ -137,86 +140,6 @@ App {
         subLauncherX = 0
         subAppbar.children = []
     }
-
-//    function deleteWindow(args) {
-
-//        for (var i = 0; i < subAppbar.children.length; i++) {
-
-//            var remove = true
-
-//            for (var j = 1; j < args.length; j++) {
-//                if (typeof(subAppbar.children[i]) !== "undefined") {
-//                    if (subAppbar.children[i].winId === parseInt(wins[j])) {
-//                        remove = false
-//                        break
-//                    }
-//                }
-//            }
-
-//            if (remove) {
-//                if (typeof(subAppbar.children[i]) !== "undefined") {
-//                    subAppbar.children[i].destroy()
-//                    subLauncherX -= defaultWidth
-//                    delete subAppbar.children[i]
-
-//                    var tmp = []
-//                    var tmpX = 0
-
-//                    for (var k = 0; k < subAppbar.children.length; k++) {
-//                        if (typeof(subAppbar.children[k]) !== "undefined") {
-//                            subAppbar.children[k].x = tmpX
-//                            tmp[k] = subAppbar.children[k]
-//                            tmpX += defaultWidth
-//                        }
-//                    }
-
-//                    //subLauncher = tmp
-//                    subAppbar.children = tmp
-//                }
-//            }
-//        }
-//    }
-
-//    function removeWindow(args) {
-
-//        var wins = args.split('|@|')
-
-//        for (var i = 0; i < subAppbar.children.length; i++) {
-
-//            var remove = true
-
-//            for (var j = 1; j < wins.length; j++) {
-//                if (typeof(subAppbar.children[i]) !== "undefined") {
-//                    if (subAppbar.children[i].winId === parseInt(wins[j])) {
-//                        remove = false
-//                        break
-//                    }
-//                }
-//            }
-
-//            if (remove) {
-//                if (typeof(subAppbar.children[i]) !== "undefined") {
-//                    subAppbar.children[i].destroy()
-//                    subLauncherX -= defaultWidth
-//                    delete subAppbar.children[i]
-
-//                    var tmp = []
-//                    var tmpX = 0
-
-//                    for (var k = 0; k < subAppbar.children.length; k++) {
-//                        if (typeof(subAppbar.children[k]) !== "undefined") {
-//                            subAppbar.children[k].x = tmpX
-//                            tmp[k] = subAppbar.children[k]
-//                            tmpX += defaultWidth
-//                        }
-//                    }
-
-//                    //subLauncher = tmp
-//                    subAppbar.children = tmp
-//                }
-//            }
-//        }
-//    }
 
     function addWindow(args) {
         var nitems = args.split('=#=')
@@ -266,16 +189,6 @@ App {
     onGetCreateWindow: createWindow(arg)
 
     function activeWindow() {
-
-//        for (var j = 0; j < subAppbar.children.length; j++) {
-//            if (subAppbar.children[j].pidname === Context.windowFocused()) {
-//                subAppbar.children[j].destak.height = 2
-//            } else {
-//                if (typeof(subAppbar.children[j].pidname) !== "undefined") {
-//                    subAppbar.children[j].destak.height = 2
-//                }
-//            }
-//        }
 
         for (var t = 0; t < subAppbar.children.length; t++) {
             if (typeof(subAppbar.children[t]) !== "undefined") {
@@ -339,28 +252,6 @@ App {
             }
         }
     }
-
-//    function clearWindows() {
-
-//        for (var i = 0; i < subAppbar.children.length; i++) {
-//            subAppbar.children[i].destroy()
-//            delete subAppbar.children[i]
-//        }
-
-//        //subLauncher = []
-//        subAppbar.children = []
-//        subLauncherStarted = true
-//        //separatorBar.visible = false
-//        windowVerify = false
-
-//        if (launcher.length > 0) {
-//            subLauncherX = 10
-//            subLauncherX2 = 0
-//        } else {
-//            subLauncherX = 0
-//            subLauncherX2 = 0
-//        }
-//    }
 
     function desktopWindow(_nome, wmclass, winId, pid, obclass) {
 
@@ -556,7 +447,6 @@ App {
         }
 
         onDropped: {
-
             var files = drop.urls.toString().split(',')
             fixLaunchers(files)
             drop.acceptProposedAction()
@@ -586,12 +476,6 @@ App {
             accessOpened = true
             activeWindow()
         }
-    }
-
-    Rectangle {
-        anchors.fill: parent
-        opacity: opc
-        color: cor
     }
 
     Rectangle {
@@ -834,8 +718,9 @@ App {
                 font.family: "roboto light"
 
                 Timer {
+                    id: clockStart
                     interval: 100
-                    running: true
+                    running: false
                     repeat: true
                     onTriggered: {
                         var d = Utils.getTime().split('|')
@@ -938,7 +823,7 @@ App {
         main.visible = true
 
         fixedLaunchers.start()
-
+        clockStart.start()
         //Context.libraryVoidLoad("write")
         //Context.libraryVoidLoad(17, "shenoisz", "showMsg")
     }

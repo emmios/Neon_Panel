@@ -7,12 +7,14 @@ ApplicationWindow {
     x: 10
     y: 10
     width: 160
-    height: 30
+    height: 60
     color: "transparent"
     title: qsTr("Neon Painel")
     flags: Qt.Tool | Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint | Qt.Popup
 
     property string wmclass: ""
+    property alias listView: listView
+
 
     onActiveChanged: {
         if (!active) {
@@ -41,7 +43,13 @@ ApplicationWindow {
             id: listModel
 
             ListElement {
+                name: "Unknow"
+                posy: 0
+            }
+
+            ListElement {
                 name: "Remover "
+                posy: 30
             }
         }
         delegate: Item {
@@ -50,9 +58,8 @@ ApplicationWindow {
             anchors.fill: parent
 
             Rectangle {
-
                 x: 0
-                y: 0
+                y: posy
                 anchors.left: parent.left
                 anchors.leftMargin: 0
                 anchors.right: parent.right
@@ -83,13 +90,12 @@ ApplicationWindow {
                         main.applicationBar.children = appTmp
                         main.launcherX = 0
                         main.applicationBar.width = 0
-                        main.applicationBar.x = 0
 
                         for (var i = 0; i < main.applicationBar.children.length; i++) {
                             if (typeof(main.applicationBar.children[i]) !== "undefined") {
-                                main.launcherX += main.defaultWidth
                                 main.applicationBar.width += main.defaultWidth
                                 main.applicationBar.children[i].x = main.launcherX
+                                main.launcherX += main.defaultWidth
                             }
                         }
 
@@ -111,7 +117,7 @@ ApplicationWindow {
 
             Text {
                 x: 0
-                y: 0
+                y: posy
                 anchors.left: parent.left
                 anchors.leftMargin: 0
                 anchors.right: parent.right
@@ -123,6 +129,12 @@ ApplicationWindow {
                 font.pixelSize: 12
                 color: "#ffffff"
                 text: name
+
+                function setName(arg) {
+                    if (index == 0) {
+                        text = (arg.length >= 26) ? arg.substring(0, 20) + "..." : arg
+                    }
+                }
             }
         }
     }

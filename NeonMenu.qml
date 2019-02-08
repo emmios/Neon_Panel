@@ -76,7 +76,7 @@ ApplicationWindow {
     Image {
         id: blur
         x: 0
-        y: (~neonMenu.y) + 1
+        y: (~neonMenu.y)
         width: Screen.width
         height: Screen.height //Screen.height - main.height
         source: "image://grab/crop"
@@ -88,7 +88,7 @@ ApplicationWindow {
         id: fastBlur
         anchors.fill: blur
         source: blur
-        radius: 100
+        radius: main.blurControl
     }
 
     Blend {
@@ -97,7 +97,7 @@ ApplicationWindow {
         source: fastBlur
         foregroundSource: fastBlur
         mode: "softLight"
-        opacity: 0.3//0.2
+        opacity: main.blurControlOpc
     }
 
     HueSaturation {
@@ -127,8 +127,8 @@ ApplicationWindow {
 
     Rectangle {
         anchors.fill: blur
-        opacity: 0.3//0.7//main.opc
-        color: "#fff"//"#161616"
+        opacity: main.blurColorOpc//0.7
+        color: main.blurColor//"#161616"
     }
 
 
@@ -172,6 +172,7 @@ ApplicationWindow {
                     btnUp = true
                     addApps()
 
+                    neonMenu.y = main.y - (neonMenu.height + 4)
                     textSearch.focus = false
                     textSearch.text = "Buscar..."
                 }
@@ -196,32 +197,6 @@ ApplicationWindow {
         anchors.top: parent.top
         anchors.topMargin: 0
         opacity: 0.0
-
-//        Rectangle {
-//            id:topDestak
-//            width: parent.width
-//            height: 2
-//            color: main.detailColor
-//            anchors.topMargin: 0
-//            anchors.leftMargin: 0
-//            anchors.rightMargin: 0
-//            anchors.top: parent.top
-//            anchors.left: parent.left
-//            anchors.right: parent.right
-//        }
-
-//        Rectangle {
-//            id: bottomDestak
-//            width: parent.width
-//            height: 2
-//            color: main.detailColor
-//            anchors.topMargin: 0
-//            anchors.leftMargin: 0
-//            anchors.rightMargin: 0
-//            anchors.bottom: parent.bottom
-//            anchors.left: parent.left
-//            anchors.right: parent.right
-//        }
     }
 
     Rectangle {

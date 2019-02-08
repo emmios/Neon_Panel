@@ -127,22 +127,23 @@ Rectangle {
             } else {
 
                 if (_instance) {
-                    showAppInfo.winIds = Context.windowsBywmclass(pidname)
-                    showAppInfo.y = main.y - 40
-                    showAppInfo.x = ((Context.mouseX() - mouseX) + (applicationInfo.width / 2)) - (showAppInfo.width / 2)//Context.mouseX() - (showAppInfo.width / 2)
-                    showAppInfo.setText()
-                    showAppInfo.visible = true
-                    showAppInfo.requestActivate()
+                    main.showAppInfo.winIds = Context.windowsBywmclass(pidname)
+                    main.showAppInfo.y = main.y - 40
+                    main.showAppInfo.x = ((Context.mouseX() - mouseX) + (applicationInfo.width / 2)) - (main.showAppInfo.width / 2)//Context.mouseX() - (showAppInfo.width / 2)
+                    main.showAppInfo.setText()
+                    main.showAppInfo.visible = true
+                    main.showAppInfo.requestActivate()
                     //clickOpc = startOpc
-                    neonMenu.textSearch.focus = false
+                    main.neonMenu.textSearch.focus = false
                 } else {
-                    unfix.wmclass = pidname
-                    unfix.y = main.y - 40
-                    unfix.x = ((Context.mouseX() - mouseX) + (applicationInfo.width / 2)) - (showAppInfo.width / 2)//Context.mouseX() - (showAppInfo.width / 2)
-                    unfix.visible = true
-                    unfix.requestActivate()
+                    main.unfix.wmclass = pidname
+                    main.unfix.listView.contentItem.children[0].children[1].setName(nome)
+                    main.unfix.y = main.y - 70
+                    main.unfix.x = ((Context.mouseX() - mouseX) + (applicationInfo.width / 2)) - (main.showAppInfo.width / 2)//Context.mouseX() - (showAppInfo.width / 2)
+                    main.unfix.visible = true
+                    main.unfix.requestActivate()
                     //clickOpc = startOpc
-                    neonMenu.textSearch.focus = false
+                    main.neonMenu.textSearch.focus = false
                 }
             }
         }
