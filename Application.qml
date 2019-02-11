@@ -15,25 +15,10 @@ Rectangle {
     property bool _instance: false
     property string pidname: ""
     property bool minimize: true
-    //property int winId: 0
-    //property string obclass: ""
-    //property var destak: destak
-    //property bool tooTip: true
     property alias destak: destak
     property alias effect: effect
     property alias bgOpc: bgOpc
     property bool destacad: false
-
-    //signal create
-    //signal destroy
-
-//    function create() {
-//        destak.visible = true
-//    }
-
-//    function destroy() {
-//        destak.visible = false
-//    }
 
     Rectangle {
         id: destak

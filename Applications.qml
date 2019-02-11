@@ -21,17 +21,6 @@ Rectangle {
     property alias bgOpc: bgOpc
     property bool destacad: false
 
-    //signal create
-    //signal destroy
-
-//    function create() {
-//        destak.visible = true
-//    }
-
-//    function destroy() {
-//        destak.visible = false
-//    }
-
     Rectangle {
         id: destak
         x: 1
