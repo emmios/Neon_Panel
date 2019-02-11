@@ -1,4 +1,4 @@
-import QtQuick 2.7
+import QtQuick 2.9
 import QtQuick.Controls 1.4
 import QtGraphicalEffects 1.0
 
@@ -24,23 +24,23 @@ Rectangle {
     //signal create
     //signal destroy
 
-    function create() {
-        destak.visible = true
-    }
+//    function create() {
+//        destak.visible = true
+//    }
 
-    function destroy() {
-        destak.visible = false
-    }
+//    function destroy() {
+//        destak.visible = false
+//    }
 
     Rectangle {
         id: destak
-        x: 0
-        y: parent.height - 2
-        height: 2
-        width: parent.width
+        x: 1
+        y: parent.height - 3
+        height: 3
+        width: parent.width - 2
         color: main.detailColor//"#007fff"
         visible: true
-        opacity: 0.5
+        opacity: 0.5//0.5
     }
 
     RectangularGlow {
@@ -113,7 +113,6 @@ Rectangle {
                 main.showAppInfo.setText()
                 main.showAppInfo.visible = true
                 main.showAppInfo.requestActivate()
-
                 //clickOpc = startOpc
                 main.neonMenu.textSearch.focus = false
             }
@@ -123,8 +122,9 @@ Rectangle {
 
         onHoveredChanged: {
             //bgOpc.opacity = 0.2//0.75
-            effect.glowRadius = 3
-            effect.opacity = 1
+            effect.glowRadius = 4
+            effect.opacity = 0.8
+            destak.opacity = 0.5
         }
 
         onExited: {
@@ -132,6 +132,7 @@ Rectangle {
                 //bgOpc.opacity = 0
                 effect.glowRadius = 0
                 effect.opacity = 0
+                destak.opacity = 0.5
             }
         }
     }

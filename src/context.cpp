@@ -621,7 +621,9 @@ QString Context::getAllWindows()
 
 QStringList Context::getAllFixedLaunchers()
 {
-    QSettings settings(this->basepath + "/data/launchers.txt", QSettings::NativeFormat);
+    QDir dir;
+    QString path = dir.homePath() + "/.config/Synth/panel/launchers.txt";
+    QSettings settings(path, QSettings::NativeFormat);
     QStringList launchers;
 
     for (QString key : settings.allKeys())
@@ -634,7 +636,9 @@ QStringList Context::getAllFixedLaunchers()
 
 void Context::fixedLauncher(QString name, QString launchers, int remove)
 {
-    QSettings settings(this->basepath + "/data/launchers.txt", QSettings::NativeFormat);
+    QDir dir;
+    QString path = dir.homePath() + "/.config/Synth/panel/launchers.txt";
+    QSettings settings(path, QSettings::NativeFormat);
     if (remove == 0)
     {
         settings.setValue(name, launchers);

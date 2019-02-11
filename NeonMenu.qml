@@ -1,5 +1,5 @@
-import QtQuick 2.7
-import QtQuick.Window 2.2
+import QtQuick 2.9
+import QtQuick.Window 2.3
 import QtQuick.Controls 1.4
 import QtGraphicalEffects 1.0
 
@@ -76,11 +76,12 @@ ApplicationWindow {
     Image {
         id: blur
         x: 0
-        y: (~neonMenu.y)
+        y: (~neonMenu.y) + 1
         width: Screen.width
-        height: Screen.height //Screen.height - main.height
+        height: Screen.height - main.height
         source: "image://grab/crop"
         visible: false
+        cache: false
         //clip: true
     }
 
@@ -105,7 +106,7 @@ ApplicationWindow {
         anchors.fill: blur
         source: fastBlur
         hue: 0
-        saturation: 1
+        saturation: main.blurSaturation
         lightness: 0
     }
 
@@ -172,7 +173,7 @@ ApplicationWindow {
                     btnUp = true
                     addApps()
 
-                    neonMenu.y = main.y - (neonMenu.height + 4)
+                    //neonMenu.y = main.y - neonMenu.height//(neonMenu.height + 4)
                     textSearch.focus = false
                     textSearch.text = "Buscar..."
                 }

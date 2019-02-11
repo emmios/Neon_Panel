@@ -1,4 +1,7 @@
 #include <QDesktopWidget>
+#include <QDir>
+#include <QFile>
+#include <QString>
 
 #include "threads.h"
 #include "context.h"
@@ -10,6 +13,17 @@
 int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
+
+    QDir dir;
+    QString path = dir.homePath() + "/.config/Synth/panel/";
+    QFile file(path + "launchers.txt");
+
+    if(!dir.exists(path))
+    {
+        dir.mkpath(path);
+    }
+
+    file.open(QIODevice::ReadWrite);
 
     int h = 40;
     QDesktopWidget desktop;

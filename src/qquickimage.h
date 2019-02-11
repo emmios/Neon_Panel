@@ -74,8 +74,8 @@ public:
 
        if (id == "crop")
        {
-           //QRect rect(0, 0, screen->geometry().width(), screen->geometry().height() - 40);
-           QRect rect(0, 0, screen->geometry().width(), screen->geometry().height());
+           QRect rect(0, 0, screen->geometry().width(), screen->geometry().height() - 40);
+           //QRect rect(0, 0, screen->geometry().width(), screen->geometry().height());
            pixel = pixel.copy(rect);
        }
 

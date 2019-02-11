@@ -1,5 +1,5 @@
-import QtQuick 2.7
-import QtQuick.Window 2.0
+import QtQuick 2.9
+import QtQuick.Window 2.3
 import QtQuick.Controls 1.4
 import QtGraphicalEffects 1.0
 import "./Components"
@@ -22,10 +22,11 @@ App {
     property string detailColor: "#007fff"//"#7310A2"
     property int efeito1: 300
     property int efeito2: 600
-    property string blurColor: "#161616"//"#ffffff"
-    property double blurColorOpc: 0.3
+    property string blurColor: "#161616"
+    property double blurColorOpc: 0.8
     property int blurControl: 100
     property double blurControlOpc: 1
+    property double blurSaturation: 1
     property double clickOpc: 0.0
     property double startOpc: 0.0
     property int mainId: 0
@@ -50,18 +51,6 @@ App {
 
     property bool accessOpened: true
     property alias arrowAside: arrowAside
-
-
-//    Rectangle {
-//        anchors.bottom: parent.bottom
-//        anchors.bottomMargin: 0
-//        anchors.left: parent.left
-//        anchors.leftMargin: 0
-//        anchors.right: parent.right
-//        anchors.rightMargin: 0
-//        height: 2
-//        color: "#000"
-//    }
 
 
     Image {
@@ -97,7 +86,7 @@ App {
         anchors.fill: blur
         source: fastBlur
         hue: 0
-        saturation: 1
+        saturation: blurSaturation
         lightness: 0
     }
 
@@ -122,6 +111,17 @@ App {
         opacity: blurColorOpc//0.3
         color: blurColor//"#161616"
     }
+
+//    Rectangle {
+//        anchors.bottom: parent.bottom
+//        anchors.bottomMargin: 0
+//        anchors.left: parent.left
+//        anchors.leftMargin: 0
+//        anchors.right: parent.right
+//        anchors.rightMargin: 0
+//        height: 2
+//        color: "#161616"
+//    }
 
 
     function blurRefresh(arg) {
@@ -214,13 +214,13 @@ App {
                     applicationBar.children[k].effect.glowRadius = 3
                     applicationBar.children[k].effect.opacity = 1
                     applicationBar.children[k].bgOpc.opacity = 0.3
-                    applicationBar.children[k].destacad = true
+                    //applicationBar.children[k].destacad = true
                 } else {
                     try {
                         applicationBar.children[k].effect.glowRadius = 0
                         applicationBar.children[k].effect.opacity = 0
                         applicationBar.children[k].bgOpc.opacity = 0
-                        applicationBar.children[k].destacad = false
+                        //applicationBar.children[k].destacad = false
                     } catch (err) {}
                 }
             }
@@ -306,7 +306,6 @@ App {
 
             if (subAppbar.x + subLauncherX + defaultWidth < plugins.x) {
                 btnShowMore.visible = false
-                //obj = compon.createObject(subAppbar, {'x': subLauncherX, 'y': 0, 'nome': _nome, 'pidname': wmclass, 'winId': winId, 'pid': pid, 'obclass': obclass})
                 compon.createObject(subAppbar, {'x': subLauncherX, 'y': 0, 'nome': _nome, 'pidname': wmclass, 'winId': winId, 'pid': pid, 'obclass': obclass})
                 subLauncherX += defaultWidth
 
@@ -322,7 +321,6 @@ App {
 
             } else {
                 btnShowMore.visible = true
-                //obj = compon.createObject(subAppbar2, {'x': subLauncherX2, 'y': 0, 'nome': _nome, 'pidname': wmclass, 'winId': winId, 'pid': pid, 'obclass': obclass})
                 compon.createObject(subAppbar2, {'x': subLauncherX2, 'y': 0, 'nome': _nome, 'pidname': wmclass, 'winId': winId, 'pid': pid, 'obclass': obclass})
                 subLauncherX2 += defaultWidth
             }
@@ -532,7 +530,7 @@ App {
                     showAppInfo.visible = false
                     neonMenu.x = 0
 
-                    neonMenu.y = main.y - (neonMenu.height + 4) //(neonMenu.height + 5)
+                    neonMenu.y = main.y - neonMenu.height //(neonMenu.height + 4)
 
                     neonMenu.textSearch.text = ""
                     neonMenu.textSearch.focus = true
@@ -762,17 +760,17 @@ App {
 
                     onPressed: {
 
+                        acessoRapido.accessBlur.source = ""
+
                         if (accessOpened) {
                             neonMenu.visible = false
                             acessoRapido.visible = true
                             acessoRapido.requestActivate()
-                            acessoRapido.accessBlur.source = ""
                             acessoRapido.accessBlur.source = "image://grab/crop"
                             arrowAside.text = '\uf107'
                         } else {
                             neonMenu.visible = false
                             acessoRapido.visible = false
-                            acessoRapido.accessBlur.source = ""
                             arrowAside.text = '\uf106'
                         }
 

@@ -1,4 +1,4 @@
-import QtQuick 2.7
+import QtQuick 2.9
 import QtQuick.Controls 1.4
 import QtGraphicalEffects 1.0
 
@@ -27,23 +27,23 @@ Rectangle {
     //signal create
     //signal destroy
 
-    function create() {
-        destak.visible = true
-    }
+//    function create() {
+//        destak.visible = true
+//    }
 
-    function destroy() {
-        destak.visible = false
-    }
+//    function destroy() {
+//        destak.visible = false
+//    }
 
     Rectangle {
         id: destak
-        x: 0
-        y: parent.height - 2
-        height: 2
-        width: parent.width
+        x: 1
+        y: parent.height - 3
+        height: 3
+        width: parent.width - 2
         color: main.detailColor//"#007fff"
         visible: true
-        opacity: 0.8//0.5
+        opacity: 0//0.5//0.5
     }
 
     RectangularGlow {
@@ -53,7 +53,6 @@ Rectangle {
         spread: 0
         color: main.detailColor
         cornerRadius: destak.radius + glowRadius
-        opacity: 0
     }
 
     Rectangle {
@@ -152,18 +151,39 @@ Rectangle {
         hoverEnabled: true
 
         onHoveredChanged: {
-            //bgOpc.opacity = 0.2//0.75
-            effect.glowRadius = 3
-            effect.opacity = 1
-        }
 
-        onExited: {
-            if (destacad == false) {
-                //bgOpc.opacity = 0
+            if (_instance) {
+                effect.glowRadius = 4
+                effect.opacity = 0.8
+                destak.opacity = 0.3
+            } else {
+                effect.opacity = 0.5
                 effect.glowRadius = 0
-                effect.opacity = 0
+                destak.opacity = 0
             }
         }
 
+        onExited: {
+
+            if (destacad == false) {
+                effect.glowRadius = 0
+                effect.opacity = 0
+
+                if (_instance) {
+                    destak.opacity = 0.3
+                } else {
+                    destak.opacity = 0
+                }
+            }
+        }
+
+    }
+
+    on_InstanceChanged: {
+        if (_instance) {
+            destak.opacity = 0.5
+        } else {
+            destak.opacity = 0
+        }
     }
 }

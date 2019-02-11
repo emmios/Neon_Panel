@@ -1,5 +1,5 @@
-import QtQuick 2.7
-import QtQuick.Window 2.2
+import QtQuick 2.9
+import QtQuick.Window 2.3
 import QtQuick.Controls 1.4
 import QtGraphicalEffects 1.0
 import QtQuick.Controls.Styles 1.4
@@ -12,7 +12,7 @@ ApplicationWindow {
     x: main.width - 249
     y: 0//main.y - 310//(310 + 5)
     width: 250
-    height: Screen.height//main.y
+    height: Screen.height - main.height
     title: qsTr("Neon Painel")
     color: "transparent"
     flags: Qt.Tool | Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint | Qt.Popup
@@ -34,11 +34,13 @@ ApplicationWindow {
 
     Image {
         id: blur
-        x: (~Screen.width) + (acessoRapido.width + 1) //(~(Screen.width - acessoRapido.width)) + 1
+        x: (~Screen.width) + (acessoRapido.width) + 1 //(~(Screen.width - acessoRapido.width)) + 1
         y: 0
         width: Screen.width
-        height: Screen.height
+        height: Screen.height - main.height
         source: "image://grab/crop"
+        visible: false
+        cache: false
         //clip: true
     }
 
@@ -63,7 +65,7 @@ ApplicationWindow {
         anchors.fill: blur
         source: fastBlur
         hue: 0
-        saturation: 1
+        saturation: main.blurSaturation
         lightness: 0
     }
 
