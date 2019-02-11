@@ -23,7 +23,11 @@ int main(int argc, char *argv[])
         dir.mkpath(path);
     }
 
-    file.open(QIODevice::ReadWrite);
+    if(!file.exists())
+    {
+        file.open(QIODevice::ReadWrite);
+        file.close();
+    }
 
     int h = 40;
     QDesktopWidget desktop;
