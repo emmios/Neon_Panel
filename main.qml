@@ -137,6 +137,15 @@ App {
             }
         }
 
+        for (var k = 0; k < applicationBar.children.length; k++) {
+            if (typeof(applicationBar.children[k]) !== "undefined") {
+                applicationBar.children[k]._instance = false
+                applicationBar.children[k].effect.glowRadius = 0
+                applicationBar.children[k].effect.opacity = 0
+                applicationBar.children[k].bgOpc.opacity = 0
+            }
+        }
+
         subLauncherX = 0
         subAppbar.children = []
     }
@@ -197,13 +206,11 @@ App {
                     subAppbar.children[t].effect.glowRadius = 3
                     subAppbar.children[t].effect.opacity = 1
                     subAppbar.children[t].bgOpc.opacity = 0.3
-                    subAppbar.children[t].destacad = true
                 } else {
                     //subAppbar.children[t].destak.height = 2
                     subAppbar.children[t].effect.glowRadius = 0
                     subAppbar.children[t].effect.opacity = 0
                     subAppbar.children[t].bgOpc.opacity = 0
-                    subAppbar.children[t].destacad = false
                 }
             }
         }
@@ -214,13 +221,11 @@ App {
                     applicationBar.children[k].effect.glowRadius = 3
                     applicationBar.children[k].effect.opacity = 1
                     applicationBar.children[k].bgOpc.opacity = 0.3
-                    //applicationBar.children[k].destacad = true
                 } else {
                     try {
                         applicationBar.children[k].effect.glowRadius = 0
                         applicationBar.children[k].effect.opacity = 0
                         applicationBar.children[k].bgOpc.opacity = 0
-                        //applicationBar.children[k].destacad = false
                     } catch (err) {}
                 }
             }

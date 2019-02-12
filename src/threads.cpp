@@ -63,8 +63,6 @@ void Threads::run()
         QMetaObject::invokeMethod(this->main, "removeAllWindows");
     }
 
-    arrayCreate = "";
-
 
     while (true)
     {
@@ -76,6 +74,8 @@ void Threads::run()
         {
             this->msleep(100);
             QString type = QString(ctx->xwindowType(e.xmap.window));
+            arrayCreate = "";
+
             if (type == "_NET_WM_WINDOW_TYPE_NORMAL" || type == "_KDE_NET_WM_WINDOW_TYPE_OVERRIDE")
             {
                 int status;
@@ -89,11 +89,11 @@ void Threads::run()
                     if (wclass != "Neon_Panel")
                     {
                         //qDebug() << e.xmap.window << wclass;
+                        //arrayCreate += "|@|" + name + "=#=" + wclass + "=#=" + QString::number((int)e.xmap.window)  + "=#=" + QString::number((int)ctx->xwindowPid(e.xmap.window))  + '=#=' + QString((char *)ctx->windowProperty(d, e.xmap.window, "_OB_APP_CLASS", &nitems, &status));
                         QMetaObject::invokeMethod(this->main, "addWindow", Q_ARG(QVariant,  name + "=#=" + wclass + "=#=" + QString::number((int)e.xmap.window)  + "=#=" + QString::number((int)ctx->xwindowPid(e.xmap.window))  + '=#=' + QString((char *)ctx->windowProperty(d, e.xmap.window, "_OB_APP_CLASS", &nitems, &status))));
                     }
                 }
             }
-
         }
         else if (e.type == DestroyNotify)
         {
