@@ -3,7 +3,7 @@ import QtQuick.Controls 1.4
 
 
 ApplicationWindow {
-    id: showInfos
+    id: fixShowInfos
     x: 10
     y: 10
     width: 160
@@ -14,15 +14,16 @@ ApplicationWindow {
 
     property var winIds: []
     property string nome: ""
+    property string exec: ""
 
     onActiveChanged: {
         if (!active) {
-            showInfos.visible = false
-            showInfos.winIds = []
+            fixShowInfos.visible = false
+            fixShowInfos.winIds = []
             listModel.clear()
         } else {
+            main.showAppInfo.visible = false
             main.unfix.visible = false
-            main.fixShowInfos.visible = false
         }
     }
 
@@ -42,7 +43,6 @@ ApplicationWindow {
 
         model: ListModel {
             id: listModel
-
             /*
             ListElement {
                 name: "test"
@@ -66,6 +66,7 @@ ApplicationWindow {
 
                 property int winId: 0
                 property bool closer: closerX
+                property bool neo: neoWindow
 
                 MouseArea {
 
@@ -73,16 +74,21 @@ ApplicationWindow {
                     hoverEnabled: true
 
                     onPressed: {
-                        if (!parent.closer) {
-                            Context.windowActive(winId)
+                        if (parent.neo) {
+                            if (!parent.closer) {
+                                Context.windowActive(winId)
 
-                        } else {
+                            } else {
 
-                            for (var i = 0; i < winIds.length; i++) {
-                                Context.windowClose(winIds[i]);
+                                for (var i = 0; i < winIds.length; i++) {
+                                    Context.windowClose(winIds[i]);
+                                }
+
+                                fixShowInfos.visible = false
                             }
-
-                            showAppInfo.visible = false
+                        } else {
+                            Context.exec(exec)
+                            fixShowInfos.visible = false
                         }
                     }
 
@@ -117,7 +123,7 @@ ApplicationWindow {
     function setText() {
 
         listModel.clear()
-        showInfos.height = 30
+        fixShowInfos.height = 30
 
         var y = 0
 
@@ -129,12 +135,11 @@ ApplicationWindow {
                 nome = nome.substring(0, 20) + "..."
             }
 
-            listModel.append({closerX: false, winId: winIds[i], rectY : y, name: nome, textY: y})
-
+            listModel.append({neoWindow: true, closerX: false, winId: winIds[i], rectY : y, name: nome, textY: y})
 
             if (i + 1 < winIds.length) {
-                showInfos.height += 30
-                showInfos.y -= 30
+                fixShowInfos.height += 30
+                fixShowInfos.y -= 30
                 y += 30
             }
         }
@@ -143,13 +148,19 @@ ApplicationWindow {
 
             showInfosBg.opacity = 0.75
 
-            nome = winIds.length > 1 ? "Fechar Todas X" : "Fechar X"
+            nome = winIds.length > 1 ? "Fechar Janelas X" : "Fechar X"
 
-            showInfos.height += 30
-            showInfos.y -= 30
+            fixShowInfos.height += 30
+            fixShowInfos.y -= 30
             y += 30
 
-            listModel.append({closerX: true, winId: 0, rectY : y, name: nome, textY: y})
+            listModel.append({neoWindow: true, closerX: true, winId: 0, rectY : y, name: nome, textY: y})
+
+            fixShowInfos.height += 30
+            fixShowInfos.y -= 30
+            y += 30
+
+            listModel.append({neoWindow: false, closerX: true, winId: 0, rectY : y, name: "Abrir Nova", textY: y})
 
         } else {
             showInfosBg.opacity = 0.0

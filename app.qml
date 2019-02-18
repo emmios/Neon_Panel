@@ -93,15 +93,6 @@ Rectangle {
         }
     }
 
-/*
-    Rectangle {
-        x: 3
-        y: 3
-        width: 48
-        height: 48
-        color: "blue"
-   }
-*/
     Image {
         id: iconeApp
         x: 12

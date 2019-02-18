@@ -18,10 +18,10 @@ ApplicationWindow {
 
     onActiveChanged: {
         if (!active) {
-            //showAppInfo.close()
             unfix.visible = false
         } else {
             main.showAppInfo.visible = false
+            main.fixShowInfos.visible = false
         }
     }
 
@@ -73,7 +73,6 @@ ApplicationWindow {
                     hoverEnabled: true
 
                     onPressed: {
-                        //unfix.close()
                         unfix.visible = false
                         var appTmp = []
 
@@ -125,7 +124,6 @@ ApplicationWindow {
                 height: 30
                 verticalAlignment: Text.AlignVCenter
                 horizontalAlignment: Text.AlignHCenter
-                //font.bold: true
                 font.pixelSize: 12
                 color: "#ffffff"
                 text: name

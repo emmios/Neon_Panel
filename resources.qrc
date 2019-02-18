@@ -3,5 +3,6 @@
         <file>Resources/noise.png</file>
 	<file>Resources/icon-down.png</file>
 	<file>Resources/wating.gif</file>
+	<file>Resources/thumbtack.svg</file>
     </qresource>
 </RCC>

@@ -38,13 +38,14 @@ Rectangle {
         spread: 0
         color: main.detailColor
         cornerRadius: destak.radius + glowRadius
+        opacity: 0
     }
 
     Rectangle {
         id: bgOpc
         anchors.fill: parent
         color: main.detailColor//"#ffffff"
-        opacity: 0.0
+        opacity: 0
     }
 
     Image {
@@ -53,19 +54,23 @@ Rectangle {
         y: 8
         width: 24
         height: 24
-        source: url
+        source: Context.crop(url) //url
         fillMode: Image.PreserveAspectFit//Image.Stretch
         antialiasing: true
         cache: false
+        //transform: Rotation {angle: -20}
     }
 
-    Label {
-        x: 6
-        y: 4
-        text: "" //paperclip 
-        color: "#fff"
-        font.pixelSize: 6
-        //transform: Rotation {angle: -25}
+    Image {
+        x: 4
+        y: 8
+        width: 6
+        height: 6
+        antialiasing: true
+        cache: false
+        fillMode: Image.PreserveAspectFit
+        source: "qrc:/Resources/thumbtack.svg"
+        transform: Rotation {angle: -42}
     }
 
     MouseArea {
@@ -111,19 +116,20 @@ Rectangle {
             } else {
 
                 if (_instance) {
-                    main.showAppInfo.winIds = Context.windowsBywmclass(pidname)
-                    main.showAppInfo.y = main.y - 40
-                    main.showAppInfo.x = ((Context.mouseX() - mouseX) + (applicationInfo.width / 2)) - (main.showAppInfo.width / 2)//Context.mouseX() - (showAppInfo.width / 2)
-                    main.showAppInfo.setText()
-                    main.showAppInfo.visible = true
-                    main.showAppInfo.requestActivate()
+                    main.fixShowInfos.winIds = Context.windowsBywmclass(pidname)
+                    main.fixShowInfos.exec = exec
+                    main.fixShowInfos.y = main.y - 40
+                    main.fixShowInfos.x = ((Context.mouseX() - mouseX) + (applicationInfo.width / 2)) - (main.fixShowInfos.width / 2)//Context.mouseX() - (showAppInfo.width / 2)
+                    main.fixShowInfos.setText()
+                    main.fixShowInfos.visible = true
+                    main.fixShowInfos.requestActivate()
                     //clickOpc = startOpc
                     main.neonMenu.textSearch.focus = false
                 } else {
                     main.unfix.wmclass = pidname
                     main.unfix.listView.contentItem.children[0].children[1].setName(nome)
                     main.unfix.y = main.y - 70
-                    main.unfix.x = ((Context.mouseX() - mouseX) + (applicationInfo.width / 2)) - (main.showAppInfo.width / 2)//Context.mouseX() - (showAppInfo.width / 2)
+                    main.unfix.x = ((Context.mouseX() - mouseX) + (applicationInfo.width / 2)) - (main.fixShowInfos.width / 2)//Context.mouseX() - (showAppInfo.width / 2)
                     main.unfix.visible = true
                     main.unfix.requestActivate()
                     //clickOpc = startOpc
@@ -149,7 +155,6 @@ Rectangle {
         }
 
         onExited: {
-
             if (destacad == false) {
                 effect.glowRadius = 0
                 effect.opacity = 0

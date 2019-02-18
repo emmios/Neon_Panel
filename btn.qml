@@ -28,68 +28,42 @@ Rectangle {
         }
     }
 
-        Rectangle {
-            width: 26
-            height: 26
-            radius: 26
-            anchors.fill: parent
-            anchors.margins: 14
-            //border {width: 1; color: detailColor}
-            color: "transparent"//detailColor
-        }
+    Rectangle {
+        width: 26
+        height: 26
+        radius: 26
+        anchors.fill: parent
+        anchors.margins: 14
+        //border {width: 1; color: detailColor}
+        color: "transparent"//detailColor
+    }
 
-        Rectangle {
-            id: pluginMask
-            width: 24
-            height: 24
-            radius: 24
-            anchors.fill: parent
-            anchors.margins: 16
-            color: "transparent"//"#ffffff"
-        }
-/*
-        Image {
-            width: 24
-            height: 24
-            anchors.fill: parent
-            anchors.margins: 16
-            antialiasing: true
-            source: "file://" + Context.basepath + "/plugins/" + iconName
+    Rectangle {
+        id: pluginMask
+        width: 24
+        height: 24
+        radius: 24
+        anchors.fill: parent
+        anchors.margins: 16
+        color: "transparent"//"#ffffff"
+    }
 
-            fillMode: Image.PreserveAspectCrop
-            layer.enabled: true
-            layer.effect: OpacityMask {
-                maskSource: pluginMask
-            }
-        }
-*/
-        Text {
-            text: btnName
-            anchors.right: parent.right
-            anchors.rightMargin: 0
-            anchors.left: parent.left
-            anchors.leftMargin: 0
-            verticalAlignment: Text.AlignVCenter
-            horizontalAlignment: Text.AlignHCenter
-            anchors.bottom: parent.bottom
-            anchors.bottomMargin: -5
-            font.pixelSize: 12
-            color: accessDetail
-        }
-/*
-        Label {
-            id: acessIcon
-            x: 23
-            y: 25
-            text: "\uf028"
-            color: "#fff"
-            font.pixelSize: 32
-            font.family: "Font Awesome 5 Free"
-        }
-        */
+    Text {
+        text: btnName
+        anchors.right: parent.right
+        anchors.rightMargin: 0
+        anchors.left: parent.left
+        anchors.leftMargin: 0
+        verticalAlignment: Text.AlignVCenter
+        horizontalAlignment: Text.AlignHCenter
+        anchors.bottom: parent.bottom
+        anchors.bottomMargin: -5
+        font.pixelSize: 12
+        color: accessDetail
+    }
 
-        Loader {
-            source: "file://" + Context.basepath + "/plugins/" + iconName
-        }
+    Loader {
+        source: "file://" + Context.basepath + "/plugins/" + iconName
+    }
 }
 

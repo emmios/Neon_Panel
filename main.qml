@@ -31,6 +31,7 @@ App {
     property double startOpc: 0.0
     property int mainId: 0
 
+    property var fixShowInfos: Object
     property var showAppInfo: Object
     property var unfix: Object
     property var trayShowInfo: Object
@@ -206,11 +207,13 @@ App {
                     subAppbar.children[t].effect.glowRadius = 3
                     subAppbar.children[t].effect.opacity = 1
                     subAppbar.children[t].bgOpc.opacity = 0.3
+                    subAppbar.children[t].destacad = true
                 } else {
                     //subAppbar.children[t].destak.height = 2
                     subAppbar.children[t].effect.glowRadius = 0
                     subAppbar.children[t].effect.opacity = 0
                     subAppbar.children[t].bgOpc.opacity = 0
+                    subAppbar.children[t].destacad = false
                 }
             }
         }
@@ -221,11 +224,13 @@ App {
                     applicationBar.children[k].effect.glowRadius = 3
                     applicationBar.children[k].effect.opacity = 1
                     applicationBar.children[k].bgOpc.opacity = 0.3
+                    applicationBar.children[k].destacad = true
                 } else {
                     try {
                         applicationBar.children[k].effect.glowRadius = 0
                         applicationBar.children[k].effect.opacity = 0
                         applicationBar.children[k].bgOpc.opacity = 0
+                        applicationBar.children[k].destacad = false
                     } catch (err) {}
                 }
             }
@@ -806,8 +811,12 @@ App {
         neonMenu = component_.createObject(main)
         neonMenu.visible = false
 
-        var info = Qt.createComponent("qrc:/launchers/appShowInfo.qml")
-        showAppInfo = info.createObject(applicationBar)
+        var info = Qt.createComponent("qrc:/launchers/appFixShowInfo.qml")
+        fixShowInfos = info.createObject(applicationBar)
+        fixShowInfos.visible = false
+
+        var info2 = Qt.createComponent("qrc:/launchers/appShowInfo.qml")
+        showAppInfo = info2.createObject(applicationBar)
         showAppInfo.visible = false
 
         var _unfix = Qt.createComponent("qrc:/launchers/appUnfix.qml")

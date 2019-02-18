@@ -58,6 +58,7 @@ Rectangle {
         fillMode: Image.PreserveAspectFit//Image.Stretch
         antialiasing: true
         cache: false
+        //transform: Rotation {angle: -20}
     }
 
     MouseArea {

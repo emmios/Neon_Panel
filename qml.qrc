@@ -10,6 +10,7 @@
         <file>TrayIcon.qml</file>
         <file>TrayShowInfo.qml</file>
         <file>appUnfix.qml</file>
+        <file>appFixShowInfo.qml</file>
     </qresource>
     <qresource prefix="/plugins">
         <file>NeonMenu.qml</file>

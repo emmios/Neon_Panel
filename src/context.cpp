@@ -1046,3 +1046,11 @@ QString Context::userName()
 {
     return qgetenv("USER").toUpper();
 }
+
+QString Context::crop(QString img)
+{
+    QImage srcImg(img.split("file://")[1]);
+    srcImg = srcImg.scaled(QSize(24, 24), Qt::KeepAspectRatio, Qt::SmoothTransformation);
+    srcImg.save("/tmp/launcher.png", "PNG");
+    return "file:///tmp/launcher.png";
+}

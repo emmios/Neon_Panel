@@ -26,6 +26,7 @@
 #include <QList>
 #include <QLibrary>
 #include <QFunctionPointer>
+#include <QMatrix>
 
 #include "xlibutil.h"
 
@@ -78,6 +79,7 @@ public:
     Q_INVOKABLE QStringList getAllFixedLaunchers();
     Q_INVOKABLE void fixedLauncher(QString name, QString launchers, int remove);
     Q_INVOKABLE QString getAllWindows();
+    Q_INVOKABLE QString crop(QString img);
     QPixmap getIconByClass(QString winId, QString wmclass);
     QString defaultIconApplications;
     QString basepath;
