@@ -27,8 +27,10 @@ void Brightness::brightness(int bright)
         XRRChangeOutputProperty(display, output, backlight, XA_INTEGER,
                                 32, PropModeReplace, (unsigned char *) &value, 1);
 
-        XFlush(display);
+        //XFlush(display);
     }
+
+    XCloseDisplay(display);
 }
 
 int Brightness::brightness()

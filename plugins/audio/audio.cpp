@@ -35,17 +35,28 @@ void Audio::volume(QString valor)
 
 int Audio::micro()
 {
+    /*
     QProcess *process = new QProcess();
     process->start("amixer get Capture");
     process->waitForFinished();
     QString result = process->readAll();
     result = result.split("%]")[0].split("[")[1];
     process->close();
-    return result.toInt();
+    return result.toInt();*/
+
+    QDir dir;
+    QString path = dir.homePath() + "/.config/Synth/panel/";
+    QSettings settings(path + "settings.txt", QSettings::NativeFormat);
+    return settings.value("micro").toInt();
 }
 
 void Audio::micro(QString valor)
 {
+    QDir dir;
+    QString path = dir.homePath() + "/.config/Synth/panel/";
+    QSettings settings(path + "settings.txt", QSettings::NativeFormat);
+    settings.setValue("micro", valor.toInt());
+
     QProcess process;
     valor = valor.append("%");
     process.start("amixer set Capture " + valor);

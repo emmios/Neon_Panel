@@ -139,6 +139,33 @@ ApplicationWindow {
                 maskSource: mask
             }
         }
+
+        Label {
+            id: arrowBack
+            x:  20
+            y: image.height / 2
+            text: "\uf060"
+            color: "#fff"
+            font.pixelSize: 20
+            font.family: "Font Awesome 5 Free"
+            visible: false
+            MouseArea {
+                anchors.fill: parent
+                onClicked: {
+                    arrowBack.visible = false
+                    details.visible = false
+                    pluginWifi.visible = false
+                    pluginCalendar.visible = false
+                    display.visible = false
+                    _volume.visible = false
+                    power.visible = false
+
+                    for (var m in btns.model) {
+                        btns.itemAt(m).children[4].color = "#fff"
+                    }
+                }
+            }
+        }
     }
 
     Rectangle {
@@ -404,11 +431,14 @@ ApplicationWindow {
 
                     if (perValue <= 0) {
                         phone.text = "\uf026"
+                        phone2.text = "\uf026"
                     } else {
                         phone.text = "\uf028"
+                        phone2.text = "\uf028"
                     }
 
                     ContextPlugin.volume(perValue)
+                    volume2.percentage = perValue
                 }
             }
 
@@ -427,7 +457,7 @@ ApplicationWindow {
                 y: 98
                 width: 160
                 height: 8
-                percentage: 92
+                percentage: ContextPlugin.micro()
                 bg.color: "#fff"
                 detail: main.detailColor
 
@@ -976,14 +1006,14 @@ ApplicationWindow {
                     Button {
                         id: btnText
                         x: 140
-                        y: 290
+                        y: wifiInfo.height - (btnText.height + 10) //270
                         text: 'Connectar'
                         size: 12
                         detailColor: main.detailColor
                         MouseArea {
                             anchors.fill: parent
                             onClicked: {
-                                if (ContextPlugin.getCurrentNetwork() == infoRede.text) {
+                                if (ContextPlugin.getCurrentNetwork() === infoRede.text) {
                                     ContextPlugin.disconnectWireless()
                                 } else {
                                     if ((wifiInfo.password != '')) {
@@ -1054,6 +1084,7 @@ ApplicationWindow {
                         onClicked: {
 
                             if (modelData[0] == "Internet") {
+                                arrowBack.visible = true
                                 details.visible = false
                                 power.visible = false
                                 display.visible = false
@@ -1069,6 +1100,7 @@ ApplicationWindow {
                             }
 
                             if (modelData[0] == "Calendar") {
+                                arrowBack.visible = true
                                 details.visible = false
                                 power.visible = false
                                 display.visible = false
@@ -1084,6 +1116,7 @@ ApplicationWindow {
                             }
 
                             if (modelData[0] == "Display") {
+                                arrowBack.visible = true
                                 details.visible = false
                                 power.visible = false
                                 pluginWifi.visible = false
@@ -1099,6 +1132,7 @@ ApplicationWindow {
                             }
 
                             if (modelData[0] == "Audio") {
+                                arrowBack.visible = true
                                 details.visible = false
                                 power.visible = false
                                 pluginWifi.visible = false
@@ -1114,6 +1148,7 @@ ApplicationWindow {
                             }
 
                             if (modelData[0] == "Power") {
+                                arrowBack.visible = true
                                 details.visible = false
                                 pluginWifi.visible = false
                                 pluginCalendar.visible = false
@@ -1129,6 +1164,7 @@ ApplicationWindow {
                             }
 
                             if (modelData[0] == "Color") {
+                                arrowBack.visible = true
                                 pluginWifi.visible = false
                                 pluginCalendar.visible = false
                                 display.visible = false
@@ -1203,6 +1239,7 @@ ApplicationWindow {
         color: "transparent"
 
         Label {
+            id: phone2
             x: 25
             y: (parent.height / 2) - 6
             text: "\uf028"
@@ -1224,7 +1261,17 @@ ApplicationWindow {
             property bool init: false
 
             onChange: {
+
+                if (perValue <= 0) {
+                    phone.text = "\uf026"
+                    phone2.text = "\uf026"
+                } else {
+                    phone.text = "\uf028"
+                    phone2.text = "\uf028"
+                }
+
                 ContextPlugin.volume(perValue)
+                volume.percentage = perValue
             }
         }
 
