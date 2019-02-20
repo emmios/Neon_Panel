@@ -3,6 +3,8 @@
 
 #include <QProcess>
 #include <QDebug>
+#include <QDir>
+#include <QSettings>
 
 
 class Audio

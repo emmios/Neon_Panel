@@ -17,6 +17,7 @@ int main(int argc, char *argv[])
     QDir dir;
     QString path = dir.homePath() + "/.config/Synth/panel/";
     QFile file(path + "launchers.txt");
+    QFile _file(path + "settings.txt");
 
     if(!dir.exists(path))
     {
@@ -28,6 +29,15 @@ int main(int argc, char *argv[])
         file.open(QIODevice::ReadWrite);
         file.close();
     }
+
+    if(!_file.exists())
+    {
+        _file.open(QIODevice::ReadWrite);
+        QSettings settings(path + "settings.txt", QSettings::NativeFormat);
+        settings.setValue("volume", 100);
+        _file.close();
+    }
+
 
     int h = 40;
     QDesktopWidget desktop;

@@ -389,13 +389,16 @@ ApplicationWindow {
             }
 
             Controller {
+                id: volume
                 x: 58
                 y: 38
                 width: 160
                 height: 8
-                percentage: 92
+                percentage: ContextPlugin.volume()
                 bg.color: "#fff"
                 detail: main.detailColor
+
+                property bool init: false
 
                 onChange: {
 
@@ -1209,14 +1212,16 @@ ApplicationWindow {
         }
 
         Controller {
-            id: volume
+            id: volume2
             x: 50
             y: (parent.height / 2) - 2
             width: 80
             height: 5
-            percentage: 92
+            percentage: ContextPlugin.volume()
             bg.color: "#fff"
             detail: main.detailColor
+
+            property bool init: false
 
             onChange: {
                 ContextPlugin.volume(perValue)
