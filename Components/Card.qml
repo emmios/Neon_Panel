@@ -1,5 +1,5 @@
 //contents of Card.qml
-import QtQuick 2.3
+import QtQuick 2.9
 import QtGraphicalEffects 1.0
 
 Rectangle {

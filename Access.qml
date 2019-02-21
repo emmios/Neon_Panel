@@ -20,6 +20,7 @@ ApplicationWindow {
     property var acessText: acessText
     property string accessDetail: "#fff"
     property alias accessBlur: blur
+    property var tmpBtnColor: Object
 
     onActiveChanged: {
         if (!active) {
@@ -276,6 +277,7 @@ ApplicationWindow {
                         _y = parseInt(_y)
 
                         main.detailColor = ContextPlugin.changeDatail(_y, details.light)
+                        tmpBtnColor.color = main.detailColor
                     }
                 }
             }
@@ -1178,6 +1180,8 @@ ApplicationWindow {
 
                                 acessIcon.color = main.detailColor
                             }
+
+                            tmpBtnColor = acessIcon
                         }
                     }
 

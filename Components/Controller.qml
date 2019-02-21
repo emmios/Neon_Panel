@@ -1,6 +1,6 @@
 //contents of Control.qml
-import QtQuick 2.3
-
+import QtQuick 2.9
+import QtGraphicalEffects 1.0
 
 Rectangle {
     id: control
@@ -78,6 +78,26 @@ Rectangle {
             height: parent.height
             radius: parent.height
             color: detail
+        }
+
+        RectangularGlow {
+            id: effect1
+            anchors.fill: controlBtn
+            glowRadius: 1
+            spread: 0
+            color: main.detailColor
+            cornerRadius: controlBtn.radius + glowRadius
+            opacity: 0.8
+        }
+
+        RectangularGlow {
+            id: effect2
+            anchors.fill: controlBar
+            glowRadius: 2
+            spread: 0
+            color: main.detailColor
+            cornerRadius: controlBtn.radius + glowRadius
+            opacity: 0.8
         }
 
         onPressedChanged: {

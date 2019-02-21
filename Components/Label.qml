@@ -1,5 +1,5 @@
 //contents of Label.qml
-import QtQuick 2.3
+import QtQuick 2.9
 
 Text {
 
