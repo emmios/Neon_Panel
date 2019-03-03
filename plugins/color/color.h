@@ -4,13 +4,20 @@
 #include <QObject>
 #include <QColor>
 #include <QDebug>
+#include <QDir>
+#include <QSettings>
+#include <QString>
+#include <QStringList>
 
 
 class Color
 {
 public:
     Color();
-    QString changeDatail(int hue, int light);
+    int changeDetail();
+    int changeLight();
+    QString changeLight(int value, int hue, int light);
+    QString changeDetail(int value, int hue, int light);
 };
 
 #endif // COLOR_H

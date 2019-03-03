@@ -27,34 +27,26 @@ public:
 
            if (pixel.isNull())
            {
-               //pixel = ctx->xwindowTrayIcon(QString(id.split(";")[0]).toInt());
                pixel = ctx->xwindowTrayIcon((Window)QString(id.split(";")[0]).toInt());
            }
 
            if (pixel.isNull())
            {
-               QString icon;
-               QImage img;
-               icon = ctx->defaultIconApplications;
+               QString icon = ctx->defaultIconApplications;
 
                if (icon.isEmpty())
                {
-                  img.load(ctx->basepath + "/default.svg");
-                  //pixel.load(ctx->basepath + "/default.svg");
+                  pixel.load("/opt/synth_panel/default.svg");
+                  pixel.scaled(QSize(24, 24), Qt::KeepAspectRatio, Qt::SmoothTransformation);
                }
                else
                {
-                  img.load(icon);
-                  //pixel.load(icon);
+                  pixel.load(icon);
+                  pixel.scaled(QSize(24, 24), Qt::KeepAspectRatio, Qt::SmoothTransformation);
                }
-
-               img = img.scaled(QSize(24, 24), Qt::KeepAspectRatio, Qt::SmoothTransformation);
-               pixel.fromImage(img);
-               //pixel = pixel.scaled(16, 16, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
            }
        }
 
-       //pixel.save("/home/shenoisz/Documents/" + id.split(";")[0] + ".png");
        return pixel;
     }
 

@@ -66,9 +66,8 @@ void SysTray::startTray()
         ev.data.l[4] = 0;
 
         XSendEvent(display, root, False, StructureNotifyMask, (XEvent*)&ev);
-        qDebug() << "Systray started";
+        //qDebug() << "Systray started";
     }
 
-    XFlush(display);
     XCloseDisplay(display);
 }

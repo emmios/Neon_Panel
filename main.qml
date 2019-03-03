@@ -149,6 +149,7 @@ App {
 
         subLauncherX = 0
         subAppbar.children = []
+        activeWindow()
     }
 
     function addWindow(args) {
@@ -156,6 +157,8 @@ App {
         if (nitems[1] !== 'Neon_Panel') {
             desktopWindow(nitems[0], nitems[1], nitems[2], nitems[3], nitems[4])
         }
+
+        activeWindow()
     }
 
     function createWindow(args) {
@@ -193,6 +196,8 @@ App {
                 }
             }
         }
+
+        activeWindow()
     }
 
     signal getCreateWindow(string arg)
@@ -261,6 +266,8 @@ App {
                 subLauncherX2 = 0
             }
         }
+
+        activeWindow()
     }
 
     function desktopWindow(_nome, wmclass, winId, pid, obclass) {
@@ -574,6 +581,9 @@ App {
                     color: "transparent"
                     border {width: 2; color: "#fff"}
                     radius: 12
+                    onColorChanged: {
+                        console.log('ok')
+                    }
                 }
             }
         }
@@ -771,6 +781,7 @@ App {
                     onPressed: {
 
                         acessoRapido.accessBlur.source = ""
+                        acessoRapido.back()
 
                         if (accessOpened) {
                             neonMenu.visible = false

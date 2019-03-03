@@ -2,6 +2,7 @@ import QtQuick 2.9
 import QtQuick.Window 2.3
 import QtQuick.Controls 1.4
 import QtGraphicalEffects 1.0
+import QtQuick.Controls.Styles 1.4
 
 
 ApplicationWindow {
@@ -43,6 +44,11 @@ ApplicationWindow {
         launchersApps.height = y;
     }
 
+    function desfocusApps() {
+        for (var i = 0; i < launchersApps.children.length; i++) {
+            launchersApps.children[i].bg.opacity = 0
+        }
+    }
 
     onActiveChanged: {
         if (!active) {
@@ -56,6 +62,7 @@ ApplicationWindow {
             btnCycle.border.color = "#fff"
             blur.source = ""
             main.activeWindow()
+            desfocusApps()
         }
     }
 
@@ -67,7 +74,7 @@ ApplicationWindow {
 
             addApps()
             textSearch.focus = false
-            textSearch.text = "Buscar..."
+            textSearch.text = qsTr("Search...")
 
             showAppInfo.visible = false
         }
@@ -236,11 +243,12 @@ ApplicationWindow {
         anchors.leftMargin: 24
         anchors.top: parent.top
         anchors.topMargin: 16
-        source: "file://" + Context.basepath + "/01.jpg"
+        source: "file://usr/share/synth_panel/perfil.jpg"//"file://" + Context.basepath + "/01.jpg"
 
         fillMode: Image.PreserveAspectCrop
         layer.enabled: true
         layer.effect: OpacityMask {
+            antialiasing: true
             maskSource: mask
         }
     }
@@ -379,6 +387,21 @@ ApplicationWindow {
             anchors.topMargin: 0
         }
 
+        style: ScrollViewStyle{
+            incrementControl: null
+            decrementControl: null
+            transientScrollBars: false
+            handle: Rectangle {
+                implicitWidth: 6
+                implicitHeight: 6
+                color: main.detailColor//styleData.pressed ? "dimgray" : "gray"
+            }
+            scrollBarBackground: Rectangle {
+                implicitWidth: 6
+                implicitHeight: 6
+                color: "#33000000"
+            }
+        }
     }
 
     Rectangle {

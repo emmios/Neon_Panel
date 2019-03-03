@@ -13,7 +13,7 @@ ApplicationWindow {
     y: 0//main.y - 310//(310 + 5)
     width: 250
     height: Screen.height - main.height
-    title: qsTr("Neon Painel")
+    title: "Neon Painel"
     color: "transparent"
     flags: Qt.Tool | Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint | Qt.Popup
 
@@ -21,6 +21,7 @@ ApplicationWindow {
     property string accessDetail: "#fff"
     property alias accessBlur: blur
     property var tmpBtnColor: Object
+    property int tmpColor: 115
 
     onActiveChanged: {
         if (!active) {
@@ -132,11 +133,12 @@ ApplicationWindow {
             width: 62
             height: 62
             antialiasing: true
-            source: "file://" + Context.basepath + "/01.jpg"
+            source: "file://usr/share/synth_panel/perfil.jpg"//"file://" + Context.basepath + "/01.jpg"
 
             fillMode: Image.PreserveAspectCrop
             layer.enabled: true
             layer.effect: OpacityMask {
+                antialiasing: true
                 maskSource: mask
             }
         }
@@ -153,19 +155,23 @@ ApplicationWindow {
             MouseArea {
                 anchors.fill: parent
                 onClicked: {
-                    arrowBack.visible = false
-                    details.visible = false
-                    pluginWifi.visible = false
-                    pluginCalendar.visible = false
-                    display.visible = false
-                    _volume.visible = false
-                    power.visible = false
-
-                    for (var m in btns.model) {
-                        btns.itemAt(m).children[4].color = "#fff"
-                    }
+                    back()
                 }
             }
+        }
+    }
+
+    function back() {
+        arrowBack.visible = false
+        details.visible = false
+        pluginWifi.visible = false
+        pluginCalendar.visible = false
+        display.visible = false
+        _volume.visible = false
+        power.visible = false
+
+        for (var m in btns.model) {
+            btns.itemAt(m).children[4].color = "#fff"
         }
     }
 
@@ -209,80 +215,77 @@ ApplicationWindow {
             property int light: 115
 
             Rectangle {
+                anchors.fill: parent
+                color: "#fff"
+                opacity: 0.1
+            }
+
+            Label {
+                x: 14
+                y: 48
+                text: qsTr("Contrast")
+                color: "#fff"
+                font.pixelSize: 12
+                font.family: "Font Awesome 5 Free"
+            }
+
+            Image {
                 x: 14
                 y: 70
                 width: 220
-                height: 12//8
-                color: "#666666"
+                height: 8
+                source: "qrc:/Resources/lightness.png"
+            }
 
-                Image {
-                    id: lightness
-                    anchors.fill: parent
-                    source: "file://" + Context.basepath + "/lightness.png"
-                }
+            Controller {
+                x: 14
+                y: 70
+                width: 220
+                height: 8
+                percentage: ContextPlugin.changeLight()//50
+                bg.color: "transparent"
+                detail: main.detailColor
 
-                Rectangle {
-                    id: brightIdicator
-                    x: 110 //0
-                    y: -1//-2.5
-                    width: 14
-                    height: 14
-                    radius: 7
-                    color: main.detailColor
-                    border.width: 0
-                }
-
-                MouseArea {
-                    anchors.fill: parent
-
-                    onClicked: {
-
-                        var _x = mouseX
-                        brightIdicator.x = _x  - 7
-                        _x = (_x * 100) / 220
-                        _x = parseInt(_x)
-
-                        if (_x == 99) _x = 100
-
-                        var _y = (_x * 255) / 100
-                        _y = parseInt(_y)
-
-                        details.light = _y.toString()
-                    }
+                onChange: {
+                    details.light = parseInt((perValue * 255) / 100)
+                    main.detailColor = ContextPlugin.changeLight(perValue, tmpColor, details.light)
+                    tmpBtnColor.color = main.detailColor
                 }
             }
 
-            Rectangle {
+            Label {
                 x: 14
-                y: 100
+                y: 98
+                text: qsTr("Colors")
+                color: "#fff"
+                font.pixelSize: 12
+                font.family: "Font Awesome 5 Free"
+            }
+
+            Image {
+                x: 14
+                y: 120
                 width: 220
-                height: 100
-                color: "transparent"
+                height: 20
+                source: "qrc:/Resources/hue.png"
+            }
 
-                Image {
-                    id: hue
-                    anchors.fill: parent
-                    source: "file://" + Context.basepath + "/hue.png"
-                }
+            Controller {
+                x: 14
+                y: 145
+                width: 220
+                height: 8
+                percentage: ContextPlugin.changeDetail()//60
+                bg.color: "#fff"
+                detail: main.detailColor
 
-                MouseArea {
-                    anchors.fill: parent
-
-                    onClicked: {
-
-                        var _x = (mouseX * 100) / 220
-                        _x = parseInt(_x)
-
-                        var _y = (_x * 360) / 100
-                        _y = parseInt(_y)
-
-                        main.detailColor = ContextPlugin.changeDatail(_y, details.light)
-                        tmpBtnColor.color = main.detailColor
-                    }
+                onChange: {
+                    tmpColor = parseInt((perValue * 360) / 100)
+                    main.detailColor = ContextPlugin.changeDetail(perValue, tmpColor, details.light)
+                    tmpBtnColor.color = main.detailColor
                 }
             }
         }
-
 
         Rectangle {
             id: power
@@ -306,16 +309,26 @@ ApplicationWindow {
                 font.family: "Font Awesome 5 Free"
                 MouseArea {
                     anchors.fill: parent
+                    hoverEnabled: true
+
                     onClicked: {
                         ContextPlugin.shutdown()
+                    }
+
+                    onHoveredChanged: {
+                        parent.color = main.detailColor
+                    }
+
+                    onExited: {
+                        parent.color = "#fff"
                     }
                 }
             }
 
             Label {
-                x:  100
+                x: (parent.width / 2) - (width / 2)
                 y: 82
-                text: "Desligar"
+                text: qsTr("Shutdown")
                 color: "#fff"
                 font.pixelSize: 12
                 font.family: "Font Awesome 5 Free"
@@ -330,16 +343,26 @@ ApplicationWindow {
                 font.family: "Font Awesome 5 Free"
                 MouseArea {
                     anchors.fill: parent
+                    hoverEnabled: true
+
                     onPressed: {
                         ContextPlugin.restart()
+                    }
+
+                    onHoveredChanged: {
+                        parent.color = main.detailColor
+                    }
+
+                    onExited: {
+                        parent.color = "#fff"
                     }
                 }
             }
 
             Label {
-                x:  100
+                x: (parent.width / 2) - (width / 2)
                 y: 164
-                text: "Reeniciar"
+                text: qsTr("Restart")
                 color: "#fff"
                 font.pixelSize: 12
                 font.family: "Font Awesome 5 Free"
@@ -354,16 +377,26 @@ ApplicationWindow {
                 font.family: "Font Awesome 5 Free"
                 MouseArea {
                     anchors.fill: parent
+                    hoverEnabled: true
+
                     onClicked: {
                         ContextPlugin.logoff()
+                    }
+
+                    onHoveredChanged: {
+                        parent.color = main.detailColor
+                    }
+
+                    onExited: {
+                        parent.color = "#fff"
                     }
                 }
             }
 
             Label {
-                x:  80
+                x: (parent.width / 2) - (width / 2)
                 y: 240
-                text: "Encerrar Sessão"
+                text: qsTr("Close Session")
                 color: "#fff"
                 font.pixelSize: 12
                 font.family: "Font Awesome 5 Free"
@@ -378,16 +411,26 @@ ApplicationWindow {
                 font.family: "Font Awesome 5 Free"
                 MouseArea {
                     anchors.fill: parent
+                    hoverEnabled: true
+
                     onClicked: {
                         ContextPlugin.suspend()
+                    }
+
+                    onHoveredChanged: {
+                        parent.color = main.detailColor
+                    }
+
+                    onExited: {
+                        parent.color = "#fff"
                     }
                 }
             }
 
             Label {
-                x:  92
+                x: (parent.width / 2) - (width / 2)
                 y: 324
-                text: "Suspender"
+                text: qsTr("Suspend")
                 color: "#fff"
                 font.pixelSize: 12
                 font.family: "Font Awesome 5 Free"
@@ -408,9 +451,18 @@ ApplicationWindow {
             }
 
             Label {
+                x: 22
+                y: 48
+                text: qsTr("Volume")
+                color: "#fff"
+                font.pixelSize: 12
+                font.family: "Font Awesome 5 Free"
+            }
+
+            Label {
                 id: phone
                 x: 22
-                y: 30
+                y: 70
                 text: "\uf028"
                 color: "#fff"
                 font.pixelSize: 22
@@ -420,7 +472,7 @@ ApplicationWindow {
             Controller {
                 id: volume
                 x: 58
-                y: 38
+                y: 78
                 width: 160
                 height: 8
                 percentage: ContextPlugin.volume()
@@ -445,9 +497,18 @@ ApplicationWindow {
             }
 
             Label {
+                x: 22
+                y: 110
+                text: qsTr("Microphone")
+                color: "#fff"
+                font.pixelSize: 12
+                font.family: "Font Awesome 5 Free"
+            }
+
+            Label {
                 id: mic
                 x: 22
-                y: 90
+                y: 132
                 text: "\uf130"
                 color: "#fff"
                 font.pixelSize: 24
@@ -456,7 +517,7 @@ ApplicationWindow {
 
             Controller {
                 x: 58
-                y: 98
+                y: 140
                 width: 160
                 height: 8
                 percentage: ContextPlugin.micro()
@@ -500,7 +561,7 @@ ApplicationWindow {
                         Label {
                             anchors.centerIn: parent
                             y: 8
-                            text: "\uf108 Tela - " + index
+                            text: "\uf108 " + qsTr("Display") + " - " + index
                             color: "#fff"
                             font.pixelSize: 22
                             font.family: "Font Awesome 5 Free"
@@ -525,8 +586,49 @@ ApplicationWindow {
             id: pluginCalendar
             visible: false
             anchors.fill: parent
+            //navigationBarVisible: false
+
             style: CalendarStyle {
+
                 gridVisible: false
+                gridColor: "transparent"
+
+                background: Rectangle {
+                    color: "#fff"
+                    opacity: 0.2
+                }
+
+                dayDelegate: Rectangle {
+
+                    gradient: Gradient {
+
+                        GradientStop {
+                            position: 0.00
+                            color: styleData.selected ? main.detailColor : "transparent"//(styleData.visibleMonth && styleData.valid ? "#ffe" : "#fff");
+                        }
+                    }
+
+                    Label {
+                        text: styleData.date.getDate()
+                        anchors.centerIn: parent
+                        font.pixelSize: 14
+                        color: styleData.selected ? (main.detailColor === "#ffffff" || main.detailColor === "#fff" ? "#007fff" : "#fff") : (styleData.visibleMonth && styleData.valid ? "#161616" : "#999")//styleData.valid ? "white" : "grey"
+                    }
+
+                    Rectangle {
+                        width: parent.width
+                        height: 1
+                        color: "transparent"
+                        anchors.bottom: parent.bottom
+                    }
+
+                    Rectangle {
+                        width: 1
+                        height: parent.height
+                        color: "transparent"
+                        anchors.right: parent.right
+                    }
+                }
             }
         }
 
@@ -549,7 +651,7 @@ ApplicationWindow {
                 Label {
                     y: 10
                     x: 20
-                    text:"Atualizar"
+                    text:qsTr("Refresh")
                     color: "#fff"
                     font.pixelSize: 10
                     font.family: "Font Awesome 5 Free"
@@ -892,7 +994,7 @@ ApplicationWindow {
                     Label {
                         y: 70
                         x: 20
-                        text: "Segurança:"
+                        text: qsTr("Security:")
                         color: "#fff"
                         font.pixelSize: 14
                         font.family: "Font Awesome 5 Free"
@@ -912,7 +1014,7 @@ ApplicationWindow {
                     Label {
                         y: 110
                         x: 20
-                        text: "Canal:"
+                        text: qsTr("Chanal:")
                         color: "#fff"
                         font.pixelSize: 14
                         font.family: "Font Awesome 5 Free"
@@ -932,7 +1034,7 @@ ApplicationWindow {
                     Label {
                         y: 150
                         x: 20
-                        text: "Potência do sinal:"
+                        text: qsTr("Potência do sinal:")
                         color: "#fff"
                         font.pixelSize: 14
                         font.family: "Font Awesome 5 Free"
@@ -979,7 +1081,7 @@ ApplicationWindow {
                         Label {
                             y: 0
                             x: 0
-                            text: "Senha:"
+                            text: qsTr("Password:")
                             color: "#fff"
                             font.pixelSize: 14
                             font.family: "Font Awesome 5 Free"
@@ -1009,7 +1111,7 @@ ApplicationWindow {
                         id: btnText
                         x: 140
                         y: wifiInfo.height - (btnText.height + 10) //270
-                        text: 'Connectar'
+                        text: qsTr('Connect')
                         size: 12
                         detailColor: main.detailColor
                         MouseArea {
@@ -1085,7 +1187,7 @@ ApplicationWindow {
 
                         onClicked: {
 
-                            if (modelData[0] == "Internet") {
+                            if (modelData[0] === qsTr("Internet")) {
                                 arrowBack.visible = true
                                 details.visible = false
                                 power.visible = false
@@ -1101,7 +1203,7 @@ ApplicationWindow {
                                 acessIcon.color = main.detailColor
                             }
 
-                            if (modelData[0] == "Calendar") {
+                            if (modelData[0] === qsTr("Calendar")) {
                                 arrowBack.visible = true
                                 details.visible = false
                                 power.visible = false
@@ -1117,7 +1219,7 @@ ApplicationWindow {
                                 acessIcon.color = main.detailColor
                             }
 
-                            if (modelData[0] == "Display") {
+                            if (modelData[0] === qsTr("Display")) {
                                 arrowBack.visible = true
                                 details.visible = false
                                 power.visible = false
@@ -1133,7 +1235,7 @@ ApplicationWindow {
                                 acessIcon.color = main.detailColor
                             }
 
-                            if (modelData[0] == "Audio") {
+                            if (modelData[0] === qsTr("Audio")) {
                                 arrowBack.visible = true
                                 details.visible = false
                                 power.visible = false
@@ -1149,7 +1251,7 @@ ApplicationWindow {
                                 acessIcon.color = main.detailColor
                             }
 
-                            if (modelData[0] == "Power") {
+                            if (modelData[0] === qsTr("Power")) {
                                 arrowBack.visible = true
                                 details.visible = false
                                 pluginWifi.visible = false
@@ -1165,7 +1267,7 @@ ApplicationWindow {
                                 acessIcon.color = main.detailColor
                             }
 
-                            if (modelData[0] == "Color") {
+                            if (modelData[0] === qsTr("Color")) {
                                 arrowBack.visible = true
                                 pluginWifi.visible = false
                                 pluginCalendar.visible = false

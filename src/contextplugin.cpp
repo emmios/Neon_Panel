@@ -133,8 +133,26 @@ void ContextPlugin::logoff()
 
 //Color
 
-QString ContextPlugin::changeDatail(int hue, int light)
+int ContextPlugin::changeLight()
 {
     Color color;
-    return color.changeDatail(hue, light);
+    return color.changeLight();
+}
+
+int ContextPlugin::changeDetail()
+{
+    Color color;
+    return color.changeDetail();
+}
+
+QString ContextPlugin::changeLight(int value, int hue, int light)
+{
+    Color color;
+    return color.changeLight(value, hue, light);
+}
+
+QString ContextPlugin::changeDetail(int value, int hue, int light)
+{
+    Color color;
+    return color.changeDetail(value, hue, light);
 }

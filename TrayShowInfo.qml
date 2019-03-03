@@ -26,7 +26,7 @@ ApplicationWindow {
         id: showInfosBg
         anchors.fill: parent
         color: "#000000"
-        opacity: 0.75
+        opacity: 0.80
         radius: 0
     }
 

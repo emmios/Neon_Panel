@@ -15,8 +15,10 @@ Rectangle {
     property string exec: ""
     property string launcherApp: ""
     property double iconOpc: 0.0
+    property alias bg: bg
 
     Rectangle {
+        id: bg
         anchors.fill: parent
         color: main.detailColor//"#ffffff"
         opacity: 0 //iconOpc

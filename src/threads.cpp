@@ -181,7 +181,8 @@ void Threads::run()
                 QMetaObject::invokeMethod(this->main, "notifications", Q_ARG(QVariant,  (int)id));
             }
         }
-        else if (e.type == ConfigureNotify)
+
+        if (e.type == ConfigureNotify)
         {
             int atual = (int)e.xconfigure.window;
             //qDebug() << e.xconfigure.window;

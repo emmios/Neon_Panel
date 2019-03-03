@@ -4,5 +4,7 @@
 	<file>Resources/icon-down.png</file>
 	<file>Resources/wating.gif</file>
 	<file>Resources/thumbtack.svg</file>
+	<file>Resources/lightness.png</file>
+	<file>Resources/hue.png</file>
     </qresource>
 </RCC>

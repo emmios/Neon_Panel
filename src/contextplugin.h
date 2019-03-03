@@ -44,8 +44,10 @@ public:
     Q_INVOKABLE void restart();
     Q_INVOKABLE void suspend();
     Q_INVOKABLE void logoff();
-
-    Q_INVOKABLE QString changeDatail(int hue, int light);
+    Q_INVOKABLE int changeLight();
+    Q_INVOKABLE int changeDetail();
+    Q_INVOKABLE QString changeLight(int value, int hue, int light);
+    Q_INVOKABLE QString changeDetail(int value, int hue, int light);
 };
 
 #endif // CONTEXTPLUGIN_H
