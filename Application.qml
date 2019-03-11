@@ -54,25 +54,26 @@ Rectangle {
         y: 8
         width: 24
         height: 24
-        source: Context.crop(url) //url
+        source: Context.crop(url) //"image://pixmap/" + url //url
         fillMode: Image.PreserveAspectFit//Image.Stretch
         antialiasing: true
+        smooth: true
         cache: false
         //transform: Rotation {angle: -20}
     }
-
+/*
     Image {
         x: 4
         y: 8
-        width: 6
-        height: 6
+        width: 4
+        height: 6//8
         antialiasing: true
         cache: false
         fillMode: Image.PreserveAspectFit
         source: "qrc:/Resources/thumbtack.svg"
         transform: Rotation {angle: -42}
     }
-
+*/
     MouseArea {
 
         anchors.fill: parent

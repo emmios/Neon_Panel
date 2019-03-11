@@ -29,6 +29,7 @@ Rectangle {
         source: "image://pixmap/" + winId + ';' + wclass
         fillMode: Image.Stretch//Image.PreserveAspectCrop
         antialiasing: true
+        smooth: true
         cache: false
     }
 

@@ -122,6 +122,8 @@ ApplicationWindow {
         anchors.fill: blur
         source: "qrc:/Resources/noise.png"
         fillMode: Image.Tile
+        antialiasing: true
+        smooth: true
     }
 
     Blend {

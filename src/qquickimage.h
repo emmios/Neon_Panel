@@ -19,6 +19,13 @@ public:
     {
        QPixmap pixel;
 
+       if (id.contains("file://"))
+       {
+           QPixmap pixel(id.split("file://")[1], "PNG");
+           pixel.scaled(QSize(24, 24), Qt::KeepAspectRatio, Qt::SmoothTransformation);
+           return pixel;
+       }
+
        if (!id.isEmpty())
        {
            QString wclass = id.split(";")[1];
@@ -36,7 +43,7 @@ public:
 
                if (icon.isEmpty())
                {
-                  pixel.load("/opt/synth_panel/default.svg");
+                  pixel.load("/usr/share/synth_panel/default.svg");
                   pixel.scaled(QSize(24, 24), Qt::KeepAspectRatio, Qt::SmoothTransformation);
                }
                else

@@ -131,6 +131,18 @@ void ContextPlugin::logoff()
     power.logoff();
 }
 
+int ContextPlugin::hasBattery()
+{
+    Power power;
+    return power.hasBattery();
+}
+
+int ContextPlugin::isPlugged()
+{
+    Power power;
+    return power.isPlugged();
+}
+
 //Color
 
 int ContextPlugin::changeLight()
@@ -155,4 +167,10 @@ QString ContextPlugin::changeDetail(int value, int hue, int light)
 {
     Color color;
     return color.changeDetail(value, hue, light);
+}
+
+void ContextPlugin::color(QString cor)
+{
+    Color color;
+    color.color(cor);
 }

@@ -27,6 +27,8 @@
 #include <QLibrary>
 #include <QFunctionPointer>
 #include <QMatrix>
+#include <QSize>
+#include <QSettings>
 
 #include "xlibutil.h"
 

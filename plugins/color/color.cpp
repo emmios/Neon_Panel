@@ -5,6 +5,7 @@ Color::Color()
 
 }
 
+
 QString Color::changeLight(int value, int hue, int light)
 {
     QDir dir;
@@ -49,4 +50,12 @@ int Color::changeDetail()
     int hue = settings.value("hue").toInt();
     if (hue == 0) hue = 59;
     return hue;
+}
+
+void Color::color(QString cor)
+{
+    QDir dir;
+    QString path = dir.homePath() + "/.config/Synth/panel/";
+    QSettings settings(path + "settings.txt", QSettings::NativeFormat);
+    settings.setValue("color", cor);
 }

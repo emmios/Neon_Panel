@@ -133,6 +133,7 @@ ApplicationWindow {
             width: 62
             height: 62
             antialiasing: true
+            smooth: true
             source: "file://usr/share/synth_panel/perfil.jpg"//"file://" + Context.basepath + "/01.jpg"
 
             fillMode: Image.PreserveAspectCrop
@@ -250,6 +251,7 @@ ApplicationWindow {
                     details.light = parseInt((perValue * 255) / 100)
                     main.detailColor = ContextPlugin.changeLight(perValue, tmpColor, details.light)
                     tmpBtnColor.color = main.detailColor
+                    ContextPlugin.color(main.detailColor)
                 }
             }
 
@@ -283,6 +285,7 @@ ApplicationWindow {
                     tmpColor = parseInt((perValue * 360) / 100)
                     main.detailColor = ContextPlugin.changeDetail(perValue, tmpColor, details.light)
                     tmpBtnColor.color = main.detailColor
+                    ContextPlugin.color(main.detailColor)
                 }
             }
         }

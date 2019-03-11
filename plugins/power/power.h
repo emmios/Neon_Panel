@@ -6,6 +6,7 @@
 #include <QStringList>
 #include <QString>
 #include <QDebug>
+#include <QDir>
 
 #include <unistd.h>
 #include <linux/reboot.h>
@@ -20,6 +21,8 @@ public:
     void restart();
     void suspend();
     void logoff();
+    int hasBattery();
+    int isPlugged();
 };
 
 #endif // POWER_H

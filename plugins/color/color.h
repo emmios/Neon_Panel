@@ -18,6 +18,7 @@ public:
     int changeLight();
     QString changeLight(int value, int hue, int light);
     QString changeDetail(int value, int hue, int light);
+    void color(QString cor);
 };
 
 #endif // COLOR_H

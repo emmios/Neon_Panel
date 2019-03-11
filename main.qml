@@ -13,7 +13,7 @@ App {
     y: 0
     width: 1000
     height: 40
-    title: qsTr("Neon Painel")
+    title: qsTr("Synth-Panel")
     color: "transparent"
     flags: Qt.FramelessWindowHint | Qt.WindowDoesNotAcceptFocus | Qt.WindowStaysOnTopHint | Qt.WA_X11NetWmWindowTypeDock
 
@@ -712,10 +712,45 @@ App {
 
             Rectangle {
                 id: systray
-                x: verticaline.width
+                x: (ContextPlugin.hasBattery() ? verticaline.width - 16 : verticaline.width)
                 width: (parent.width - verticaline.width) - 95
                 height: main.height
                 color: "transparent"
+            }
+
+            Rectangle {
+                id: battery
+                x: clock.x - 24
+                width: (ContextPlugin.hasBattery() === 1 ? 20 : 0)
+                height: main.height
+                color: "transparent"
+                clip: true
+
+                Label {
+                    x: 2
+                    y: 28
+                    text: '\uf244'
+                    size: 12
+                    color: main.detailColor
+                    transform: Rotation {angle: -90}
+                }
+
+                Rectangle {
+                    x: 6
+                    y: 14
+                    width: 7
+                    height: (ContextPlugin.hasBattery() === 1 ? 14 : 0)
+                    color: main.detailColor 
+                }
+
+                Label {
+                    x: 7
+                    y: 14
+                    text: '\uf0e7'
+                    color: '#fff'
+                    size: 12
+                    visible: (ContextPlugin.isPlugged() === 1 ? true : false)
+                }
             }
 
             Text {

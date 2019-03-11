@@ -9,7 +9,12 @@ Context::Context()
     //MacBuntu-OS
     //this->defaultIconTheme = process.readLine().replace("\n", "");
 
-    this->defaultIconTheme = "MacBuntu-OS";
+    QDir dir;
+    QString path = dir.homePath() + "/.config/Synth/panel/";
+    QSettings theme(path + "settings.txt", QSettings::NativeFormat);
+    this->defaultIconTheme = theme.value("theme").toString();
+
+    if (this->defaultIconTheme.isEmpty()) this->defaultIconTheme = "Paper"; //"MacBuntu-OS";
     //process.close();
 
     QStringList localPrefix;

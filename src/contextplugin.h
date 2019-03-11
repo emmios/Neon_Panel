@@ -48,6 +48,9 @@ public:
     Q_INVOKABLE int changeDetail();
     Q_INVOKABLE QString changeLight(int value, int hue, int light);
     Q_INVOKABLE QString changeDetail(int value, int hue, int light);
+    Q_INVOKABLE void color(QString cor);
+    Q_INVOKABLE int hasBattery();
+    Q_INVOKABLE int isPlugged();
 };
 
 #endif // CONTEXTPLUGIN_H

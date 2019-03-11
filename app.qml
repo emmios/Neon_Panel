@@ -103,6 +103,7 @@ Rectangle {
         height: 48
         source: icone
         antialiasing: true
+        smooth: true
         fillMode: Image.PreserveAspectCrop
    }
 

@@ -57,6 +57,7 @@ Rectangle {
         source: "image://pixmap/" + winId + ';' + obclass + ',' + pidname
         fillMode: Image.PreserveAspectFit//Image.Stretch
         antialiasing: true
+        smooth: true
         cache: false
         //transform: Rotation {angle: -20}
     }

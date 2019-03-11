@@ -35,6 +35,8 @@ int main(int argc, char *argv[])
         _file.open(QIODevice::ReadWrite);
         QSettings settings(path + "settings.txt", QSettings::NativeFormat);
         settings.setValue("volume", 100);
+        settings.setValue("theme", "Paper");
+        settings.setValue("color", "#007fff");
         _file.close();
     }
 
