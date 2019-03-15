@@ -756,7 +756,7 @@ App {
             Text {
                 id: clock
                 x: 102
-                text: Utils.getTime()
+                text: Utils.getTime().split('|')[0]//Utils.getTime()
                 font.bold: false
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
@@ -773,7 +773,7 @@ App {
                 Timer {
                     id: clockStart
                     interval: 100
-                    running: false
+                    running: true
                     repeat: true
                     onTriggered: {
                         var d = Utils.getTime().split('|')
@@ -881,7 +881,7 @@ App {
         main.visible = true
 
         fixedLaunchers.start()
-        clockStart.start()
+        //clockStart.start()
         //Context.libraryVoidLoad("write")
         //Context.libraryVoidLoad(17, "shenoisz", "showMsg")
     }

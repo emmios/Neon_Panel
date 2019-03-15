@@ -245,7 +245,7 @@ ApplicationWindow {
         anchors.leftMargin: 24
         anchors.top: parent.top
         anchors.topMargin: 16
-        source: "file://usr/share/synth_panel/perfil.jpg"//"file://" + Context.basepath + "/01.jpg"
+        source: Context.imagePerfil()
 
         fillMode: Image.PreserveAspectCrop
         layer.enabled: true

@@ -1059,3 +1059,15 @@ QString Context::crop(QString img)
     srcImg.save("/tmp/launcher.png", "PNG");
     return "file:///tmp/launcher.png";
 }
+
+QString Context::imagePerfil()
+{
+    QString img = "/usr/share/synth/users/" + qgetenv("USER").toLower() + ".jpg";
+    QFile file(img);
+
+    if (!file.exists()) {
+        return "file:///usr/share/synth/users/default.jpg";
+    }
+
+    return "file://" + img;
+}

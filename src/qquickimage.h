@@ -43,7 +43,7 @@ public:
 
                if (icon.isEmpty())
                {
-                  pixel.load("/usr/share/synth_panel/default.svg");
+                  pixel.load("/usr/share/synth/synth_panel/default.svg");
                   pixel.scaled(QSize(24, 24), Qt::KeepAspectRatio, Qt::SmoothTransformation);
                }
                else

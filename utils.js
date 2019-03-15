@@ -8,6 +8,7 @@ function getTime() {
 
     h = d.getHours()
     m = d.getMinutes()
+    s = d.getSeconds()
 
     if (day < 10) day = '0' + day
     if (mounth < 10) mounth = '0' + mounth

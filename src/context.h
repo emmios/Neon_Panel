@@ -82,6 +82,7 @@ public:
     Q_INVOKABLE void fixedLauncher(QString name, QString launchers, int remove);
     Q_INVOKABLE QString getAllWindows();
     Q_INVOKABLE QString crop(QString img);
+    Q_INVOKABLE QString imagePerfil();
     QPixmap getIconByClass(QString winId, QString wmclass);
     QString defaultIconApplications;
     QString basepath;
