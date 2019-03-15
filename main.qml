@@ -537,18 +537,18 @@ App {
 
                 onPressed: {
 
-                    trayShowInfo.visible = false
-                    showAppInfo.visible = false
+
                     acessoRapido.accessBlur.source = ""
                     acessoRapido.visible = false
                     arrowAside.text = '\uf106'
                     accessOpened = true
 
+                    trayShowInfo.visible = false
+                    fixShowInfos.visible = false
                     showAppInfo.visible = false
+
                     neonMenu.x = 0
-
                     neonMenu.y = main.y - neonMenu.height //(neonMenu.height + 4)
-
                     neonMenu.textSearch.text = ""
                     neonMenu.textSearch.focus = true
                     neonMenu.addApps()
@@ -772,7 +772,7 @@ App {
 
                 Timer {
                     id: clockStart
-                    interval: 100
+                    interval: 500
                     running: true
                     repeat: true
                     onTriggered: {

@@ -76,7 +76,7 @@ void Threads::run()
             QString type = QString(ctx->xwindowType(e.xmap.window));
             arrayCreate = "";
 
-            if (type == "_NET_WM_WINDOW_TYPE_NORMAL" || type == "_KDE_NET_WM_WINDOW_TYPE_OVERRIDE")
+            if (type == "_NET_WM_WINDOW_TYPE_NORMAL" || type == "_NET_WM_WINDOW_TYPE_DIALOG" || type == "_KDE_NET_WM_WINDOW_TYPE_OVERRIDE")
             {
                 int status;
                 unsigned long nitems;
@@ -105,7 +105,7 @@ void Threads::run()
             for (int i = 0; i < items; i++)
             {
                 QString type = QString(ctx->xwindowType(list[i]));
-                if (type == "_NET_WM_WINDOW_TYPE_NORMAL" || type == "_KDE_NET_WM_WINDOW_TYPE_OVERRIDE")
+                if (type == "_NET_WM_WINDOW_TYPE_NORMAL" || type == "_NET_WM_WINDOW_TYPE_DIALOG" || type == "_KDE_NET_WM_WINDOW_TYPE_OVERRIDE")
                 {
                     int status;
                     unsigned long nitems;
