@@ -1,6 +1,7 @@
 //contents of List.qml
 import QtQuick 2.9
 
+
 Column {
 
     id: colun

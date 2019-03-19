@@ -1,6 +1,7 @@
 //contents of Label.qml
 import QtQuick 2.9
 
+
 Text {
 
     property alias size: label.font.pixelSize

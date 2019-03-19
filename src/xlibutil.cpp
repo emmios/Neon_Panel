@@ -10,7 +10,7 @@ int Xlibutil::numberOfscreens()
 {
     Display *d = XOpenDisplay(0); //QX11Info::display();
     int num = ScreenCount(d);
-    XFlush(d);
+    //XFlush(d);
     XCloseDisplay(d);
     return num;
 }

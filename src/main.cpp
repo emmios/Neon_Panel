@@ -72,7 +72,7 @@ int main(int argc, char *argv[])
     //wind->setAttribute(Qt::WA_X11NetWmWindowTypeDock);
     //window->xChanged(Qt::WA_X11NetWmWindowTypeDock);
 
-    window->xChanged(Qt::FramelessWindowHint| Qt::WindowStaysOnTopHint| Qt::WA_X11NetWmWindowTypeDock);
+    window->xChanged(Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint | Qt::WA_X11NetWmWindowTypeDock);
     //app.setAttribute(Qt::AA_X11InitThreads);
 
     ctx->xreservedSpace(window->winId(), window->height());

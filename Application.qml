@@ -1,5 +1,5 @@
 import QtQuick 2.9
-import QtQuick.Controls 1.4
+import QtQuick.Controls 2.2
 import QtGraphicalEffects 1.0
 
 
@@ -61,6 +61,9 @@ Rectangle {
         cache: false
         //transform: Rotation {angle: -20}
     }
+
+    PropertyAnimation {id: ani; target: effect; property: "opacity"; to: 0.5; duration: 300}
+
 /*
     Image {
         x: 4
@@ -143,22 +146,30 @@ Rectangle {
         hoverEnabled: true
 
         onHoveredChanged: {
-
             if (_instance) {
                 effect.glowRadius = 4
-                effect.opacity = 0.8
+                //effect.opacity = 0.8
                 destak.opacity = 0.3
+                ani.to = 0.8
+                ani.stop()
+                ani.start()
             } else {
-                effect.opacity = 0.5
+                //effect.opacity = 0.5
                 effect.glowRadius = 0
                 destak.opacity = 0
+                ani.to = 0.5
+                ani.stop()
+                ani.start()
             }
         }
 
         onExited: {
             if (destacad == false) {
                 effect.glowRadius = 0
-                effect.opacity = 0
+                //effect.opacity = 0
+                ani.to = 0.0
+                ani.stop()
+                ani.start()
 
                 if (_instance) {
                     destak.opacity = 0.3

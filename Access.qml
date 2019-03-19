@@ -22,6 +22,7 @@ ApplicationWindow {
     property alias accessBlur: blur
     property var tmpBtnColor: Object
     property int tmpColor: 115
+    //property alias aniAcess: aniAcess
 
     onActiveChanged: {
         if (!active) {
@@ -564,7 +565,7 @@ ApplicationWindow {
                         Label {
                             anchors.centerIn: parent
                             y: 8
-                            text: "\uf108 " + qsTr("Display") + " - " + index
+                            text: "\uf108 " + qsTr("Display") + " - " + (index + 1)
                             color: "#fff"
                             font.pixelSize: 22
                             font.family: "Font Awesome 5 Free"
@@ -1407,4 +1408,6 @@ ApplicationWindow {
             }
         }
     }
+
+    //PropertyAnimation {id: aniAcess; target: acessoRapido; property: "x"; to: main.width - 249; duration: 300}
 }

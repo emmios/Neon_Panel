@@ -8,17 +8,17 @@ Tela::Tela()
 
 int Tela::getDesktopsCount()
 {
+    Display *d = XOpenDisplay(0); //QX11Info::display();
+    int num = ScreenCount(d);
+    XCloseDisplay(d);
 
-    QDir dir("/tmp/.X11-unix/");
-    QFileInfoList filelist = dir.entryInfoList(QDir::System | QDir::NoDot | QDir::NoDotAndDotDot);
-    return filelist.length();
+    if (num == 0 || num == NULL) {
+        QDir dir("/tmp/.X11-unix/");
+        QFileInfoList filelist = dir.entryInfoList(QDir::System | QDir::NoDot | QDir::NoDotAndDotDot);
+        return filelist.length();
+    }
 
-//    Display *d = XOpenDisplay(NULL); //QX11Info::display();
-//    //int num = ScreenCount(d);
-//    int num = XScreenCount(d);
-//    XFlush(d);
-//    XCloseDisplay(d);
-//    return num;
+    return num;
 }
 
 void Tela::displayChange(int num)
@@ -38,6 +38,6 @@ void Tela::displayChange(int num)
 
     XSendEvent(d, root, False, SubstructureRedirectMask | SubstructureNotifyMask, &xev);
 
-    XFlush(d);
+    //XFlush(d);
     XCloseDisplay(d);
 }

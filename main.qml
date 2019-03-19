@@ -1,6 +1,6 @@
 import QtQuick 2.9
 import QtQuick.Window 2.3
-import QtQuick.Controls 1.4
+import QtQuick.Controls 2.2
 import QtGraphicalEffects 1.0
 import "./Components"
 import "./utils.js" as Utils
@@ -823,10 +823,17 @@ App {
                             acessoRapido.visible = true
                             acessoRapido.requestActivate()
                             acessoRapido.accessBlur.source = "image://grab/crop"
+                            //acessoRapido.aniAcess.to = main.width - 249
+                            //acessoRapido.aniAcess.stop()
+                            //acessoRapido.aniAcess.start()
                             arrowAside.text = '\uf107'
                         } else {
                             neonMenu.visible = false
                             acessoRapido.visible = false
+                            acessoRapido.accessBlur.source = ""
+                            //acessoRapido.aniAcess.to = main.width
+                            //acessoRapido.aniAcess.stop()
+                            //acessoRapido.aniAcess.start()
                             arrowAside.text = '\uf106'
                         }
 
