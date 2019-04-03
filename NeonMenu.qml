@@ -8,18 +8,21 @@ import QtQuick.Controls.Styles 1.4
 ApplicationWindow {
     id: neonMenu
     visible: false
-    x: 0
-    y: 0
+    x: 0//30
+    y: main.y - neonMenu.height
     width: 470//530
     height: 530
-    title: qsTr("Neon Menu")
+    title: "Synth-Panel"
     color: "transparent"
+    opacity: 0
     flags: Qt.Tool | Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint | Qt.Popup
 
     property var menuElements: []
     property var textSearch: textSearch
     property string textColor: "#fff"
     property alias blur: blur
+    property alias aniMenu: aniMenu
+    property alias aniMenu2: aniMenu2
 
     function addApps() {
 
@@ -52,18 +55,43 @@ ApplicationWindow {
 
     onActiveChanged: {
         if (!active) {
-            //neonMenu.close()
-            textSearch.text = ""
-            textSearch.focus = true
-            neonMenu.visible = false
-            main.clickOpc = main.startOpc
-            textSearch.focus = false
-            addApps()
-            btnCycle.border.color = "#fff"
-            blur.source = ""
-            main.activeWindow()
-            desfocusApps()
+            aniMenu.to = 0
+            aniMenu.stop()
+            aniMenu.start()
+
+            aniMenu2.to = 30
+            aniMenu2.stop()
+            aniMenu2.start()
+            main.menuOpened = true
+        } else {
+            /*
+            aniMenu.to = 1
+            aniMenu.stop()
+            aniMenu.start()
+
+            aniMenu2.to = 0
+            aniMenu2.stop()
+            aniMenu2.start()
+            main.menuOpened = false
+            */
+            visible = true
+            opacity = 1
         }
+    }
+
+    function desactive() {
+        /*
+        aniMenu.to = 0
+        aniMenu.stop()
+        aniMenu.start()
+
+        aniMenu2.to = 30
+        aniMenu2.stop()
+        aniMenu2.start()
+        main.menuOpened = true
+        */
+        visible = false
+        opacity = 0
     }
 
     MouseArea {
@@ -72,7 +100,7 @@ ApplicationWindow {
 
         onClicked: {
 
-            addApps()
+            //addApps()
             textSearch.focus = false
             textSearch.text = qsTr("Search...")
 
@@ -445,12 +473,18 @@ ApplicationWindow {
         }
     }
 
-    Component.onCompleted: {
+    function updateApps() {
 
         var apps = Context.applications()
         var comp = Qt.createComponent("app.qml")
         var x = 0
         var y = 0
+
+        for (var i = 0; i < menuElements.length; i++) {
+            delete menuElements[i]
+        }
+
+        menuElements = []
 
         for (var i = 0; i < apps.length; i ++) {
 
@@ -473,11 +507,40 @@ ApplicationWindow {
                     }
                 } else {
 
-                    obj.destroy()
+                    //obj.destroy()
                 }
             }
         }
 
         launchersApps.height = y;
+    }
+
+    Component.onCompleted: {
+        updateApps()
+    }
+
+    PropertyAnimation {id: aniMenu2; target: neonMenu; property: "x"; to: 0; duration: 200;
+        onStopped: {
+            neonMenu.x = 0
+        }
+    }
+    PropertyAnimation {id: aniMenu; target: neonMenu; property: "opacity"; to: 1; duration: 200;
+        onStopped: {
+            if (to === 0) {
+                main.menuOpened = true
+                textSearch.text = ""
+                textSearch.focus = true
+                neonMenu.visible = false
+                main.clickOpc = main.startOpc
+                textSearch.focus = false
+                //addApps()
+                blur.source = ""
+                main.activeWindow()
+                desfocusApps()
+                activeWindow()
+                arrowAside.text = '\uf106'
+                btnCycle.border.color = "#fff"
+            }
+        }
     }
 }

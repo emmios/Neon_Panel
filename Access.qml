@@ -13,8 +13,9 @@ ApplicationWindow {
     y: 0//main.y - 310//(310 + 5)
     width: 250
     height: Screen.height - main.height
-    title: "Neon Painel"
+    title: "Synth-Panel"
     color: "transparent"
+    opacity: 0
     flags: Qt.Tool | Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint | Qt.Popup
 
     property var acessText: acessText
@@ -22,17 +23,48 @@ ApplicationWindow {
     property alias accessBlur: blur
     property var tmpBtnColor: Object
     property int tmpColor: 115
-    //property alias aniAcess: aniAcess
+    property alias aniAcess: aniAcess
+    property alias aniAcess2: aniAcess2
 
     onActiveChanged: {
         if (!active) {
-            acessoRapido.visible = false
-            blur.source = ""
-            arrowAside.text = '\uf106'
-            accessOpened = true
-            wifiInfo.visible = false
-            wifiList.model = ContextPlugin.redes().split(";")
+            aniAcess.to = 0
+            aniAcess.stop()
+            aniAcess.start()
+
+            aniAcess2.to = (main.width - 249) - 30
+            aniAcess2.stop()
+            aniAcess2.start()
+            main.accessOpened = true
+
+        } else {
+            /*
+            aniAcess.to = 1
+            aniAcess.stop()
+            aniAcess.start()
+
+            aniAcess2.to = main.width - 249
+            aniAcess2.stop()
+            aniAcess2.start()
+            main.accessOpened = false
+            */
+            visible = true
+            opacity = 1
         }
+    }
+
+    function desactive() {
+        /*
+        aniAcess.to = 0
+        aniAcess.stop()
+        aniAcess.start()
+
+        aniAcess2.to = (main.width - 249) - 30
+        aniAcess2.stop()
+        aniAcess2.start()
+        */
+        visible = false
+        opacity = 0
     }
 
     Image {
@@ -175,6 +207,9 @@ ApplicationWindow {
         for (var m in btns.model) {
             btns.itemAt(m).children[4].color = "#fff"
         }
+
+        wifiInfo.visible = false
+        wifiList.model = ContextPlugin.redes().split(";")
     }
 
     Rectangle {
@@ -287,6 +322,7 @@ ApplicationWindow {
                     main.detailColor = ContextPlugin.changeDetail(perValue, tmpColor, details.light)
                     tmpBtnColor.color = main.detailColor
                     ContextPlugin.color(main.detailColor)
+                    //Context.gtkThemeChangeDetail(main.detailColor)
                 }
             }
         }
@@ -1409,5 +1445,21 @@ ApplicationWindow {
         }
     }
 
-    //PropertyAnimation {id: aniAcess; target: acessoRapido; property: "x"; to: main.width - 249; duration: 300}
+    PropertyAnimation {id: aniAcess2; target: acessoRapido; property: "x"; to: main.width - 249; duration: 200;
+        onStopped: {
+            acessoRapido.x = main.width - 249
+        }
+    }
+    PropertyAnimation {id: aniAcess; target: acessoRapido; property: "opacity"; to: 1; duration: 200;
+        onStopped: {
+            if (to === 0) {
+                acessoRapido.visible = false
+                blur.source = ""
+                main.arrowAside.text = '\uf106'
+                main.accessOpened = true
+                back()
+                main.activeWindow()
+            }
+        }
+    }
 }

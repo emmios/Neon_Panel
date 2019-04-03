@@ -10,8 +10,8 @@ App {
     id: main
     visible: false
     x: 0
-    y: 0
-    width: 1000
+    y: Screen.height - 40
+    width: Screen.width
     height: 40
     title: qsTr("Synth-Panel")
     color: "transparent"
@@ -51,6 +51,7 @@ App {
     property bool windowVerify: false
 
     property bool accessOpened: true
+    property bool menuOpened: true
     property alias arrowAside: arrowAside
 
 
@@ -475,21 +476,26 @@ App {
 
         onPressed: {
             clickOpc = startOpc
-            neonMenu.visible = false
+            //neonMenu.visible = false
             neonMenu.textSearch.focus = false
+            neonMenu.desactive()
+            menuOpened = false
             //neonMenu.addApps()
             showAppInfo.visible = false
             trayShowInfo.visible = false
 
             unfix.visible = false
 
-            btnCycle.border.color = "#fff"
+            //btnCycle.border.color = "#fff"
 
-            acessoRapido.visible = false
-            acessoRapido.accessBlur.source = ""
-            arrowAside.text = '\uf106'
+            //acessoRapido.visible = false
+            //acessoRapido.accessBlur.source = ""
             accessOpened = true
-            activeWindow()
+            acessoRapido.desactive()
+
+            //arrowAside.text = '\uf106'
+            accessOpened = true
+            //activeWindow()
         }
     }
 
@@ -537,9 +543,11 @@ App {
 
                 onPressed: {
 
+                    //neonMenu.updateApps()
+                    //acessoRapido.accessBlur.source = ""
+                    //acessoRapido.visible = false
+                    acessoRapido.desactive()
 
-                    acessoRapido.accessBlur.source = ""
-                    acessoRapido.visible = false
                     arrowAside.text = '\uf106'
                     accessOpened = true
 
@@ -547,29 +555,35 @@ App {
                     fixShowInfos.visible = false
                     showAppInfo.visible = false
 
-                    neonMenu.x = 0
-                    neonMenu.y = main.y - neonMenu.height //(neonMenu.height + 4)
+                    //neonMenu.x = 0
+                    //neonMenu.y = main.y - neonMenu.height //(neonMenu.height + 4)
                     neonMenu.textSearch.text = ""
                     neonMenu.textSearch.focus = true
-                    neonMenu.addApps()
+                    //neonMenu.addApps()
+                    //neonMenu.desfocusApps()
 
-                    if (!neonMenu.visible) {
+                    if (menuOpened) {
+                        menuOpened = false
+                        btnCycle.border.color = main.detailColor
                         neonMenu.blur.source = ""
                         neonMenu.blur.source = "image://grab/crop"
-                        acessoRapido.accessBlur.source = ""
                         neonMenu.visible = true
                         neonMenu.requestActivate()
                         //clickOpc = 0.3
-                        btnCycle.border.color = main.detailColor
                     } else {
-                        neonMenu.blur.source = ""
-                        btnCycle.border.color = "#fff"
+
+                        neonMenu.desactive()
+
+                        //menuOpened = true
+                        //neonMenu.blur.source = ""
+                        //btnCycle.border.color = "#fff"
                         //clickOpc = startOpc
-                        neonMenu.visible = false
-                        neonMenu.addApps()
+                        //neonMenu.visible = false
+
+                        //neonMenu.addApps()
                     }
 
-                    activeWindow()
+                    //activeWindow()
                 }
 
                 Rectangle {
@@ -675,8 +689,14 @@ App {
 
                         onPressed: {
 
-                            acessoRapido.visible = false
-                            acessoRapido.accessBlur.source = ""
+                            //acessoRapido.visible = false
+                            //acessoRapido.accessBlur.source = ""
+
+                            menuOpened = true
+                            btnCycle.border.color = "#fff"
+                            neonMenu.desactive()
+
+                            acessoRapido.desactive()
                             accessOpened = true
                             arrowAside.text = '\uf106'
                             trayShowInfo.visible = false
@@ -815,31 +835,42 @@ App {
 
                     onPressed: {
 
-                        acessoRapido.accessBlur.source = ""
-                        acessoRapido.back()
+                        //acessoRapido.back()
+
+                        trayShowInfo.visible = false
+                        showAppInfo.visible = false
+                        //neonMenu.visible = false
+                        neonMenu.desactive()
+                        menuOpened = false
+
+                        menuOpened = true
+                        btnCycle.border.color = "#fff"
+                        neonMenu.desactive()
 
                         if (accessOpened) {
-                            neonMenu.visible = false
+
+                            acessoRapido.accessBlur.source = ""
+                            accessOpened = false
                             acessoRapido.visible = true
-                            acessoRapido.requestActivate()
                             acessoRapido.accessBlur.source = "image://grab/crop"
+                            acessoRapido.requestActivate()
                             //acessoRapido.aniAcess.to = main.width - 249
                             //acessoRapido.aniAcess.stop()
                             //acessoRapido.aniAcess.start()
                             arrowAside.text = '\uf107'
+
                         } else {
-                            neonMenu.visible = false
-                            acessoRapido.visible = false
-                            acessoRapido.accessBlur.source = ""
-                            //acessoRapido.aniAcess.to = main.width
-                            //acessoRapido.aniAcess.stop()
-                            //acessoRapido.aniAcess.start()
+
+                            accessOpened = true
+                            //acessoRapido.visible = false
+                            //acessoRapido.accessBlur.source = ""
+
+                            acessoRapido.desactive()
+
                             arrowAside.text = '\uf106'
                         }
 
-                        accessOpened = !accessOpened
-                        trayShowInfo.visible = false
-                        showAppInfo.visible = false
+
                         activeWindow()
                     }   
                 }
@@ -859,6 +890,9 @@ App {
     }
 
     Component.onCompleted: {
+
+        height = Screen.height - 40
+        width = Screen.width
 
         var component_ = Qt.createComponent("qrc:/plugins/NeonMenu.qml")
         neonMenu = component_.createObject(main)
@@ -880,7 +914,6 @@ App {
         trayShowInfo = trayInfo.createObject(main)
         trayShowInfo.visible = false
 
-
         var access = Qt.createComponent("qrc:/plugins/Access.qml")
         acessoRapido = access.createObject(main)
 
@@ -888,6 +921,7 @@ App {
         main.visible = true
 
         fixedLaunchers.start()
+        //Context.gtkThemeChangeDetail(main.detailColor)
         //clockStart.start()
         //Context.libraryVoidLoad("write")
         //Context.libraryVoidLoad(17, "shenoisz", "showMsg")

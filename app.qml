@@ -48,8 +48,10 @@ Rectangle {
 
                 if (_pressed2) {
                     Context.exec(exec, launcherApp)
-                    neonMenu.visible = false
+                    //neonMenu.visible = false
                     neonMenu.textSearch.focus = false
+                    main.menuOpened = true
+                    neonMenu.desactive()
                     main.clickOpc = main.startOpc
                 }
 
@@ -63,8 +65,10 @@ Rectangle {
                     mouseStart = mouseX
                     parent.opacity = 0.0
                     main.clickOpc = main.startOpc
-                    neonMenu.visible = false
+                    //neonMenu.visible = false
                     neonMenu.textSearch.focus = false
+                    main.menuOpened = true
+                    neonMenu.desactive()
                     neonMenu.addApps()
                 }
             }
@@ -74,8 +78,10 @@ Rectangle {
                 if (_pressed2 && mouseX > mouseStart + 10) {
                     _pressed2 = false
                     Context.dragDrop(icone.replace("file://", ""), launcherApp)
-                    neonMenu.visible = false
+                    //neonMenu.visible = false
                     neonMenu.textSearch.focus = false
+                    main.menuOpened = true
+                    neonMenu.desactive()
                     neonMenu.addApps()
                 }
                 //neonMenu.visible = true
@@ -86,10 +92,12 @@ Rectangle {
 
             onHoveredChanged: {
                 parent.opacity = 0.75
+                toolTip.visible = true
             }
 
             onExited: {
                 parent.opacity = 0.0
+                toolTip.visible = false
             }
 
         }
@@ -105,6 +113,24 @@ Rectangle {
         antialiasing: true
         smooth: true
         fillMode: Image.PreserveAspectCrop
+
+        ToolTip {
+            id: toolTip
+            text: nome
+            delay: 500
+            timeout: 5000
+            visible: false
+            contentItem: Label {
+                text: toolTip.text
+                wrapMode: Text.WordWrap
+                font: toolTip.font
+                color: "#ffffff"
+            }
+            background: Rectangle {
+                opacity: 0.9
+                color: "#000000"
+            }
+        }
    }
 
    Text {

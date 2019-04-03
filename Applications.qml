@@ -69,18 +69,21 @@ Rectangle {
 
         onPressed: {
 
-            acessoRapido.visible = false
-            acessoRapido.accessBlur.source = ""
-            arrowAside.text = '\uf106'
-            accessOpened = true
-            neonMenu.visible = false
+            //acessoRapido.visible = false
+            //acessoRapido.accessBlur.source = ""
+            main.arrowAside.text = '\uf106'
+            main.accessOpened = true
+            //neonMenu.visible = false
+            neonMenu.textSearch.focus = false
+            main.menuOpened = true
+            neonMenu.desactive()
 
             if (mouse.button & Qt.LeftButton) {
 
                 showAppInfo.visible = false
 
                 neonMenu.textSearch.focus = false
-                neonMenu.addApps()
+                //neonMenu.addApps()
                 //main.clickOpc = main.startOpc
 
                 if (!Context.isMinimized(pidname) & Context.isActive(pidname)) {

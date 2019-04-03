@@ -10,6 +10,12 @@ Context::Context()
     //this->defaultIconTheme = process.readLine().replace("\n", "");
 
     QDir dir;
+
+    QSettings gtkThemePath(dir.homePath() + "/.config/gtk-3.0/settings.ini", QSettings::IniFormat);
+    gtkThemePath.beginGroup("Settings");
+    this->gtkTheme = gtkThemePath.value("gtk-theme-name").toString();
+    gtkThemePath.endGroup();
+
     QString path = dir.homePath() + "/.config/Synth/panel/";
     QSettings theme(path + "settings.txt", QSettings::NativeFormat);
     this->defaultIconTheme = theme.value("theme").toString();
@@ -57,7 +63,7 @@ Context::Context()
     this->defaultIconApplications = this->defaultIcon();
 }
 
-
+/*
 int Context::libraryIntLoad(int arg, QString args, QString funcName, QString pluginName)
 {
     QLibrary library(this->basepath + "/plugins/" + pluginName);
@@ -152,6 +158,7 @@ void Context::libraryVoidLoad(QString funcName, QString pluginName)
             func();
     }
 }
+*/
 
 QImage Context::imageOverlay(const QImage& baseImage, const QImage& overlayImage)
 {
@@ -998,13 +1005,34 @@ QStringList Context::plugins()
     return list;
 }
 
+int Context::modified()
+{
+    QStringList appsPath;
+    appsPath << "/usr/share/applications" << QDir::homePath() + "/.local/share/applications";
+
+    for (QString path : appsPath)
+    {
+        QDir dir(path);
+
+        qDebug() << dir.Modified;
+
+        if (dir.Modified)
+        {
+
+        }
+    }
+
+    return 0;
+}
+
 QStringList Context::applications()
 {
+    //this->modified();
     QStringList list, tmp, appsPath;
 
     appsPath << "/usr/share/applications/" << QDir::homePath() + "/.local/share/applications/";
 
-    foreach (QString path, appsPath)
+    for (QString path : appsPath)
     {
         QDir dir(path);
         QFileInfoList filelist = dir.entryInfoList(QDir::Files);
@@ -1012,7 +1040,21 @@ QStringList Context::applications()
         for (int i = 0; i < filelist.length(); i++)
         {
             tmp = this->addLauncher(filelist.at(i).filePath());
-            list << tmp.at(0) + ";" + tmp.at(1) + ";" + tmp.at(2) + ";" + filelist.at(i).filePath();
+            bool exist = false;
+
+            foreach (QString l, list)
+            {
+                if (tmp.at(0) == l.split(";")[0])
+                {
+                    exist = true;
+                }
+            }
+
+            if (!exist)
+            {
+                list << tmp.at(0) + ";" + tmp.at(1) + ";" + tmp.at(2) + ";" + filelist.at(i).filePath();
+                exist = false;
+            }
         }
     }
 
@@ -1021,7 +1063,6 @@ QStringList Context::applications()
 
 void Context::dragDrop(QString icone, QString app)
 {
-
     QMimeData *mimeData = new QMimeData;
     QList<QUrl> url;
 
@@ -1070,4 +1111,91 @@ QString Context::imagePerfil()
     }
 
     return "file://" + img;
+}
+
+void Context::gtkThemeChangeDetail(QString color)
+{
+    QDir dir;
+    QString pathTheme = dir.homePath() + "/.themes/" + this->gtkTheme;
+    QString gtk2_0, gtk3_0, gtk3_20;
+
+    //gtk 2.0
+    gtk2_0 = pathTheme + "/gtk-2.0/gtkrc";
+
+    QFile r_gtk2_0(gtk2_0);
+    QFile w_gtk2_0(gtk2_0);
+
+    if (r_gtk2_0.open(QFile::ReadOnly))
+    {
+        QString content, selected_bg;
+
+        content = r_gtk2_0.readAll();
+        selected_bg = content.split("selected_bg_color:")[1];
+        selected_bg = selected_bg.split("\\n")[0];
+        content = content.replace("selected_bg_color:" + selected_bg, "selected_bg_color:" + color);
+
+        r_gtk2_0.close();
+
+        if (w_gtk2_0.open(QFile::WriteOnly))
+        {
+            w_gtk2_0.write(content.toUtf8());
+            w_gtk2_0.close();
+        }
+    }
+
+    //gtk 3.0
+    gtk3_0 = pathTheme + "/gtk-3.0/gtk.css";
+
+    QFile r_gtk3_0(gtk3_0);
+    QFile w_gtk3_0(gtk3_0);
+
+    if (r_gtk3_0.open(QFile::ReadOnly))
+    {
+        QString content, selected_bg, theme_selected_bg_color;
+
+        content = r_gtk3_0.readAll();
+        selected_bg = content.split("@define-color selected_bg_color ")[1];
+        selected_bg = selected_bg.split(";")[0];
+        content = content.replace("@define-color selected_bg_color " + selected_bg, "@define-color selected_bg_color " + color);
+
+        theme_selected_bg_color = content.split("@define-color selected_bg_color ")[1];
+        theme_selected_bg_color = theme_selected_bg_color.split(";")[0];
+        content = content.replace("@define-color theme_selected_bg_color " + theme_selected_bg_color, "@define-color theme_selected_bg_color " + color);
+
+        r_gtk3_0.close();
+
+        if (w_gtk3_0.open(QFile::WriteOnly))
+        {
+            w_gtk3_0.write(content.toUtf8());
+            w_gtk3_0.close();
+        }
+    }
+
+    //gtk 3.20
+    gtk3_20 = pathTheme + "/gtk-3.20/gtk.css";
+
+    QFile r_gtk3_20(gtk3_20);
+    QFile w_gtk3_20(gtk3_20);
+
+    if (r_gtk3_20.open(QFile::ReadOnly))
+    {
+        QString content, selected_bg, theme_selected_bg_color;
+
+        content = r_gtk3_20.readAll();
+        selected_bg = content.split("@define-color selected_bg_color ")[1];
+        selected_bg = selected_bg.split(";")[0];
+        content = content.replace("@define-color selected_bg_color " + selected_bg, "@define-color selected_bg_color " + color);
+
+        theme_selected_bg_color = content.split("@define-color selected_bg_color ")[1];
+        theme_selected_bg_color = theme_selected_bg_color.split(";")[0];
+        content = content.replace("@define-color theme_selected_bg_color " + theme_selected_bg_color, "@define-color theme_selected_bg_color " + color);
+
+        r_gtk3_20.close();
+
+        if (w_gtk3_20.open(QFile::WriteOnly))
+        {
+            w_gtk3_20.write(content.toUtf8());
+            w_gtk3_20.close();
+        }
+    }
 }

@@ -29,6 +29,8 @@
 #include <QMatrix>
 #include <QSize>
 #include <QSettings>
+//#include <QTextStream>
+//#include <QByteArray>
 
 #include "xlibutil.h"
 
@@ -38,6 +40,7 @@ class Context : public QObject, public Xlibutil
 
     Q_OBJECT
     Q_PROPERTY(QString basepath READ basePath NOTIFY basepathChanged)
+
 
 public:
     Context();
@@ -67,12 +70,12 @@ public:
     Q_INVOKABLE void windowClose(int window);
     Q_INVOKABLE QList<int> windowsBywmclass(QString wmclass);
     Q_INVOKABLE void showMoreWindows(int winId, int h);
-    Q_INVOKABLE void libraryVoidLoad(int arg, QString args, QString funcName, QString pluginName);
-    Q_INVOKABLE int libraryIntLoad(int arg, QString args, QString funcName, QString pluginName);
-    Q_INVOKABLE QString libraryQStringLoad(int arg, QString args, QString funcName, QString pluginName);
-    Q_INVOKABLE void libraryVoidLoad(QString funcName, QString pluginName);
-    Q_INVOKABLE int libraryIntLoad(QString funcName, QString pluginName);
-    Q_INVOKABLE QString libraryQStringLoad(QString funcName, QString pluginName);
+    //Q_INVOKABLE void libraryVoidLoad(int arg, QString args, QString funcName, QString pluginName);
+    //Q_INVOKABLE int libraryIntLoad(int arg, QString args, QString funcName, QString pluginName);
+    //Q_INVOKABLE QString libraryQStringLoad(int arg, QString args, QString funcName, QString pluginName);
+    //Q_INVOKABLE void libraryVoidLoad(QString funcName, QString pluginName);
+    //Q_INVOKABLE int libraryIntLoad(QString funcName, QString pluginName);
+    //Q_INVOKABLE QString libraryQStringLoad(QString funcName, QString pluginName);
     Q_INVOKABLE QStringList plugins();
     Q_INVOKABLE QString windowFocused();
     Q_INVOKABLE int windowFocusedId(QString wmclass);
@@ -83,6 +86,8 @@ public:
     Q_INVOKABLE QString getAllWindows();
     Q_INVOKABLE QString crop(QString img);
     Q_INVOKABLE QString imagePerfil();
+    Q_INVOKABLE void gtkThemeChangeDetail(QString color);
+    Q_INVOKABLE int modified();
     QPixmap getIconByClass(QString winId, QString wmclass);
     QString defaultIconApplications;
     QString basepath;
@@ -108,6 +113,7 @@ private:
     QString defaultIconTheme;
     QString defaultPrefixTheme;
     QString absoluteIconPath;
+    QString gtkTheme;
 
     QString basePath() const {
         return this->basepath;

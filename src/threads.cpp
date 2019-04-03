@@ -45,7 +45,7 @@ void Threads::run()
 
             if (wclass != "unknow")
             {
-                if (wclass != "Neon_Panel")
+                if (wclass != "Synth-Panel")
                 {
                     arrayCreate += "|@|" + name + "=#=" + wclass + "=#=" + QString::number((int)_list[i])  + "=#=" + QString::number((int)ctx->xwindowPid(_list[i]))  + '=#=' + QString((char *)ctx->windowProperty(d, _list[i], "_OB_APP_CLASS", &nitems, &status));
                     this->msleep(50);
