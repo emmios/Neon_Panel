@@ -1,6 +1,7 @@
 #include "context.h"
 
 
+
 Context::Context()
 {
     //QProcess process;
@@ -1007,27 +1008,38 @@ QStringList Context::plugins()
 
 int Context::modified()
 {
+    int response = 0;
+    int i = 0;
+    QDir dir;
+    QStringList _modified;
+    _modified << "modifiedapp" << "modifiedlocal";
     QStringList appsPath;
-    appsPath << "/usr/share/applications" << QDir::homePath() + "/.local/share/applications";
+    appsPath << "/usr/share/applications" << dir.homePath() + "/.local/share/applications";
+
+    QSettings settings(dir.homePath() + "/.config/Synth/panel/settings.txt", QSettings::NativeFormat);
 
     for (QString path : appsPath)
     {
-        QDir dir(path);
+        QFileInfo info(path);
+        QDateTime datetime = info.lastModified();
+        //QString hash = QCryptographicHash::hash(datetime.toString().toUtf8(), QCryptographicHash::Md5).toHex();
+        QString hash = datetime.toString();
+        QString sHash = settings.value(_modified.at(i)).toString();
 
-        qDebug() << dir.Modified;
-
-        if (dir.Modified)
+        if (sHash != hash)
         {
-
+            response = 1;
+            settings.setValue(_modified.at(i), hash);
         }
+
+        i++;
     }
 
-    return 0;
+    return response;
 }
 
 QStringList Context::applications()
 {
-    //this->modified();
     QStringList list, tmp, appsPath;
 
     appsPath << "/usr/share/applications/" << QDir::homePath() + "/.local/share/applications/";

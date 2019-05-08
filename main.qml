@@ -486,7 +486,7 @@ App {
 
             unfix.visible = false
 
-            //btnCycle.border.color = "#fff"
+            btnCycle.border.color = "#fff"
 
             //acessoRapido.visible = false
             //acessoRapido.accessBlur.source = ""
@@ -568,15 +568,22 @@ App {
                         neonMenu.blur.source = ""
                         neonMenu.blur.source = "image://grab/crop"
                         neonMenu.visible = true
+
+
+                        if (Context.modified() === 1) {
+                            neonMenu.updateApps()
+                        }
+
                         neonMenu.requestActivate()
+
                         //clickOpc = 0.3
                     } else {
 
                         neonMenu.desactive()
+                        menuOpened = true
 
-                        //menuOpened = true
                         //neonMenu.blur.source = ""
-                        //btnCycle.border.color = "#fff"
+                        btnCycle.border.color = "#fff"
                         //clickOpc = startOpc
                         //neonMenu.visible = false
 

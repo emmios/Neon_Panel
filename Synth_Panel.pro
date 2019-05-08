@@ -1,6 +1,6 @@
 TEMPLATE = app
 
-QT += qml quick widgets x11extras dbus
+QT += core qml quick widgets x11extras dbus
 CONFIG += c++14
 
 

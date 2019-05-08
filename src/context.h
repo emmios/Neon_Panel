@@ -8,6 +8,7 @@
 #include <QApplication>
 #include <QFile>
 #include <QFileInfo>
+#include <QDateTime>
 #include <QSettings>
 #include <QIcon>
 #include <QStringList>
@@ -29,6 +30,7 @@
 #include <QMatrix>
 #include <QSize>
 #include <QSettings>
+//#include <QCryptographicHash>
 //#include <QTextStream>
 //#include <QByteArray>
 

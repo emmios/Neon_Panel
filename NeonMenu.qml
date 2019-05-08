@@ -417,7 +417,7 @@ ApplicationWindow {
             anchors.topMargin: 0
         }
 
-        style: ScrollViewStyle{
+        style: ScrollViewStyle {
             incrementControl: null
             decrementControl: null
             transientScrollBars: false
@@ -485,6 +485,12 @@ ApplicationWindow {
         }
 
         menuElements = []
+
+        for (var i = 0; i < launchersApps.children.length; i++) {
+            delete launchersApps.children[i]
+        }
+
+        launchersApps.children = []
 
         for (var i = 0; i < apps.length; i ++) {
 
