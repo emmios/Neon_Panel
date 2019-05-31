@@ -32,7 +32,7 @@ void Xlibutil::displayChange(int num)
 
     XSendEvent(d, root, False, SubstructureRedirectMask | SubstructureNotifyMask, &xev);
 
-    XFlush(d);
+    //XFlush(d);
     XCloseDisplay(d);
 }
 
@@ -53,7 +53,7 @@ void Xlibutil::setMoreDisplay(int num)
 
     XSendEvent(d, root, False, SubstructureRedirectMask | SubstructureNotifyMask, &xev);
 
-    XFlush(d);
+    //XFlush(d);
     XCloseDisplay(d);
 }
 
@@ -63,7 +63,7 @@ QString Xlibutil::xgetWindowFocused()
     int revert_to;
     Display *d = XOpenDisplay(0); //QX11Info::display();
     XGetInputFocus(d, &w, &revert_to);
-    XFlush(d);
+    //XFlush(d);
     XCloseDisplay(d);
     return QString(this->xwindowClass(w));
 }
@@ -74,7 +74,7 @@ int Xlibutil::xgetWindowFocusedId()
     int revert_to;
     Display *d = XOpenDisplay(0); //QX11Info::display();
     XGetInputFocus(d, &w, &revert_to);
-    XFlush(d);
+    //XFlush(d);
     XCloseDisplay(d);
     return (int)this->xwindowPid(w);
 }
@@ -85,7 +85,7 @@ void Xlibutil::xwindowKill(Window window)
     //Atom atom = XInternAtom(d, "_NET_DELETE_WINDOW", False);
     //XSetWMProtocols(d, window, &atom, 1);
     XDestroyWindow(d, window);
-    XFlush(d);
+    //XFlush(d);
     XCloseDisplay(d);
 }
 
@@ -105,7 +105,7 @@ void Xlibutil::xwindowClose(Window window)
     xev.xclient.data.l[1] = CurrentTime;
 
     XSendEvent(d, DefaultRootWindow(d), False, SubstructureRedirectMask | SubstructureNotifyMask, &xev);
-    XFlush(d);
+    //XFlush(d);
     XCloseDisplay(d);
 }
 
@@ -125,7 +125,7 @@ void Xlibutil::xreservedSpace(Window window, int h)
                     XInternAtom(d, "_NET_WM_STRUT_PARTIAL", False),
                     XA_CARDINAL, 32, PropModeReplace, (unsigned char *)&prop, 12);
 
-    XFlush(d);
+    //XFlush(d);
     XCloseDisplay(d);
 }
 
@@ -143,7 +143,7 @@ void Xlibutil::openboxChange(Window window, long atom)
     m.data.l[0] = atom;
     XSendEvent(d, DefaultRootWindow(d), False, SubstructureRedirectMask | SubstructureNotifyMask, (XEvent *)&m);
     //XSync(display, False);
-    XFlush(d);
+    //XFlush(d);
     XCloseDisplay(d);
 }
 
@@ -154,7 +154,7 @@ void Xlibutil::xchange(Window window, const char * atom)
     XChangeProperty(d, window,
                     XInternAtom(d, "_NET_WM_WINDOW_TYPE", False), //_NET_WM_WINDOW_TYPE
                     XA_ATOM, 32, PropModeReplace, (unsigned char *)&tmp, 1); //XA_ATOM
-    XFlush(d);
+    //XFlush(d);
     XCloseDisplay(d);
 }
 
@@ -165,7 +165,7 @@ void Xlibutil::xchangeProperty(Window window, const char *atom, const char * int
     XChangeProperty(d, window,
                     XInternAtom(d, internalAtom, False), //_NET_WM_WINDOW_TYPE
                     format, 8, 0, (const unsigned char*)atom, QString(atom).length()); //XA_ATOM
-    XFlush(d);
+    //XFlush(d);
     XCloseDisplay(d);
 }
 
@@ -176,7 +176,7 @@ void Xlibutil::xchangeProperty(Window window, int atom, const char * internalAto
     XChangeProperty(d, window,
                     XInternAtom(d, internalAtom, False), //_NET_WM_WINDOW_TYPE
                     format, 32, PropModeReplace, (unsigned char*)&atom, 1); //XA_ATOM
-    XFlush(d);
+    //XFlush(d);
     XCloseDisplay(d);
 }
 
@@ -209,7 +209,7 @@ char* Xlibutil::xwindowType(Window window)
     {
         data = this->windowProperty(d, window, "_OB_APP_TYPE", &nitems, &status);
 
-        XFlush(d);
+        //XFlush(d);
         XCloseDisplay(d);
 
         if (nitems != 0)
@@ -221,7 +221,7 @@ char* Xlibutil::xwindowType(Window window)
 
     Atom prop = ((Atom *)data)[0];
     data = (unsigned char *)XGetAtomName(d, prop);
-    XFlush(d);
+    //XFlush(d);
     XCloseDisplay(d);
     return (char *)data;
 }
@@ -250,7 +250,7 @@ unsigned char* Xlibutil::xwindowState(Window window)
 
     Atom prop = ((Atom *)data)[0];
     data = (unsigned char *)XGetAtomName(d, prop);
-    XFlush(d);
+    //XFlush(d);
     XCloseDisplay(d);
     return data;
 }
@@ -288,7 +288,7 @@ char* Xlibutil::xwindowClass(Window window)
         return "unknow";
     }
 
-    XFlush(d);
+    //XFlush(d);
     XCloseDisplay(d);
     return (char*)data;
 }
@@ -316,7 +316,7 @@ char* Xlibutil::xwindowName(Window window)
         return "unknow";
     }
 
-    XFlush(d);
+    //XFlush(d);
     XCloseDisplay(d);
     return (char *)data;
 }
@@ -340,7 +340,7 @@ int Xlibutil::xwindowPid(Window window)
         return 0;
     }
 
-    XFlush(d);
+    //XFlush(d);
     XCloseDisplay(d);
     return window_pid;
 }
@@ -369,7 +369,7 @@ unsigned char* Xlibutil::windowProperty(Display *d, Window window, const char *a
         return 0x0;
     }
 
-    XFlush(d);
+    //XFlush(d);
     return data;
 }
 
@@ -377,7 +377,7 @@ XWindowAttributes Xlibutil::attrWindow(Display *d, Window window)
 {
     XWindowAttributes attr;
     XGetWindowAttributes(d, window, &attr);
-    XFlush(d);
+    //XFlush(d);
     return attr;
 }
 
@@ -403,7 +403,7 @@ void Xlibutil::xactive(Window window)
     xev.xclient.data.l[1] = CurrentTime;
 
     XSendEvent(d, DefaultRootWindow(d), False, SubstructureRedirectMask|SubstructureNotifyMask, &xev);
-    XFlush(d);
+    //XFlush(d);
     XCloseDisplay(d);
 }
 
@@ -414,7 +414,7 @@ void Xlibutil::xminimize(Window window)
     XWindowAttributes attr = this->attrWindow(d, window);
     screen = XScreenNumberOfScreen(attr.screen);
     XIconifyWindow(d, window, screen);
-    XFlush(d);
+    //XFlush(d);
     XCloseDisplay(d);
 }
 
@@ -441,12 +441,12 @@ Window* Xlibutil::xgetWindows(Window win, unsigned long *size)
         }
 
         //Window *lists = (Window *)((unsigned long *)prop);
-        XFlush(d);
+        //XFlush(d);
         XCloseDisplay(d);
         return (Window *)((unsigned long *)prop);
     }
 
-    XFlush(d);
+    //XFlush(d);
     XCloseDisplay(d);
     return NULL;
 }
@@ -494,12 +494,12 @@ Window* Xlibutil::xwindows(unsigned long *size)
         }
 
         //Window *lists = (Window *)((unsigned long *)prop);
-        XFlush(d);
+        //XFlush(d);
         XCloseDisplay(d);
         return (Window *)((unsigned long *)prop);
     }
 
-    XFlush(d);
+    //XFlush(d);
     XCloseDisplay(d);
     return NULL;
 }
@@ -526,14 +526,14 @@ Window Xlibutil::xwindowID(int pid)
             if (pid == this->xwindowPid(lists[i]))
             {
                 XFree(prop);
-                XFlush(d);
+                //XFlush(d);
                 XCloseDisplay(d);
                 return lists[i];
             }
         }
     }
 
-    XFlush(d);
+    //XFlush(d);
     XCloseDisplay(d);
     return NULL;
 }
@@ -560,14 +560,14 @@ Window Xlibutil::xwindowIdByClass(QString wmclass)
             if (wmclass == QString(this->xwindowClass(lists[i])).toLower())
             {
                 XFree(prop);
-                XFlush(d);
+                //XFlush(d);
                 XCloseDisplay(d);
                 return lists[i];
             }
         }
     }
 
-    XFlush(d);
+    //XFlush(d);
     XCloseDisplay(d);
     return NULL;
 }
@@ -587,13 +587,13 @@ bool Xlibutil::xsingleActive(QString wmclass)
     //if ((unsigned char*)prop != 0x0)
     if (nitems == 0)
     {
-        XFlush(d);
+        //XFlush(d);
         XCloseDisplay(d);
         return true;
     }
 
     XFree(prop);
-    XFlush(d);
+    //XFlush(d);
     XCloseDisplay(d);
     return false;
 }
@@ -621,14 +621,14 @@ bool Xlibutil::xisActive(QString wmclass)
             if (wmclass == QString(this->xwindowClass(lists[i])).toLower())
             {
                 XFree(prop);
-                XFlush(d);
+                //XFlush(d);
                 XCloseDisplay(d);
                 return 1;
             }
         }
     }
 
-    XFlush(d);
+    //XFlush(d);
     XCloseDisplay(d);
     return 0;
 }
@@ -676,7 +676,7 @@ void Xlibutil::xminimizeByClass(QString wmclass)
             }
         }
 
-        XFree(prop);
+        //XFree(prop);
         XFlush(d);
     }
 
@@ -708,7 +708,7 @@ void Xlibutil::xactiveByClass(QString wmclass)
             }
         }
 
-        XFlush(d);
+        //XFlush(d);
         XFree(prop);
     }
 
@@ -743,7 +743,7 @@ bool Xlibutil::xwindowExist(QString wmclass)
             }
         }
 
-        XFlush(d);
+        //XFlush(d);
         XFree(prop);
     }
 
@@ -769,7 +769,7 @@ QString Xlibutil::xwindowLauncher(Window window)
         return "";
     }
 
-    XFlush(d);
+    //XFlush(d);
     XCloseDisplay(d);
 
     return launcher;
@@ -789,7 +789,7 @@ void Xlibutil::addDesktopFile(int pid, QString arg)
         status = XChangeProperty(d, this->xwindowID(pid), atom, XA_STRING, 8, PropModeReplace, deskfile, arg.length());
     }
 
-    XFlush(d);
+    //XFlush(d);
     XCloseDisplay(d);
 }
 
@@ -807,7 +807,7 @@ void Xlibutil::xaddDesktopFile(Window id, QString arg)
         status = XChangeProperty(d, id, atom, XA_STRING, 8, PropModeReplace, deskfile, arg.length());
     }
 
-    XFlush(d);
+    //XFlush(d);
     XCloseDisplay(d);
 }
 
@@ -870,7 +870,7 @@ QPixmap Xlibutil::xwindowTrayIcon(Window window)
     }
 
     XFree(data);
-    XFlush(d);
+    //XFlush(d);
     XCloseDisplay(d);
     return map;
 }

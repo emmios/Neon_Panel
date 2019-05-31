@@ -40,7 +40,8 @@ Context::Context()
         }
     }
 
-    QSettings settings(this->absoluteIconPath + this->defaultIconTheme + "/index.theme", QSettings::NativeFormat);
+    QString themePath = this->absoluteIconPath + this->defaultIconTheme + "/";
+    QSettings settings(themePath + "index.theme", QSettings::NativeFormat);
 
     QStringList prefix;
     prefix << "48x48/apps";
@@ -56,7 +57,17 @@ Context::Context()
 
         if (fix != 0)
         {
-            this->defaultPrefixTheme = "/" + str + "/";
+            QFile file(themePath + str);
+
+            if (file.exists())
+            {
+                this->defaultPrefixTheme = "/" + str + "/";
+            }
+            else
+            {
+                this->defaultPrefixTheme = "/48/";
+            }
+
             break;
         }
     }
@@ -583,20 +594,18 @@ QString Context::defaultIcon()
     defaultIcons << "application-default-icon.svg";
     defaultIcons << "default-application.png";
     defaultIcons << "default-application.svg";
-    defaultIcons << "application-default-icon.png";
-    defaultIcons << "application-default-icon.svg";
 
     for (QString icon : defaultIcons)
     {
         icon = this->absoluteIconPath + this->defaultIconTheme + this->defaultPrefixTheme + icon;
-        QFileInfo info(icon);
+        QFile info(icon);
         if (info.exists())
         {
             return icon;
         }
     }
 
-    return "";
+    return "/usr/share/synth/synth_panel/default.svg";
 }
 
 QString Context::getAllWindows()

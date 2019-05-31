@@ -496,7 +496,8 @@ ApplicationWindow {
 
             var app = apps[i].split(';')
 
-            if (app[0] !== "" & app[1] !== "") {
+            //if (app[0] !== "" & app[1] !== "") {
+            if (app[0] !== "") {
 
                 var obj = comp.createObject(launchersApps, {'x': x, 'y': y, 'nome': app[0], 'icone': app[1], 'exec': app[2], 'launcherApp': 'file://' + app[3]})
 
