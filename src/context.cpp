@@ -10,24 +10,25 @@ Context::Context()
     //MacBuntu-OS
     //this->defaultIconTheme = process.readLine().replace("\n", "");
 
-    QDir dir;
+    this->homePath = QDir::homePath();
 
-    QSettings gtkThemePath(dir.homePath() + "/.config/gtk-3.0/settings.ini", QSettings::IniFormat);
-    gtkThemePath.beginGroup("Settings");
-    this->gtkTheme = gtkThemePath.value("gtk-theme-name").toString();
-    gtkThemePath.endGroup();
+    //QSettings gtkThemePath(this->homePath + "/.config/gtk-3.0/settings.ini", QSettings::IniFormat);
+    //gtkThemePath.beginGroup("Settings");
+    //this->gtkTheme = gtkThemePath.value("gtk-theme-name").toString();
+    //gtkThemePath.endGroup();
 
-    QString path = dir.homePath() + "/.config/Synth/panel/";
-    QSettings theme(path + "settings.txt", QSettings::NativeFormat);
+    QString path = this->homePath + "/.config/synth/panel/";
+    QSettings theme(path + "settings.conf", QSettings::NativeFormat);
     this->defaultIconTheme = theme.value("theme").toString();
+    this->noDisplay = theme.value("showNoIcon").toBool();
+    this->mixHicolor = theme.value("mixHicolor").toBool();
 
-    if (this->defaultIconTheme.isEmpty()) this->defaultIconTheme = "Paper"; //"MacBuntu-OS";
-    //process.close();
+    if (this->defaultIconTheme.isEmpty()) this->defaultIconTheme = "hicolor";
 
     QStringList localPrefix;
     localPrefix << "/usr/share/icons/";
-    localPrefix << QDir::homePath() + "/.local/share/icons/";
-    localPrefix << QDir::homePath() + "/.icons/";
+    localPrefix << this->homePath + "/.local/share/icons/";
+    localPrefix << this->homePath + "/.icons/";
 
     for (QString local : localPrefix)
     {
@@ -40,37 +41,40 @@ Context::Context()
         }
     }
 
-    QString themePath = this->absoluteIconPath + this->defaultIconTheme + "/";
-    QSettings settings(themePath + "index.theme", QSettings::NativeFormat);
+    this->prefix << "/apps/48/";
+    this->prefix << "/mimes/48/";
+    this->prefix << "/mimetypes/48/";
+    this->prefix << "/places/48/";
+    this->prefix << "/status/48/";
+    this->prefix << "/devices/48/";
+    this->prefix << "/web/48/";
+    this->prefix << "/emblems/48/";
+    this->prefix << "/categories/48/";
+    this->prefix << "/actions/48/";
 
-    QStringList prefix;
-    prefix << "48x48/apps";
-    prefix << "apps/48";
-    prefix << "apps/scalable";
-    prefix << "scalable/apps";
+    this->prefix << "/apps/scalable/";
+    this->prefix << "/scalable/apps/";
+    this->prefix << "/status/scalable/";
+    this->prefix << "/mimetypes/scalable/";
+    this->prefix << "/mimes/scalable/";
+    this->prefix << "/devices/scalable/";
+    this->prefix << "/places/scalable/";
+    this->prefix << "/web/scalable/";
+    this->prefix << "/emblems/scalable/";
+    this->prefix << "/categories/scalable/";
+    this->prefix << "/actions/scalable/";
 
-    for (QString str : prefix)
-    {
-        settings.beginGroup(str);
-        int fix = settings.value("Size").toInt();
-        settings.endGroup();
-
-        if (fix != 0)
-        {
-            QFile file(themePath + str);
-
-            if (file.exists())
-            {
-                this->defaultPrefixTheme = "/" + str + "/";
-            }
-            else
-            {
-                this->defaultPrefixTheme = "/48/";
-            }
-
-            break;
-        }
-    }
+    this->prefix << "/48x48/apps/";
+    this->prefix << "/48x48/scalable/";
+    this->prefix << "/48x48/status/";
+    this->prefix << "/48x48/mimes/";
+    this->prefix << "/48x48/mimetypes/";
+    this->prefix << "/48x48/devices/";
+    this->prefix << "/48x48/places/";
+    this->prefix << "/48x48/web/";
+    this->prefix << "/48x48/emblems/";
+    this->prefix << "/48x48/categories/";
+    this->prefix << "/48x48/actions/";
 
     this->defaultIconApplications = this->defaultIcon();
 }
@@ -191,6 +195,7 @@ QImage Context::imageOverlay(const QImage& baseImage, const QImage& overlayImage
     return imageWithOverlay;
 }
 
+/*
 void Context::changeColorBtnMenu(QRgb color)
 {
     QImage img(QDir::homePath() + "/.themes/dinamic-color/xfwm4/novos/menu-active2.xpm", "xpm");
@@ -308,6 +313,7 @@ void Context::changeColorBtnClose(QRgb color)
     img.save(QDir::homePath() + "/.themes/dinamic-color/xfwm4/close-prelight.xpm", "xpm");
     img.save(QDir::homePath() + "/.themes/dinamic-color/xfwm4/close-pressed.xpm", "xpm");
 }
+*/
 
 void Context::showMoreWindows(int winId, int h)
 {
@@ -327,6 +333,7 @@ void Context::changeColor(int w, int h, QRgb color, QString s)
     img.save(s, "xpm");
 }
 
+/*
 void Context::changeThemeColor(QString rgb)
 {
     QColor cor(rgb);
@@ -384,6 +391,7 @@ void Context::changeThemeColor(QString rgb)
         process.close();
     }
 }
+*/
 
 QString Context::launcherFix(QString exec)
 {
@@ -408,7 +416,7 @@ QString Context::launcherFix(QString exec)
 void Context::killFromPid(QString pid)
 {
     QProcess *process = new QProcess();
-    process->start("kill "+ pid);
+    process->start("kill " + pid);
 }
 
 void Context::execFromPid(QString pid)
@@ -597,11 +605,16 @@ QString Context::defaultIcon()
 
     for (QString icon : defaultIcons)
     {
-        icon = this->absoluteIconPath + this->defaultIconTheme + this->defaultPrefixTheme + icon;
-        QFile info(icon);
-        if (info.exists())
+        QString iconPath;
+        for (QString prefix : this->prefix)
         {
-            return icon;
+            iconPath = this->absoluteIconPath + this->defaultIconTheme + prefix + icon;
+            QFile info(iconPath);
+
+            if (info.exists())
+            {
+                return iconPath;
+            }
         }
     }
 
@@ -643,8 +656,7 @@ QString Context::getAllWindows()
 
 QStringList Context::getAllFixedLaunchers()
 {
-    QDir dir;
-    QString path = dir.homePath() + "/.config/Synth/panel/launchers.txt";
+    QString path = this->homePath + "/.config/synth/panel/launchers.conf";
     QSettings settings(path, QSettings::NativeFormat);
     QStringList launchers;
 
@@ -658,8 +670,7 @@ QStringList Context::getAllFixedLaunchers()
 
 void Context::fixedLauncher(QString name, QString launchers, int remove)
 {
-    QDir dir;
-    QString path = dir.homePath() + "/.config/Synth/panel/launchers.txt";
+    QString path = this->homePath + "/.config/synth/panel/launchers.conf";
     QSettings settings(path, QSettings::NativeFormat);
     if (remove == 0)
     {
@@ -677,10 +688,12 @@ QStringList Context::addLauncher(QString app)
     app = app.replace("file://", "");
     QFileInfo f(app);
 
-    QString nome, icone, tmp, exec, wmclass;
-
     if (f.suffix() == "desktop")
     {
+        QString nome, icone, tmp, exec, wmclass, hasIcon;
+        QStringList categories;
+        bool noDisplay = false;
+        hasIcon = "true";
         QLocale locale;
         QSettings settings(app, QSettings::NativeFormat);
         settings.setIniCodec("UTF-8");
@@ -691,8 +704,16 @@ QStringList Context::addLauncher(QString app)
 
         tmp = settings.value("Icon").toString();
         exec = settings.value("Exec").toString();
+        noDisplay = settings.value("NoDisplay").toBool();
+        categories = settings.value("Categories").toStringList();
         wmclass = settings.value("StartupWMClass").toString();
         settings.endGroup();
+
+        if (noDisplay)
+        {
+            list << "" << "" << "" << "" << "false";
+            return list;
+        }
 
         if (wmclass.isEmpty())
         {
@@ -720,75 +741,93 @@ QStringList Context::addLauncher(QString app)
             QStringList exts;
             exts << ".svg" << ".png" << ".xpm";
 
-            foreach (QString ext, exts)
+            for (QString ext : exts)
             {
-                icone = this->absoluteIconPath + this->defaultIconTheme + this->defaultPrefixTheme + tmp + ext;
-                f.setFile(icone);
+                bool stop = false;
 
-                if (f.exists())
+                for (QString prefix : this->prefix)
                 {
-                     break;
-                }
-                else
-                {
-                     icone = "";
-                }
-            }
-
-            if (icone.isEmpty())
-            {
-                foreach (QString ext, exts)
-                {
-                    icone = "/usr/share/icons/hicolor/48x48/apps/" + tmp + ext;
+                    icone = this->absoluteIconPath + this->defaultIconTheme + prefix + tmp + ext;
                     f.setFile(icone);
 
                     if (f.exists())
                     {
+                        stop = true;
                         break;
-                     }
-                     else
-                     {
-                        icone = "";
-                     }
+                    }
+                    else
+                    {
+                         icone = "";
+                    }
                 }
 
-                if (icone.isEmpty())
-                {
-                    foreach (QString ext, exts)
-                    {
+                if (stop) break;
+            }
 
-                        icone = "/usr/share/pixmaps/" + tmp + ext;
+            if (icone.isEmpty())
+            {
+                QStringList finalPaths;
+
+                if (this->mixHicolor)
+                {
+                    finalPaths << this->homePath + ".local/share/icons/hicolor/48x48/apps/";
+                    finalPaths << "/usr/share/icons/hicolor/48x48/apps/";
+                }
+
+                finalPaths << this->homePath + ".local/share/icons/";
+                finalPaths << "/usr/share/pixmaps/";
+
+                for (QString path : finalPaths)
+                {
+                    bool stop = false;
+
+                    for (QString ext : exts)
+                    {
+                        icone = path + tmp + ext;
                         f.setFile(icone);
 
                         if (f.exists())
                         {
+                            stop = true;
                             break;
-                        }
-                        else
-                        {
+                         }
+                         else
+                         {
                             icone = "";
-                        }
+                         }
                     }
+
+                    if (stop) break;
                 }
             }
 
             if (icone.isEmpty())
             {
                 icone = this->defaultIconApplications;
+                hasIcon = "false";
             }
 
-            list << nome << "file://" + icone << exec << wmclass.toLower();
+            list << nome << "file://" + icone << exec << wmclass.toLower() << hasIcon;
         }
         else
         {
-            if (tmp.contains(".ico")) tmp = this->defaultIconApplications;
-            if (tmp == "/") tmp = this->defaultIconApplications;
-            list << nome << "file://" + tmp << exec << wmclass.toLower();
+            if (tmp.contains(".ico"))
+            {
+                tmp = this->defaultIconApplications;
+                hasIcon = "false";
+            }
+            else if (tmp == "/")
+            {
+                tmp = this->defaultIconApplications;
+                hasIcon = "false";
+            }
+
+            list << nome << "file://" + tmp << exec << wmclass.toLower() << hasIcon;
         }
     }
     else
     {
-        list << "" << "" << "" << "";
+        list << "" << "" << "" << "" << "false";
     }
 
     return list;
@@ -824,16 +863,24 @@ QPixmap Context::getIconByClass(QString winId, QString wmclass)
 
     if (!icon.startsWith("/"))
     {
-        foreach (QString ext, exts)
+        for (QString ext : exts)
         {
-            tmp = this->absoluteIconPath + this->defaultIconTheme + this->defaultPrefixTheme + icon + ext;
-            QFileInfo info(tmp);
+            bool stop = false;
 
-            if (info.exists())
+            for (QString prefix : this->prefix)
             {
-                icon = tmp;
-                 break;
+                tmp = this->absoluteIconPath + this->defaultIconTheme + '/' + prefix + '/' + icon + ext;
+                QFileInfo info(tmp);
+
+                if (info.exists())
+                {
+                    icon = tmp;
+                    stop = true;
+                    break;
+                }
             }
+
+            if (stop) break;
         }
 
         if (icon.isEmpty())
@@ -1019,13 +1066,12 @@ int Context::modified()
 {
     int response = 0;
     int i = 0;
-    QDir dir;
     QStringList _modified;
     _modified << "modifiedapp" << "modifiedlocal";
     QStringList appsPath;
-    appsPath << "/usr/share/applications" << dir.homePath() + "/.local/share/applications";
+    appsPath << "/usr/share/applications" << this->homePath + "/.local/share/applications";
 
-    QSettings settings(dir.homePath() + "/.config/Synth/panel/settings.txt", QSettings::NativeFormat);
+    QSettings settings(this->homePath + "/.config/Synth/panel/settings.txt", QSettings::NativeFormat);
 
     for (QString path : appsPath)
     {
@@ -1051,7 +1097,7 @@ QStringList Context::applications()
 {
     QStringList list, tmp, appsPath;
 
-    appsPath << "/usr/share/applications/" << QDir::homePath() + "/.local/share/applications/";
+    appsPath << "/usr/share/applications/" << this->homePath + "/.local/share/applications/";
 
     for (QString path : appsPath)
     {
@@ -1073,8 +1119,22 @@ QStringList Context::applications()
 
             if (!exist)
             {
-                list << tmp.at(0) + ";" + tmp.at(1) + ";" + tmp.at(2) + ";" + filelist.at(i).filePath();
-                exist = false;
+                if (!this->noDisplay)
+                {
+                    if (tmp.at(0) != "" && tmp.at(4) == "true")
+                    {
+                        list << tmp.at(0) + ";" + tmp.at(1) + ";" + tmp.at(2) + ";" + filelist.at(i).filePath();
+                        exist = false;
+                    }
+                }
+                else
+                {
+                    if (tmp.at(0) != "")
+                    {
+                        list << tmp.at(0) + ";" + tmp.at(1) + ";" + tmp.at(2) + ";" + filelist.at(i).filePath();
+                        exist = false;
+                    }
+                }
             }
         }
     }
@@ -1136,8 +1196,7 @@ QString Context::imagePerfil()
 
 void Context::gtkThemeChangeDetail(QString color)
 {
-    QDir dir;
-    QString pathTheme = dir.homePath() + "/.themes/" + this->gtkTheme;
+    QString pathTheme = this->homePath + "/.themes/" + this->gtkTheme;
     QString gtk2_0, gtk3_0, gtk3_20;
 
     //gtk 2.0

@@ -30,6 +30,28 @@ ApplicationWindow {
         radius: 0
     }
 
+    Timer {
+        id: execDelay
+        running: false
+        interval: 100
+        repeat: false
+        onTriggered: {
+            trayShowInfo.visible = false
+            Context.execFromPid(pid)
+        }
+    }
+
+    Timer {
+        id: closeDelay
+        running: false
+        interval: 100
+        repeat: false
+        onTriggered: {
+            trayShowInfo.visible = false
+            Context.killFromPid(pid)
+        }
+    }
+
     Item {
         x: 0
         y: 0
@@ -51,8 +73,8 @@ ApplicationWindow {
                 hoverEnabled: true
 
                 onPressed: {
-                    trayShowInfo.visible = false
-                    Context.execFromPid(pid)
+                    execDelay.stop()
+                    execDelay.start()
                 }
 
                 onHoveredChanged: {
@@ -63,7 +85,6 @@ ApplicationWindow {
                     parent.color = "transparent"
                 }
             }
-
         }
 
         Text {
@@ -98,8 +119,8 @@ ApplicationWindow {
                 hoverEnabled: true
 
                 onClicked: {
-                    trayShowInfo.visible = false
-                    Context.killFromPid(pid)
+                    closeDelay.stop()
+                    closeDelay.start()
                 }
 
                 onHoveredChanged: {
@@ -110,7 +131,6 @@ ApplicationWindow {
                     parent.color = "transparent"
                 }
             }
-
         }
 
         Text {

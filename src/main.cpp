@@ -15,9 +15,9 @@ int main(int argc, char *argv[])
     QApplication app(argc, argv);
 
     QDir dir;
-    QString path = dir.homePath() + "/.config/Synth/panel/";
-    QFile file(path + "launchers.txt");
-    QFile _file(path + "settings.txt");
+    QString path = dir.homePath() + "/.config/synth/panel/";
+    QFile file(path + "launchers.conf");
+    QFile _file(path + "settings.conf");
 
     if(!dir.exists(path))
     {
@@ -33,10 +33,12 @@ int main(int argc, char *argv[])
     if(!_file.exists())
     {
         _file.open(QIODevice::ReadWrite);
-        QSettings settings(path + "settings.txt", QSettings::NativeFormat);
+        QSettings settings(path + "settings.conf", QSettings::NativeFormat);
         settings.setValue("volume", 100);
         settings.setValue("theme", "Paper");
         settings.setValue("color", "#007fff");
+        settings.setValue("showNoIcon", false);
+        settings.setValue("mixHicolor", true);
         _file.close();
     }
 

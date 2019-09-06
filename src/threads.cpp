@@ -17,21 +17,25 @@ void Threads::run()
     tray_list _tray;
     QList<tray_list> trayList;
 
-    QString arrayDestroy;
+    QString arrayDestroy = "";
     QString arrayCreate = "";
     int activated = 0;
 
     XEvent e;
     XDamageNotifyEvent *dEvent;
 
-
     //this->msleep(200);
     unsigned long _items;
     Window *_list = ctx->xwindows(&_items);
 
-    arrayCreate = "";
-
-    SignalOver signal;
+    SignalOver *signal = new SignalOver;
+    this->main->connect(signal, SIGNAL(onActiveWindow()), this->main, SLOT(activeWindow()));
+    this->main->connect(signal, SIGNAL(onRemoveAllWindows()), this->main, SLOT(removeAllWindows()));
+    this->main->connect(signal, SIGNAL(onCreate(QString)), this->main, SIGNAL(getCreateWindow(QString)));
+    this->main->connect(signal, SIGNAL(onAddWindow(QString)), this->main, SIGNAL(getAddWindow(QString)));
+    this->main->connect(signal, SIGNAL(onRemoveTryIcon(int)), this->main, SIGNAL(getRemoveTryIcon(int)));
+    this->main->connect(signal, SIGNAL(onNotifications(int)), this->main, SIGNAL(getNotifications(int)));
+    this->main->connect(signal, SIGNAL(onAddTryIcon(QString)), this->main, SIGNAL(tryIcon(QString)));
 
     for (int i = 0; i < _items; i++)
     {
@@ -56,11 +60,13 @@ void Threads::run()
 
     if (!arrayCreate.isEmpty())
     {
-        QMetaObject::invokeMethod(this->main, "createWindow", Q_ARG(QVariant,  arrayCreate));
+        //QMetaObject::invokeMethod(this->main, "createWindow", Q_ARG(QVariant,  arrayCreate));
+        signal->onCreate(arrayCreate);
     }
     else if (arrayCreate.isEmpty())
     {
-        QMetaObject::invokeMethod(this->main, "removeAllWindows");
+        //QMetaObject::invokeMethod(this->main, "removeAllWindows");
+        signal->onRemoveAllWindows();
     }
 
 
@@ -90,7 +96,8 @@ void Threads::run()
                     {
                         //qDebug() << e.xmap.window << wclass;
                         //arrayCreate += "|@|" + name + "=#=" + wclass + "=#=" + QString::number((int)e.xmap.window)  + "=#=" + QString::number((int)ctx->xwindowPid(e.xmap.window))  + '=#=' + QString((char *)ctx->windowProperty(d, e.xmap.window, "_OB_APP_CLASS", &nitems, &status));
-                        QMetaObject::invokeMethod(this->main, "addWindow", Q_ARG(QVariant,  name + "=#=" + wclass + "=#=" + QString::number((int)e.xmap.window)  + "=#=" + QString::number((int)ctx->xwindowPid(e.xmap.window))  + '=#=' + QString((char *)ctx->windowProperty(d, e.xmap.window, "_OB_APP_CLASS", &nitems, &status))));
+                        //QMetaObject::invokeMethod(this->main, "addWindow", Q_ARG(QVariant,  name + "=#=" + wclass + "=#=" + QString::number((int)e.xmap.window)  + "=#=" + QString::number((int)ctx->xwindowPid(e.xmap.window))  + '=#=' + QString((char *)ctx->windowProperty(d, e.xmap.window, "_OB_APP_CLASS", &nitems, &status))));
+                        signal->onCreate(name + "=#=" + wclass + "=#=" + QString::number((int)e.xmap.window)  + "=#=" + QString::number((int)ctx->xwindowPid(e.xmap.window))  + '=#=' + QString((char *)ctx->windowProperty(d, e.xmap.window, "_OB_APP_CLASS", &nitems, &status)));
                     }
                 }
             }
@@ -120,21 +127,22 @@ void Threads::run()
 
             if (!arrayDestroy.isEmpty())
             {
-                QMetaObject::invokeMethod(this->main, "createWindow", Q_ARG(QVariant, arrayDestroy));
+                //QMetaObject::invokeMethod(this->main, "createWindow", Q_ARG(QVariant, arrayDestroy));
                 //QObject::connect(&signal, SIGNAL(createWin(QString)), this->main, SLOT(createWindow(QString)));
                 //emit signal.createWin(arrayDestroy);
+                signal->onCreate(arrayDestroy);
             }
             else if (arrayDestroy.isEmpty())
             {
-                QMetaObject::invokeMethod(this->main, "removeAllWindows");
-                //QObject::connect(&signal, SIGNAL(removeAllWindows), this->main, SLOT(removeAllWindows));
+                signal->onRemoveAllWindows();
             }
 
             for (int i = 0; i < trayList.length(); i++)
             {
                 if (ctx->xwindowTrayIcon(trayList[i].id).isNull())
                 {
-                    QMetaObject::invokeMethod(this->main, "removeTryIcon", Q_ARG(QVariant, (int)trayList[i].id));
+                    //QMetaObject::invokeMethod(this->main, "removeTryIcon", Q_ARG(QVariant, (int)trayList[i].id));
+                    signal->onRemoveTryIcon((int)trayList[i].id);
                     trayList.removeAt(i);
                 }
             }
@@ -178,7 +186,8 @@ void Threads::run()
 
             if (add)
             {
-                QMetaObject::invokeMethod(this->main, "notifications", Q_ARG(QVariant,  (int)id));
+                //QMetaObject::invokeMethod(this->main, "notifications", Q_ARG(QVariant,  (int)id));
+                signal->onNotifications((int)id);
             }
         }
 
@@ -189,8 +198,7 @@ void Threads::run()
             if (activated != atual)
             {
                 activated = atual;
-                QMetaObject::invokeMethod(this->main, "activeWindow");
-                //QObject::connect(&signal, SIGNAL(activeWindow), this->main, SLOT(activeWindow));
+                signal->onActiveWindow();
                 //this->msleep(50);
             }
         }
@@ -257,7 +265,8 @@ void Threads::run()
                 {
                     //QString args = QString(ctx->xwindowName(id)) + ";" + QString::number(id) + ";" + wclass + ";" + QString((char *)ctx->windowProperty(d, id, "_OB_APP_CLASS", &nitems, &status));
                     QString args = QString(ctx->xwindowName(id)) + "|@|" + QString::number(id) + "|@|" + wclass + "|@|" + QString::number(ctx->xwindowPid(id));
-                    QMetaObject::invokeMethod(this->main, "addTryIcon", Q_ARG(QVariant,  args));
+                    //QMetaObject::invokeMethod(this->main, "addTryIcon", Q_ARG(QVariant,  args));
+                    signal->onAddTryIcon(args);
 
                     _tray.wclass = wclass;
                     _tray.id = id;

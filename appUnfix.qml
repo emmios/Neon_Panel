@@ -33,6 +33,44 @@ ApplicationWindow {
         radius: 0
     }
 
+    Timer {
+        id: unfixedDelay
+        running: false
+        interval: 100
+        repeat: false
+        onTriggered: {
+            unfix.visible = false
+            var appTmp = []
+
+            for (var k = 0; k < main.applicationBar.children.length; k++) {
+                if (typeof(main.applicationBar.children[k]) !== "undefined") {
+                    if (main.applicationBar.children[k].pidname === wmclass) {
+                        delete main.applicationBar.children[k]
+                    } else {
+                        appTmp.push(main.applicationBar.children[k])
+                    }
+                }
+            }
+
+            main.applicationBar.children = appTmp
+            main.launcherX = 0
+            main.applicationBar.width = 0
+
+            for (var i = 0; i < main.applicationBar.children.length; i++) {
+                if (typeof(main.applicationBar.children[i]) !== "undefined") {
+                    main.applicationBar.width += main.defaultWidth
+                    main.applicationBar.children[i].x = main.launcherX
+                    main.launcherX += main.defaultWidth
+                }
+            }
+
+            main.subAppbar.x -= main.defaultWidth
+            main.subAppbar.width -= main.defaultWidth
+            main.createWindow(Context.getAllWindows())
+            Context.fixedLauncher(wmclass, "", 1)
+        }
+    }
+
     ListView {
         id: listView
         x: 0
@@ -73,35 +111,8 @@ ApplicationWindow {
                     hoverEnabled: true
 
                     onPressed: {
-                        unfix.visible = false
-                        var appTmp = []
-
-                        for (var k = 0; k < main.applicationBar.children.length; k++) {
-                            if (typeof(main.applicationBar.children[k]) !== "undefined") {
-                                if (main.applicationBar.children[k].pidname === wmclass) {
-                                    delete main.applicationBar.children[k]
-                                } else {
-                                    appTmp.push(main.applicationBar.children[k])
-                                }
-                            }
-                        }
-
-                        main.applicationBar.children = appTmp
-                        main.launcherX = 0
-                        main.applicationBar.width = 0
-
-                        for (var i = 0; i < main.applicationBar.children.length; i++) {
-                            if (typeof(main.applicationBar.children[i]) !== "undefined") {
-                                main.applicationBar.width += main.defaultWidth
-                                main.applicationBar.children[i].x = main.launcherX
-                                main.launcherX += main.defaultWidth
-                            }
-                        }
-
-                        main.subAppbar.x -= main.defaultWidth
-                        main.subAppbar.width -= main.defaultWidth
-                        main.createWindow(Context.getAllWindows())
-                        Context.fixedLauncher(wmclass, "", 1)
+                        unfixedDelay.stop()
+                        unfixedDelay.start()
                     }
 
                     onHoveredChanged: {

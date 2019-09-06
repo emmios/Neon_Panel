@@ -12,7 +12,7 @@
 #include <QQuickImageProvider>
 #include <QList>
 #include <QVariant>
-#include <QMetaObject>
+//#include <QMetaObject>
 #include <QHash>
 
 #include "context.h"

@@ -21,6 +21,42 @@ Rectangle {
     property alias bgOpc: bgOpc
     property bool destacad: false
 
+    ToolTip {
+        id: toolTip
+        x: 44
+        text: nome
+        delay: 500
+        timeout: 3000
+        visible: false
+
+        property bool timeActive: false
+        property alias timer: timer
+
+        contentItem: Label {
+            text: toolTip.text
+            wrapMode: Text.WordWrap
+            font: toolTip.font
+            color: "#ffffff"
+        }
+
+        background: Rectangle {
+            opacity: 0.9
+            color: "#000000"
+        }
+
+        Timer {
+            id: timer
+            running: false
+            interval: 2000
+            repeat: false
+            onTriggered: {
+                if (toolTip.timeActive) {
+                    toolTip.visible = true
+                }
+            }
+        }
+    }
+
     Rectangle {
         id: destak
         x: 1
@@ -59,7 +95,26 @@ Rectangle {
         antialiasing: true
         smooth: true
         cache: false
+        //rotation: -5
         //transform: Rotation {angle: -20}
+    }
+
+    Timer {
+        id: minimizeDelay
+        running: false
+        interval: 100
+        repeat: false
+        onTriggered: {
+            if (!Context.isMinimized(pidname) & Context.isActive(pidname)) {
+                Context.manyMinimizes(pidname)
+                minimize = false;
+            } else {
+                Context.manyActives(pidname)
+                minimize = true;
+            }
+
+           activeWindow()
+        }
     }
 
     MouseArea {
@@ -85,19 +140,8 @@ Rectangle {
                 neonMenu.textSearch.focus = false
                 //neonMenu.addApps()
                 //main.clickOpc = main.startOpc
-
-                if (!Context.isMinimized(pidname) & Context.isActive(pidname)) {
-
-                    Context.manyMinimizes(pidname)
-                    minimize = false;
-
-                } else {
-
-                    Context.manyActives(pidname)
-                    minimize = true;
-                }
-
-               activeWindow()
+                minimizeDelay.stop()
+                minimizeDelay.start()
 
             } else {
 
@@ -119,6 +163,10 @@ Rectangle {
             effect.glowRadius = 4
             effect.opacity = 0.8
             destak.opacity = 0.5
+
+            toolTip.timeActive = true
+            toolTip.timer.stop()
+            toolTip.timer.start()
         }
 
         onExited: {
@@ -128,6 +176,9 @@ Rectangle {
                 effect.opacity = 0
                 destak.opacity = 0.5
             }
+
+            toolTip.visible = false
+            toolTip.timeActive = false
         }
     }
 }

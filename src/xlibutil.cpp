@@ -435,7 +435,7 @@ Window* Xlibutil::xgetWindows(Window win, unsigned long *size)
 
         if (status != Success)
         {
-            XFlush(d);
+            //XFlush(d);
             XCloseDisplay(d);
             return NULL;
         }
@@ -488,7 +488,7 @@ Window* Xlibutil::xwindows(unsigned long *size)
 
         if (status != Success)
         {
-            XFlush(d);
+            //XFlush(d);
             XCloseDisplay(d);
             return NULL;
         }

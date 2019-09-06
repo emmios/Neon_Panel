@@ -112,6 +112,7 @@ Rectangle {
         source: icone
         antialiasing: true
         smooth: true
+        //rotation: -5
         fillMode: Image.PreserveAspectCrop
 
         ToolTip {

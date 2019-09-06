@@ -1,7 +1,7 @@
 TEMPLATE = app
 
 QT += core qml quick widgets x11extras dbus
-CONFIG += c++14
+CONFIG += c++11
 
 
 #DBUS_ADAPTORS += emmi.interface.background.xml
@@ -12,6 +12,8 @@ RESOURCES += qml.qrc \
     components.qrc
 
 LIBS += -lX11 -lXdamage -lxcb -lxcb-util -lXrandr
+
+#QMAKE_CXXFLAGS += "-fno-sized-deallocation"
 
 include(src/src.pri)
 include(plugins/plugins.pri)

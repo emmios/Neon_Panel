@@ -5,26 +5,24 @@
 #include <QObject>
 #include <QString>
 
-class SignalOver : public QWindow
+class SignalOver : public QObject
 {
     Q_OBJECT
-
 
 public slots:
     void addWindow(QString arg);
     void createWindow(QString arg);
 
 signals:
-    void createWin(QString arg);
-    void create();
-    void destroy();
-    void removeAllWindows();
-    void clearWindows();
-    void activeWindow();
-
-//public slots:
-//    void activeWindow();
-
+    void onAddWindow(QString arg);
+    void onCreate(QString arg);
+    void onDestroy();
+    void onRemoveAllWindows();
+    void onClearWindows();
+    void onActiveWindow();
+    void onRemoveTryIcon(int arg);
+    void onNotifications(int arg);
+    void onAddTryIcon(QString arg);
 };
 
 #endif // WINDOW_H

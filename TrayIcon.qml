@@ -33,6 +33,17 @@ Rectangle {
         cache: false
     }
 
+    Timer {
+        id: execDelay
+        running: false
+        interval: 100
+        repeat: false
+        onTriggered: {
+            hasNotification.visible = false
+            Context.execFromPid(pid)
+        }
+    }
+
     MouseArea {
 
         anchors.fill: parent
@@ -50,18 +61,14 @@ Rectangle {
             neonMenu.desactive()
 
             if (mouse.button & Qt.LeftButton) {
-
-                hasNotification.visible = false
-                Context.execFromPid(pid)
-
+                execDelay.stop()
+                execDelay.start()
             } else {
-
                 trayShowInfo.pid = pid
                 trayShowInfo.y = main.y - 55
                 trayShowInfo.x = ((Context.mouseX() - mouseX) + (trayAppInfo.width / 2)) - (trayShowInfo.width / 2)
                 trayShowInfo.visible = true
                 trayShowInfo.requestActivate()
-
                 neonMenu.textSearch.focus = false
             }
         }

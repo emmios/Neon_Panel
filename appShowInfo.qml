@@ -34,6 +34,31 @@ ApplicationWindow {
         radius: 0
     }
 
+    Timer {
+        id: activeDelay
+        running: false
+        interval: 100
+        repeat: false
+        property int win: 0
+        onTriggered: {
+            Context.windowActive(win)
+        }
+    }
+
+    Timer {
+        id: closeDelay
+        running: false
+        interval: 100
+        repeat: false
+        onTriggered: {
+            for (var i = 0; i < winIds.length; i++) {
+                Context.windowClose(winIds[i]);
+            }
+
+            showAppInfo.visible = false
+        }
+    }
+
     ListView {
         id: listView
         x: 0
@@ -54,7 +79,6 @@ ApplicationWindow {
             anchors.fill: parent
 
             Rectangle {
-
                 x: 0
                 y: rectY
                 anchors.left: parent.left
@@ -74,15 +98,12 @@ ApplicationWindow {
 
                     onPressed: {
                         if (!parent.closer) {
-                            Context.windowActive(winId)
-
+                            activeDelay.win = winId
+                            activeDelay.stop()
+                            activeDelay.start()
                         } else {
-
-                            for (var i = 0; i < winIds.length; i++) {
-                                Context.windowClose(winIds[i]);
-                            }
-
-                            showAppInfo.visible = false
+                            closeDelay.stop()
+                            closeDelay.start()
                         }
                     }
 
@@ -94,7 +115,6 @@ ApplicationWindow {
                         parent.color = "transparent"
                     }
                 }
-
             }
 
             Text {

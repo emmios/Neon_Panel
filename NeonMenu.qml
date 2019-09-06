@@ -542,11 +542,10 @@ ApplicationWindow {
                 textSearch.focus = false
                 //addApps()
                 blur.source = ""
-                main.activeWindow()
                 desfocusApps()
-                activeWindow()
                 arrowAside.text = '\uf106'
                 btnCycle.border.color = "#fff"
+                main.activeWindow()
             }
         }
     }

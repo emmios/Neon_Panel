@@ -162,6 +162,10 @@ App {
         activeWindow()
     }
 
+    signal getAddWindow(string arg)
+    onGetAddWindow: addWindow(arg)
+
+
     function createWindow(args) {
 
         windowVerify = true
@@ -364,6 +368,9 @@ App {
         trayIconsX += 28
     }
 
+    signal tryIcon(string arg)
+    onTryIcon: addTryIcon(arg)
+
     function removeTryIcon(args) {
 
         var icons = []
@@ -394,6 +401,10 @@ App {
         }
     }
 
+    signal getRemoveTryIcon(int arg)
+    onGetRemoveTryIcon: removeTryIcon(arg)
+
+
     function notifications(arg) {
 
         var exist = false
@@ -414,6 +425,9 @@ App {
             }
         }
     }
+
+    signal getNotifications(int arg)
+    onGetNotifications: notifications(arg)
 
     function fixLaunchers(files) {
 
@@ -924,7 +938,7 @@ App {
         var access = Qt.createComponent("qrc:/plugins/Access.qml")
         acessoRapido = access.createObject(main)
 
-        Context.changeThemeColor(main.detailColor)
+        //Context.changeThemeColor(main.detailColor)
         main.visible = true
 
         fixedLaunchers.start()

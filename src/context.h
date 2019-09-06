@@ -60,7 +60,7 @@ public:
     Q_INVOKABLE void manyActives(QString pidname);
     Q_INVOKABLE void actives(int pid);
     Q_INVOKABLE void xActive(int id);
-    Q_INVOKABLE void changeThemeColor(QString rgb);
+    //Q_INVOKABLE void changeThemeColor(QString rgb);
     Q_INVOKABLE int isActive(QString pidname);
     Q_INVOKABLE QStringList applications();
     Q_INVOKABLE void dragDrop(QString icone, QString app);
@@ -103,9 +103,9 @@ signals:
     void basepathChanged();
 
 private:
-    void changeColorBtnMin(QRgb color);
-    void changeColorBtnMax(QRgb color);
-    void changeColorBtnClose(QRgb color);
+    //void changeColorBtnMin(QRgb color);
+    //void changeColorBtnMax(QRgb color);
+    //void changeColorBtnClose(QRgb color);
     void changeColor(int w, int h, QRgb color, QString s);
     void changeColorBtnMenu(QRgb color);
     QImage imageOverlay(const QImage& baseImage, const QImage& overlayImage);
@@ -114,8 +114,12 @@ private:
     Display *display;
     QString defaultIconTheme;
     QString defaultPrefixTheme;
+    QStringList prefix;
     QString absoluteIconPath;
     QString gtkTheme;
+    QString homePath;
+    bool noDisplay;
+    bool mixHicolor;
 
     QString basePath() const {
         return this->basepath;
