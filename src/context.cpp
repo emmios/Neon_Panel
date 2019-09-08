@@ -22,6 +22,7 @@ Context::Context()
     this->defaultIconTheme = theme.value("theme").toString();
     this->noDisplay = theme.value("showNoIcon").toBool();
     this->mixHicolor = theme.value("mixHicolor").toBool();
+    this->font = theme.value("font").toString();
 
     if (this->defaultIconTheme.isEmpty()) this->defaultIconTheme = "hicolor";
 
@@ -77,6 +78,11 @@ Context::Context()
     this->prefix << "/48x48/actions/";
 
     this->defaultIconApplications = this->defaultIcon();
+}
+
+QString Context::fontName()
+{
+    return this->font;
 }
 
 /*

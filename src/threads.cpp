@@ -69,7 +69,6 @@ void Threads::run()
         signal->onRemoveAllWindows();
     }
 
-
     while (true)
     {
         XNextEvent(d, &e);
@@ -78,7 +77,7 @@ void Threads::run()
         //create new windows
         if (e.type == CreateNotify)
         {
-            this->msleep(100);
+            this->msleep(200);
             QString type = QString(ctx->xwindowType(e.xmap.window));
             arrayCreate = "";
 
@@ -97,14 +96,16 @@ void Threads::run()
                         //qDebug() << e.xmap.window << wclass;
                         //arrayCreate += "|@|" + name + "=#=" + wclass + "=#=" + QString::number((int)e.xmap.window)  + "=#=" + QString::number((int)ctx->xwindowPid(e.xmap.window))  + '=#=' + QString((char *)ctx->windowProperty(d, e.xmap.window, "_OB_APP_CLASS", &nitems, &status));
                         //QMetaObject::invokeMethod(this->main, "addWindow", Q_ARG(QVariant,  name + "=#=" + wclass + "=#=" + QString::number((int)e.xmap.window)  + "=#=" + QString::number((int)ctx->xwindowPid(e.xmap.window))  + '=#=' + QString((char *)ctx->windowProperty(d, e.xmap.window, "_OB_APP_CLASS", &nitems, &status))));
-                        signal->onCreate(name + "=#=" + wclass + "=#=" + QString::number((int)e.xmap.window)  + "=#=" + QString::number((int)ctx->xwindowPid(e.xmap.window))  + '=#=' + QString((char *)ctx->windowProperty(d, e.xmap.window, "_OB_APP_CLASS", &nitems, &status)));
+                        arrayCreate = name + "=#=" + wclass + "=#=" + QString::number((int)e.xmap.window)  + "=#=" + QString::number((int)ctx->xwindowPid(e.xmap.window))  + '=#=' + QString((char *)ctx->windowProperty(d, e.xmap.window, "_OB_APP_CLASS", &nitems, &status));
+                        signal->onAddWindow(arrayCreate);
+                        //QMetaObject::invokeMethod(this->main, "addWindow", Q_ARG(QVariant, arrayCreate));
                     }
                 }
             }
         }
         else if (e.type == DestroyNotify)
         {
-            this->msleep(100);
+            this->msleep(200);
             unsigned long items;
             Window *list = ctx->xwindows(&items);
             arrayDestroy = "";
@@ -128,8 +129,6 @@ void Threads::run()
             if (!arrayDestroy.isEmpty())
             {
                 //QMetaObject::invokeMethod(this->main, "createWindow", Q_ARG(QVariant, arrayDestroy));
-                //QObject::connect(&signal, SIGNAL(createWin(QString)), this->main, SLOT(createWindow(QString)));
-                //emit signal.createWin(arrayDestroy);
                 signal->onCreate(arrayDestroy);
             }
             else if (arrayDestroy.isEmpty())
@@ -191,7 +190,7 @@ void Threads::run()
             }
         }
 
-        if (e.type == ConfigureNotify)
+        else if (e.type == ConfigureNotify)
         {
             int atual = (int)e.xconfigure.window;
             //qDebug() << e.xconfigure.window;
@@ -206,7 +205,7 @@ void Threads::run()
         //XDamageNotify
         //qDebug() << e.type << ctx->xwindowClass(dEvent->drawable) << e.xclient.data.l[1] << dEvent->type + XDamageNotify << dEvent->type << ctx->xwindowClass(e.xclient.data.l[2]) << ctx->xwindowClass(e.xmap.window);
         // create icon systray
-        if (e.xclient.data.l[1] == SYSTEM_TRAY_REQUEST_DOCK || e.xclient.data.l[1] > 1)
+        else if (e.xclient.data.l[1] == SYSTEM_TRAY_REQUEST_DOCK || e.xclient.data.l[1] > 1)
         {
             Window id = e.xclient.data.l[2];
             QString wclass = QString(ctx->xwindowClass(id));

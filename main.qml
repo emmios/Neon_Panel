@@ -20,6 +20,7 @@ App {
     property var neonMenu: Object
     // yellow #FFFB00, purple "#7310A2", crimson #dc143c, black "#333333", blue "#007fff", red #FF0D00, orange #ff9900, green #00ff00
     property string detailColor: "#007fff"//"#7310A2"
+    property string fontName: Context.fontName()
     property int efeito1: 300
     property int efeito2: 600
     property string blurColor: "#161616"
@@ -162,8 +163,23 @@ App {
         activeWindow()
     }
 
-    signal getAddWindow(string arg)
-    onGetAddWindow: addWindow(arg)
+    Timer {
+        id: addWindowDelay
+        running: false
+        interval: 100
+        repeat: false
+        property string args: ""
+        onTriggered: {
+            addWindow(args)
+        }
+    }
+
+    signal getAddWindow(string args)
+    onGetAddWindow: {
+        addWindowDelay.args = args
+        addWindowDelay.stop()
+        addWindowDelay.start()
+    }
 
 
     function createWindow(args) {
@@ -205,10 +221,26 @@ App {
         activeWindow()
     }
 
-    signal getCreateWindow(string arg)
-    onGetCreateWindow: createWindow(arg)
+    Timer {
+        id: createWindowDelay
+        running: false
+        interval: 100
+        repeat: false
+        property string args: ""
+        onTriggered: {
+            createWindow(args)
+        }
+    }
 
-    function activeWindow() {
+    signal getCreateWindow(string args)
+    onGetCreateWindow: {
+        createWindowDelay.args = args
+        createWindowDelay.stop()
+        createWindowDelay.start()
+    }
+
+
+    function _activeWindow() {
 
         for (var t = 0; t < subAppbar.children.length; t++) {
             if (typeof(subAppbar.children[t]) !== "undefined") {
@@ -247,6 +279,20 @@ App {
         }
     }
 
+    Timer {
+        id: activeWindowDelay
+        running: false
+        interval: 100
+        repeat: false
+        onTriggered: {
+            _activeWindow()
+        }
+    }
+
+    function activeWindow() {
+        activeWindowDelay.stop()
+        activeWindowDelay.start()
+    }
 
     function clearWindow() {
 
@@ -370,6 +416,7 @@ App {
 
     signal tryIcon(string arg)
     onTryIcon: addTryIcon(arg)
+
 
     function removeTryIcon(args) {
 
@@ -809,7 +856,7 @@ App {
                 anchors.rightMargin: 35
                 font.pointSize: 12
                 color: "#ffffff"
-                font.family: "roboto light"
+                font.family: main.fontName
 
                 Timer {
                     id: clockStart

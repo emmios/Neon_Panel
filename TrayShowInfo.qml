@@ -101,6 +101,7 @@ ApplicationWindow {
             font.pixelSize: 12
             color: "#ffffff"
             text: "Restaurar"
+            font.family: main.fontName
         }
 
         Rectangle {
@@ -147,6 +148,7 @@ ApplicationWindow {
             font.pixelSize: 12
             color: "#ffffff"
             text: "Sair"
+            font.family: main.fontName
         }
 
     }

@@ -88,6 +88,7 @@ public:
     Q_INVOKABLE QString getAllWindows();
     Q_INVOKABLE QString crop(QString img);
     Q_INVOKABLE QString imagePerfil();
+    Q_INVOKABLE QString fontName();
     Q_INVOKABLE void gtkThemeChangeDetail(QString color);
     Q_INVOKABLE int modified();
     QPixmap getIconByClass(QString winId, QString wmclass);
@@ -120,6 +121,7 @@ private:
     QString homePath;
     bool noDisplay;
     bool mixHicolor;
+    QString font;
 
     QString basePath() const {
         return this->basepath;

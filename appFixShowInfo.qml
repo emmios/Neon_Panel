@@ -116,6 +116,7 @@ ApplicationWindow {
                 font.pixelSize: 12
                 color: "#ffffff"
                 text: name
+                font.family: main.fontName
             }
         }
     }

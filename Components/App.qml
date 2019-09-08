@@ -14,7 +14,8 @@ ApplicationWindow {
     property alias fontIcons: fontIcons
     property alias focus: wm
 
-    FontLoader { id: fontIcons; name: "Font Awesome 5 Free"; source: "fontawesome-free-5.0.10/web-fonts-with-css/webfonts/fa-solid-900.woff" }
+    //FontLoader { id: fontIcons; name: "Font Awesome 5 Free"; source: "fontawesome-free-5.0.10/web-fonts-with-css/webfonts/fa-solid-900.woff" }
+    FontLoader { id: fontIcons; name: "Font Awesome 5 Free"; source: "fontawesome-free-5.10.2-desktop/otfs/Font Awesome 5 Free-Solid-900.otf" }
 
     MouseArea {
         anchors.fill: parent

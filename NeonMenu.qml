@@ -56,6 +56,7 @@ ApplicationWindow {
     onActiveChanged: {
         if (!active) {
             aniMenu.to = 0
+            aniMenu.duration = 200
             aniMenu.stop()
             aniMenu.start()
 
@@ -64,18 +65,20 @@ ApplicationWindow {
             aniMenu2.start()
             main.menuOpened = true
         } else {
-            /*
+
             aniMenu.to = 1
+            aniMenu.duration = 100
             aniMenu.stop()
             aniMenu.start()
-
+            /*
             aniMenu2.to = 0
             aniMenu2.stop()
             aniMenu2.start()
             main.menuOpened = false
             */
+            neonMenu.x = 0
             visible = true
-            opacity = 1
+            //opacity = 1
         }
     }
 
@@ -92,6 +95,7 @@ ApplicationWindow {
         */
         visible = false
         opacity = 0
+        neonMenu.x = 0
     }
 
     MouseArea {
@@ -330,6 +334,7 @@ ApplicationWindow {
         focus: true
         font.bold: false
         font.pointSize: 12
+        font.family: main.fontName
         verticalAlignment: Text.AlignVCenter
         horizontalAlignment: Text.AlignLeft
         selectionColor: main.detailColor
@@ -366,7 +371,7 @@ ApplicationWindow {
                 }
             }
 
-            launchersApps.height = y;
+            launchersApps.height = y
         }
     }
 
@@ -383,7 +388,7 @@ ApplicationWindow {
         horizontalAlignment: Text.AlignLeft
         verticalAlignment: Text.AlignVCenter
         font.pixelSize: 14
-        font.family: "roboto light"
+        font.family: main.fontName
         color: textColor
     }
 
@@ -519,7 +524,7 @@ ApplicationWindow {
             }
         }
 
-        launchersApps.height = y;
+        launchersApps.height = y
     }
 
     Component.onCompleted: {
@@ -528,7 +533,9 @@ ApplicationWindow {
 
     PropertyAnimation {id: aniMenu2; target: neonMenu; property: "x"; to: 0; duration: 200;
         onStopped: {
-            neonMenu.x = 0
+            if (to === 30) {
+                neonMenu.x = 0
+            }
         }
     }
     PropertyAnimation {id: aniMenu; target: neonMenu; property: "opacity"; to: 1; duration: 200;
@@ -546,6 +553,7 @@ ApplicationWindow {
                 arrowAside.text = '\uf106'
                 btnCycle.border.color = "#fff"
                 main.activeWindow()
+                neonMenu.x = 0
             }
         }
     }

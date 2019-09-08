@@ -29,6 +29,7 @@ ApplicationWindow {
     onActiveChanged: {
         if (!active) {
             aniAcess.to = 0
+            aniAcess.duration = 200
             aniAcess.stop()
             aniAcess.start()
 
@@ -38,18 +39,21 @@ ApplicationWindow {
             main.accessOpened = true
 
         } else {
-            /*
+
             aniAcess.to = 1
+            aniAcess.duration = 100
             aniAcess.stop()
             aniAcess.start()
-
+            /*
             aniAcess2.to = main.width - 249
             aniAcess2.stop()
             aniAcess2.start()
             main.accessOpened = false
             */
+
+            acessoRapido.x = main.width - 249
             visible = true
-            opacity = 1
+            //opacity = 1
         }
     }
 
@@ -65,6 +69,7 @@ ApplicationWindow {
         */
         visible = false
         opacity = 0
+        acessoRapido.x = main.width - 249
     }
 
     Image {
@@ -230,7 +235,7 @@ ApplicationWindow {
             color: accessDetail
             font.pixelSize: 23
             font.bold: false
-            font.family: "roboto light"
+            font.family: main.fontName
         }
     }
 
@@ -263,7 +268,7 @@ ApplicationWindow {
                 text: qsTr("Contrast")
                 color: "#fff"
                 font.pixelSize: 12
-                font.family: "Font Awesome 5 Free"
+                font.family: main.fontName
             }
 
             Image {
@@ -297,7 +302,7 @@ ApplicationWindow {
                 text: qsTr("Colors")
                 color: "#fff"
                 font.pixelSize: 12
-                font.family: "Font Awesome 5 Free"
+                font.family: main.fontName
             }
 
             Image {
@@ -371,7 +376,7 @@ ApplicationWindow {
                 text: qsTr("Shutdown")
                 color: "#fff"
                 font.pixelSize: 12
-                font.family: "Font Awesome 5 Free"
+                font.family: main.fontName
             }
 
             Label {
@@ -405,7 +410,7 @@ ApplicationWindow {
                 text: qsTr("Restart")
                 color: "#fff"
                 font.pixelSize: 12
-                font.family: "Font Awesome 5 Free"
+                font.family: main.fontName
             }
 
             Label {
@@ -439,7 +444,7 @@ ApplicationWindow {
                 text: qsTr("Close Session")
                 color: "#fff"
                 font.pixelSize: 12
-                font.family: "Font Awesome 5 Free"
+                font.family: main.fontName
             }
 
             Label {
@@ -473,7 +478,7 @@ ApplicationWindow {
                 text: qsTr("Suspend")
                 color: "#fff"
                 font.pixelSize: 12
-                font.family: "Font Awesome 5 Free"
+                font.family: main.fontName
             }
         }
 
@@ -496,7 +501,7 @@ ApplicationWindow {
                 text: qsTr("Volume")
                 color: "#fff"
                 font.pixelSize: 12
-                font.family: "Font Awesome 5 Free"
+                font.family: main.fontName
             }
 
             Label {
@@ -542,7 +547,7 @@ ApplicationWindow {
                 text: qsTr("Microphone")
                 color: "#fff"
                 font.pixelSize: 12
-                font.family: "Font Awesome 5 Free"
+                font.family: main.fontName
             }
 
             Label {
@@ -604,7 +609,7 @@ ApplicationWindow {
                             text: "\uf108 " + qsTr("Display") + " - " + (index + 1)
                             color: "#fff"
                             font.pixelSize: 22
-                            font.family: "Font Awesome 5 Free"
+                            font.family: main.fontName
                         }
 
                         MouseArea {
@@ -694,7 +699,7 @@ ApplicationWindow {
                     text:qsTr("Refresh")
                     color: "#fff"
                     font.pixelSize: 10
-                    font.family: "Font Awesome 5 Free"
+                    font.family: main.fontName
                 }
 
                 Label {
@@ -781,7 +786,7 @@ ApplicationWindow {
                                 text: ((modelData.split(',')[1].toString().length < 15) ? modelData.split(',')[1] : modelData.split(',')[1].substring(0, 13) + '...')
                                 color: "#fff"
                                 font.pixelSize: 14
-                                font.family: "Font Awesome 5 Free"
+                                font.family: main.fontName
                             }
 
                             // password or not password
@@ -811,7 +816,7 @@ ApplicationWindow {
                                 text: modelData.split(',')[4]
                                 color: "#fff"
                                 font.pixelSize: 6
-                                font.family: "Font Awesome 5 Free"
+                                font.family: main.fontName
                             }
 
                             MouseArea {
@@ -914,6 +919,7 @@ ApplicationWindow {
                                         text: "Conectar"
                                         color: "#fff"
                                         size: 12
+                                        font.family: main.fontName
                                     }
 
                                     MouseArea {
@@ -1037,7 +1043,7 @@ ApplicationWindow {
                         text: qsTr("Security:")
                         color: "#fff"
                         font.pixelSize: 14
-                        font.family: "Font Awesome 5 Free"
+                        font.family: main.fontName
                     }
 
                     Label {
@@ -1048,7 +1054,7 @@ ApplicationWindow {
                         color: "#fff"
                         font.bold: true
                         font.pixelSize: 14
-                        font.family: "Font Awesome 5 Free"
+                        font.family: main.fontName
                     }
 
                     Label {
@@ -1057,7 +1063,7 @@ ApplicationWindow {
                         text: qsTr("Chanal:")
                         color: "#fff"
                         font.pixelSize: 14
-                        font.family: "Font Awesome 5 Free"
+                        font.family: main.fontName
                     }
 
                     Label {
@@ -1068,7 +1074,7 @@ ApplicationWindow {
                         color: "#fff"
                         font.bold: true
                         font.pixelSize: 14
-                        font.family: "Font Awesome 5 Free"
+                        font.family: main.fontName
                     }
 
                     Label {
@@ -1077,7 +1083,7 @@ ApplicationWindow {
                         text: qsTr("Potência do sinal:")
                         color: "#fff"
                         font.pixelSize: 14
-                        font.family: "Font Awesome 5 Free"
+                        font.family: main.fontName
                     }
 
                     Label {
@@ -1088,7 +1094,7 @@ ApplicationWindow {
                         color: "#fff"
                         font.bold: true
                         font.pixelSize: 14
-                        font.family: "Font Awesome 5 Free"
+                        font.family: main.fontName
                     }
 
                     Label {
@@ -1098,7 +1104,7 @@ ApplicationWindow {
                         text: "IP:"
                         color: "#fff"
                         font.pixelSize: 14
-                        font.family: "Font Awesome 5 Free"
+                        font.family: main.fontName
                     }
 
                     Label {
@@ -1109,12 +1115,12 @@ ApplicationWindow {
                         color: "#fff"
                         font.bold: true
                         font.pixelSize: 14
-                        font.family: "Font Awesome 5 Free"
+                        font.family: main.fontName
                     }
 
                     Rectangle {
                         id: addPassword
-                        y: 230
+                        y: 220
                         x: 20
                         color: "transparent"
 
@@ -1124,7 +1130,7 @@ ApplicationWindow {
                             text: qsTr("Password:")
                             color: "#fff"
                             font.pixelSize: 14
-                            font.family: "Font Awesome 5 Free"
+                            font.family: main.fontName
                         }
 
                         TextField {
@@ -1139,6 +1145,7 @@ ApplicationWindow {
                             bg.opacity: 1.0
                             maxLength: 30
                             size: 14
+                            input.font.family: main.fontName
                             input.font.bold: true
                             input.passwordCharacter: '*'
                             input.echoMode: TextInput.Password
@@ -1149,8 +1156,8 @@ ApplicationWindow {
 
                     Button {
                         id: btnText
-                        x: 140
-                        y: wifiInfo.height - (btnText.height + 10) //270
+                        x: 150
+                        y: wifiInfo.height - (btnText.height + 5) //270
                         text: qsTr('Connect')
                         size: 12
                         detailColor: main.detailColor
@@ -1212,7 +1219,7 @@ ApplicationWindow {
             Repeater {
                 id: btns
                 model: [
-                    ["Audio", "\uf028"], ["Internet", "\uf1eb"], ["Calendar", "\uf073"], ["Color", "\uf043"], ["Power", "\uf011"], ["Display", "\uf108"]
+                    ["Audio", "\uf028"], ["Internet", "\uf1eb"], ["Calendar", "\uf073"], ["Color", "\uf53f"], ["Power", "\uf011"], ["Display", "\uf108"]
                 ]
                 Rectangle {
                     x: ((index < 3) ? 83 * index : 83 * (index - 3))
@@ -1447,7 +1454,9 @@ ApplicationWindow {
 
     PropertyAnimation {id: aniAcess2; target: acessoRapido; property: "x"; to: main.width - 249; duration: 200;
         onStopped: {
-            acessoRapido.x = main.width - 249
+            if (to = (main.width - 249) - 30) {
+                acessoRapido.x = main.width - 249
+            }
         }
     }
     PropertyAnimation {id: aniAcess; target: acessoRapido; property: "opacity"; to: 1; duration: 200;
@@ -1459,6 +1468,7 @@ ApplicationWindow {
                 main.accessOpened = true
                 back()
                 main.activeWindow()
+                acessoRapido.x = main.width - 249
             }
         }
     }

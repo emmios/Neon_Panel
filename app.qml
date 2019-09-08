@@ -47,12 +47,12 @@ Rectangle {
             onPressedChanged: {
 
                 if (_pressed2) {
-                    Context.exec(exec, launcherApp)
                     //neonMenu.visible = false
                     neonMenu.textSearch.focus = false
                     main.menuOpened = true
                     neonMenu.desactive()
                     main.clickOpc = main.startOpc
+                    Context.exec(exec, launcherApp)
                 }
 
                 if (!_pressed) {
@@ -150,6 +150,6 @@ Rectangle {
         horizontalAlignment: Text.AlignHCenter
         verticalAlignment: Text.AlignVCenter
         color: textColor
-        font.family: "roboto light"
+        font.family: main.fontName
    }
 }
