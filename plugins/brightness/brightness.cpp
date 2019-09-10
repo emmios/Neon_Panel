@@ -3,7 +3,7 @@
 
 void Brightness::brightness(int bright)
 {
-    Display *display = XOpenDisplay(NULL);
+    Display *display = XOpenDisplay(0);
     Atom backlight = XInternAtom (display, "Backlight", True);
     int screen = 0, o = 0, status = 0;
     Window root = DefaultRootWindow(display);
@@ -12,6 +12,8 @@ void Brightness::brightness(int bright)
     XRRPropertyInfo *info = XRRQueryOutputProperty(display, output, backlight);
     double min, max;
     long value;
+
+    //qDebug() << value << " - " << info->values[0] << " - " << info->values[1];
 
     if (info != NULL)
     {

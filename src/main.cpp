@@ -33,15 +33,17 @@ int main(int argc, char *argv[])
     if(!_file.exists())
     {
         _file.open(QIODevice::ReadWrite);
+        _file.close();
         QSettings settings(path + "settings.conf", QSettings::NativeFormat);
         settings.setValue("volume", 100);
-        settings.setValue("theme", "Paper");
+        settings.setValue("iconTheme", "Paper");
         settings.setValue("color", "#007fff");
         settings.setValue("showNoIcon", false);
         settings.setValue("mixHicolor", true);
-        _file.close();
+        settings.setValue("font", "Roboto Regular");
+        settings.setValue("theme", "dark");
+        settings.setValue("brightness", "normal"); //light normal extra
     }
-
 
     int h = 40;
     QDesktopWidget desktop;

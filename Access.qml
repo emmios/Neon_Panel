@@ -330,6 +330,43 @@ ApplicationWindow {
                     //Context.gtkThemeChangeDetail(main.detailColor)
                 }
             }
+
+            Label {
+                x: 14
+                y: 185
+                text: qsTr("Theme: ")
+                color: "#fff"
+                font.pixelSize: 12
+                font.family: main.fontName
+            }
+
+            Label {
+                id: themaName
+                x: 62
+                y: 185
+                text: (Context.getTheme() === "light") ? qsTr("Light") : qsTr("Dark")
+                color: "#fff"
+                font.pixelSize: 12
+                font.family: main.fontName
+            }
+
+            Switch {
+                x: 182
+                y: 185
+                actived: (Context.getTheme() === "light") ? false : true
+                colorDetail: main.detailColor
+                onChange: {
+                    if (value) {
+                        themaName.text = qsTr("Dark")
+                        main.blurColor = "#161616"
+                    } else {
+                        themaName.text = qsTr("Light")
+                        main.blurColor = "#999"
+                    }
+
+                    Context.setTheme(themaName.text)
+                }
+            }
         }
 
         Rectangle {

@@ -1,5 +1,6 @@
 //contents of Switch.qml
 import QtQuick 2.9
+import QtGraphicalEffects 1.0
 
 
 Rectangle {
@@ -55,10 +56,10 @@ Rectangle {
         Rectangle {
             id: controlBtn
             x: 0
-            y: -(parent.height / 2) - 2
-            width: parent.height * 2 + 4
-            height: parent.height * 2 + 4
-            radius: parent.height + 2
+            y: -(swit.height / 2) - 2
+            width: swit.height * 2 + 4
+            height: swit.height * 2 + 4
+            radius: swit.height + 2
             color: colorDetail
             z: 1
         }
@@ -68,9 +69,29 @@ Rectangle {
             x: 0
             y: 0
             width: controlBtn.x + (controlBtn.width / 2)
-            height: parent.height
+            height: swit.height
             color: colorDetail
-            radius: parent.height + 2
+            radius: swit.height + 2
+        }
+
+        RectangularGlow {
+            id: effect1
+            anchors.fill: controlBtn
+            glowRadius: 1
+            spread: 0
+            color: main.detailColor
+            cornerRadius: controlBtn.radius + glowRadius
+            opacity: 0.8
+        }
+
+        RectangularGlow {
+            id: effect2
+            anchors.fill: switBar
+            glowRadius: 2
+            spread: 0
+            color: main.detailColor
+            cornerRadius: switBar.radius + glowRadius
+            opacity: 0.8
         }
 
         onClicked: {

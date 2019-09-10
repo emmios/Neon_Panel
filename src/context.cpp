@@ -18,11 +18,13 @@ Context::Context()
     //gtkThemePath.endGroup();
 
     QString path = this->homePath + "/.config/synth/panel/";
-    QSettings theme(path + "settings.conf", QSettings::NativeFormat);
-    this->defaultIconTheme = theme.value("theme").toString();
-    this->noDisplay = theme.value("showNoIcon").toBool();
-    this->mixHicolor = theme.value("mixHicolor").toBool();
-    this->font = theme.value("font").toString();
+    QSettings settings(path + "settings.conf", QSettings::NativeFormat);
+    this->defaultIconTheme = settings.value("iconTheme").toString();
+    this->noDisplay = settings.value("showNoIcon").toBool();
+    this->mixHicolor = settings.value("mixHicolor").toBool();
+    this->font = settings.value("font").toString();
+    this->theme = settings.value("theme").toString();
+    this->brightness = settings.value("brightness").toString();
 
     if (this->defaultIconTheme.isEmpty()) this->defaultIconTheme = "hicolor";
 
@@ -80,9 +82,25 @@ Context::Context()
     this->defaultIconApplications = this->defaultIcon();
 }
 
+void Context::setTheme(QString theme)
+{
+    QSettings settings(this->homePath + "/.config/synth/panel/settings.conf", QSettings::NativeFormat);
+    settings.setValue("theme", theme);
+}
+
 QString Context::fontName()
 {
     return this->font;
+}
+
+QString Context::getTheme()
+{
+    return this->theme;
+}
+
+QString Context::getBrightness()
+{
+    return this->brightness;
 }
 
 /*

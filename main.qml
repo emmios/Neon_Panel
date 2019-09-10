@@ -23,8 +23,8 @@ App {
     property string fontName: Context.fontName()
     property int efeito1: 300
     property int efeito2: 600
-    property string blurColor: "#161616"
-    property double blurColorOpc: 0.8
+    property string blurColor: (Context.getTheme() === "light") ? "#999" : "#161616"
+    property double blurColorOpc: (Context.getBrightness() === "light") ? 0.6 : (Context.getBrightness() === "normal") ? 0.7 : 0.8
     property int blurControl: 100
     property double blurControlOpc: 1
     property double blurSaturation: 1
@@ -110,6 +110,7 @@ App {
     }
 
     Rectangle {
+        id: _blurColor
         anchors.fill: blur
         opacity: blurColorOpc//0.3
         color: blurColor//"#161616"
@@ -607,7 +608,7 @@ App {
                     //neonMenu.updateApps()
                     //acessoRapido.accessBlur.source = ""
                     //acessoRapido.visible = false
-                    acessoRapido.desactive()
+                    //acessoRapido.desactive()
 
                     arrowAside.text = '\uf106'
                     accessOpened = true
@@ -635,6 +636,7 @@ App {
                             neonMenu.updateApps()
                         }
 
+                        neonMenu.x = 0
                         neonMenu.requestActivate()
 
                         //clickOpc = 0.3
@@ -919,8 +921,8 @@ App {
 
                             acessoRapido.accessBlur.source = ""
                             accessOpened = false
-                            acessoRapido.visible = true
                             acessoRapido.accessBlur.source = "image://grab/crop"
+                            acessoRapido.visible = true
                             acessoRapido.requestActivate()
                             //acessoRapido.aniAcess.to = main.width - 249
                             //acessoRapido.aniAcess.stop()

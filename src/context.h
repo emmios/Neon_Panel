@@ -91,6 +91,9 @@ public:
     Q_INVOKABLE QString fontName();
     Q_INVOKABLE void gtkThemeChangeDetail(QString color);
     Q_INVOKABLE int modified();
+    Q_INVOKABLE QString getTheme();
+    Q_INVOKABLE void setTheme(QString theme);
+    Q_INVOKABLE QString getBrightness();
     QPixmap getIconByClass(QString winId, QString wmclass);
     QString defaultIconApplications;
     QString basepath;
@@ -122,6 +125,8 @@ private:
     bool noDisplay;
     bool mixHicolor;
     QString font;
+    QString theme;
+    QString brightness;
 
     QString basePath() const {
         return this->basepath;
