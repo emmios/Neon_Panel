@@ -25,6 +25,7 @@ Context::Context()
     this->font = settings.value("font").toString();
     this->theme = settings.value("theme").toString();
     this->brightness = settings.value("brightness").toString();
+    this->transparent = settings.value("transparent").toInt();
 
     if (this->defaultIconTheme.isEmpty()) this->defaultIconTheme = "hicolor";
 
@@ -80,6 +81,83 @@ Context::Context()
     this->prefix << "/48x48/actions/";
 
     this->defaultIconApplications = this->defaultIcon();
+}
+
+void Context::windowMove(QVariant obj, int x, int y, int w, int h)
+{
+    if (!obj.isNull())
+    {
+        QObject *_obj = obj.value<QObject *>();
+        if (_obj)
+        {
+            QWindow *win = qobject_cast<QWindow *>(_obj);
+            this->xwindowMove(win->winId(), x, y, w, h);
+        }
+    }
+}
+
+QString Context::blurEffect(QVariant obj, int screeshot)
+{
+    Window desktop = -1;
+
+    if (screeshot == 1)
+    {
+        unsigned long items;
+        Window *list = this->xwindows(&items);
+        for (int i = 0; i < items; i++)
+        {
+            QString type = this->xwindowType(list[i]);
+            if (type == "_NET_WM_WINDOW_TYPE_DESKTOP")
+            {
+                desktop = list[i];
+                break;
+            }
+        }
+    }
+    else
+    {
+        desktop = 0;
+    }
+
+    if (desktop != -1)
+    {
+        QPixmap map;
+        QScreen *screen = QGuiApplication::primaryScreen();
+        if (!obj.isNull())
+        {
+            QObject *_obj = obj.value<QObject *>();
+            if (_obj)
+            {
+                QWindow *win = qobject_cast<QWindow *>(_obj);
+                map = screen->grabWindow(desktop, win->x(), win->y(), win->width(), win->height());
+            }
+        }
+        if (!map.isNull())
+        {
+            QBuffer buffer;
+            buffer.open(QIODevice::ReadWrite);
+            map.save(&buffer, "jpg");
+            const QByteArray bytes = buffer.buffer();
+            buffer.close();
+            QString base64("data:image/jpg;base64,");
+            base64.append(QString::fromLatin1(bytes.toBase64().data()));
+            return base64;
+        }
+    }
+    return "";
+}
+
+void Context::setTransparent(int arg)
+{
+    QSettings settings(this->homePath + "/.config/synth/panel/settings.conf", QSettings::NativeFormat);
+    settings.setValue("transparent", arg);
+}
+
+int Context::getTransparent()
+{
+    QSettings settings(this->homePath + "/.config/synth/panel/settings.conf", QSettings::NativeFormat);
+    int tr = settings.value("transparent").toInt();
+    return tr;
 }
 
 void Context::setTheme(QString theme)
@@ -642,7 +720,7 @@ QString Context::defaultIcon()
         }
     }
 
-    return "/usr/share/synth/synth_panel/default.svg";
+    return "/usr/share/synth/synth-panel/default.svg";
 }
 
 QString Context::getAllWindows()

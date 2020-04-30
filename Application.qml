@@ -40,13 +40,13 @@ Rectangle {
 
         background: Rectangle {
             opacity: 0.9
-            color: "#000000"
+            color: main.detailInfoColor
         }
 
         Timer {
             id: timer
             running: false
-            interval: 2000
+            interval: 1000
             repeat: false
             onTriggered: {
                 if (toolTip.timeActive) {

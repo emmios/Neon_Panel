@@ -20,11 +20,12 @@ App {
     property var neonMenu: Object
     // yellow #FFFB00, purple "#7310A2", crimson #dc143c, black "#333333", blue "#007fff", red #FF0D00, orange #ff9900, green #00ff00
     property string detailColor: "#007fff"//"#7310A2"
+    property string detailInfoColor: "#161616"
     property string fontName: Context.fontName()
     property int efeito1: 300
     property int efeito2: 600
-    property string blurColor: (Context.getTheme() === "light") ? "#999" : "#161616"
-    property double blurColorOpc: (Context.getBrightness() === "light") ? 0.6 : (Context.getBrightness() === "normal") ? 0.7 : 0.8
+    property string blurColor: (Context.getTheme() === "light") ? "#999" : "#333"//"#161616"
+    property double blurColorOpc: 0.5//(Context.getBrightness() === "light") ? 0.6 : (Context.getBrightness() === "normal") ? 0.7 : 0.8
     property int blurControl: 100
     property double blurControlOpc: 1
     property double blurSaturation: 1
@@ -54,10 +55,12 @@ App {
     property bool accessOpened: true
     property bool menuOpened: true
     property alias arrowAside: arrowAside
+    property alias blurArea: blurArea
+    //property alias bgNormal: bgNormal
 
-
+/*
     Image {
-        id: blur
+        id: bgNormal
         x: 0
         y: (~(Screen.height - main.height)) + 1
         width: Screen.width
@@ -66,71 +69,118 @@ App {
         fillMode: Image.PreserveAspectCrop
         visible: false
         cache: false
-    }
-
-    FastBlur {
-        id: fastBlur
-        anchors.fill: blur
-        source: blur
-        radius: blurControl
-    }
-
-    Blend {
-        id: blend
-        anchors.fill: fastBlur
-        source: fastBlur
-        foregroundSource: fastBlur
-        mode: "softLight"
-        opacity: blurControlOpc
-    }
-
-    HueSaturation {
-        id: saturation
-        anchors.fill: blur
-        source: fastBlur
-        hue: 0
-        saturation: blurSaturation
-        lightness: 0
-    }
-
-    Image {
-        id: overlay
-        anchors.fill: blur
-        source: "qrc:/Resources/noise.png"
-        fillMode: Image.Tile
-    }
-
-    Blend {
-        id: blend2
-        anchors.fill: overlay
-        source: overlay
-        foregroundSource: saturation
-        mode: "addition"
-        opacity: 1
-    }
+    }*/
 
     Rectangle {
-        id: _blurColor
-        anchors.fill: blur
-        opacity: blurColorOpc//0.3
-        color: blurColor//"#161616"
+        id: blurArea
+        anchors.fill: parent
+        visible: Context.getTransparent() === 1 ? false : true
+        color: "#161616"
+
+        Rectangle {
+            x: 0
+            y: main.height - 3
+            width: main.width
+            height: 3
+            color: "#161616"
+        }
+
+        BlurEffect {
+            id: blur
+        }
+
+        Rectangle {
+            id: bg
+            anchors.fill: parent
+            color: blurColor
+            opacity: blurColorOpc
+        }
+
+        Image {
+            anchors.fill: parent
+            source: "/Resources/noise.png"
+            opacity: 0.1
+        }
+
+        /*
+        Image {
+            id: blur
+            x: 0
+            y: (~(Screen.height - main.height)) + 1
+            width: Screen.width
+            height: Screen.height
+            source: "image://grab"
+            fillMode: Image.PreserveAspectCrop
+            visible: false
+            cache: false
+        }
+
+        FastBlur {
+            id: fastBlur
+            anchors.fill: blur
+            source: blur
+            radius: blurControl
+        }
+
+        Blend {
+            id: blend
+            anchors.fill: fastBlur
+            source: fastBlur
+            foregroundSource: fastBlur
+            mode: "softLight"
+            opacity: blurControlOpc
+        }
+
+        HueSaturation {
+            id: saturation
+            anchors.fill: blur
+            source: fastBlur
+            hue: 0
+            saturation: blurSaturation
+            lightness: 0
+        }
+
+        Image {
+            id: overlay
+            anchors.fill: blur
+            source: "qrc:/Resources/noise.png"
+            fillMode: Image.Tile
+        }
+
+        Blend {
+            id: blend2
+            anchors.fill: overlay
+            source: overlay
+            foregroundSource: saturation
+            mode: "addition"
+            opacity: 1
+        }
+
+        Rectangle {
+            id: blurColorOverlay
+            anchors.fill: blur
+            opacity: blurColorOpc//0.3
+            color: blurColor//"#161616"
+        }*/
     }
 
-//    Rectangle {
-//        anchors.bottom: parent.bottom
-//        anchors.bottomMargin: 0
-//        anchors.left: parent.left
-//        anchors.leftMargin: 0
-//        anchors.right: parent.right
-//        anchors.rightMargin: 0
-//        height: 2
-//        color: "#161616"
-//    }
-
+    Timer {
+        id: changeBlur
+        running: true
+        interval: 3000
+        repeat: true
+        onTriggered: {
+            blur.source = Context.blurEffect(main)
+        }
+    }
 
     function blurRefresh(arg) {
-        blur.source = ""
-        blur.source = arg
+        //blur.source = ""
+        //bgNormal.source = ""
+        //blur.source = arg
+        //bgNormal.source = arg
+        changeBlur.stop()
+        changeBlur.start()
     }
 
     function removeAllWindows() {
@@ -627,18 +677,17 @@ App {
                     if (menuOpened) {
                         menuOpened = false
                         btnCycle.border.color = main.detailColor
-                        neonMenu.blur.source = ""
-                        neonMenu.blur.source = "image://grab/crop"
+                        //neonMenu.blur.source = ""
+                        //neonMenu.blur.source = "image://grab/crop"
+                        neonMenu.aniMenu2.to = 0
+                        neonMenu.x = 0
                         neonMenu.visible = true
-
 
                         if (Context.modified() === 1) {
                             neonMenu.updateApps()
                         }
 
-                        neonMenu.x = 0
                         neonMenu.requestActivate()
-
                         //clickOpc = 0.3
                     } else {
 
@@ -652,7 +701,6 @@ App {
 
                         //neonMenu.addApps()
                     }
-
                     //activeWindow()
                 }
 
@@ -919,9 +967,9 @@ App {
 
                         if (accessOpened) {
 
-                            acessoRapido.accessBlur.source = ""
+                            //acessoRapido.accessBlur.source = ""
                             accessOpened = false
-                            acessoRapido.accessBlur.source = "image://grab/crop"
+                            //acessoRapido.accessBlur.source = "image://grab/crop"
                             acessoRapido.visible = true
                             acessoRapido.requestActivate()
                             //acessoRapido.aniAcess.to = main.width - 249
@@ -991,6 +1039,10 @@ App {
         main.visible = true
 
         fixedLaunchers.start()
+
+        changeBlur.stop()
+        changeBlur.start()
+
         //Context.gtkThemeChangeDetail(main.detailColor)
         //clockStart.start()
         //Context.libraryVoidLoad("write")

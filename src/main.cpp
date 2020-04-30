@@ -43,6 +43,7 @@ int main(int argc, char *argv[])
         settings.setValue("font", "Roboto Regular");
         settings.setValue("theme", "dark");
         settings.setValue("brightness", "normal"); //light normal extra
+        settings.setValue("transparent", 0);
     }
 
     int h = 40;
@@ -88,13 +89,14 @@ int main(int argc, char *argv[])
     //"_NET_WM_WINDOW_TYPE_DOCK" "_NET_WM_WINDOW_TYPE_DESKTOP"
     ctx->xchange(window->winId(), "_NET_WM_WINDOW_TYPE_DOCK");
 
+    /*
     BackgroundConnect bg;
     bg.main = window;
     QDBusConnection connection = QDBusConnection::sessionBus();
     connection.registerObject("/", &bg, QDBusConnection::ExportAllSlots);
     connection.connect("emmi.interface.background", "/", "emmi.interface.background", "BgConnect", &bg, SLOT(BgConnect()));
     connection.registerService("emmi.interface.background");
-
+    */
     threads->main = window;
     threads->ctx = ctx;
     threads->start();

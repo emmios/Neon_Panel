@@ -30,7 +30,7 @@ ApplicationWindow {
     Rectangle {
         id: showInfosBg
         anchors.fill: parent
-        color: "#000000"
+        color: main.detailInfoColor
         opacity: 0.75
         radius: 0
     }

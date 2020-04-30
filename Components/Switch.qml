@@ -21,7 +21,7 @@ Rectangle {
 
         if (mouseControl.effectEnd) {
             if (!mouseControl.active) {
-                animation.to = controlBtn.width - (controlBtn.width / 2)
+                animation.to = (controlBtn.width - (controlBtn.width / 2)) + 10
                 animation.start()
                 swit.value = true
             } else {
@@ -111,7 +111,7 @@ Rectangle {
     Component.onCompleted: {
 
         if (value) {
-            controlBtn.x = controlBtn.width - (controlBtn.width / 2)
+            controlBtn.x = (controlBtn.width - (controlBtn.width / 2)) + 10
             mouseControl.active = true
         } else {
             controlBtn.x = -(width / 2)

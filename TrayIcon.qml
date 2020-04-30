@@ -44,13 +44,48 @@ Rectangle {
         }
     }
 
+    ToolTip {
+        id: toolTip
+        x: 44
+        text: name
+        delay: 500
+        timeout: 3000
+        visible: false
+
+        property bool timeActive: false
+        property alias timer: timer
+
+        contentItem: Label {
+            text: toolTip.text
+            wrapMode: Text.WordWrap
+            font: toolTip.font
+            color: "#ffffff"
+        }
+
+        background: Rectangle {
+            opacity: 0.9
+            color: main.detailInfoColor
+        }
+
+        Timer {
+            id: timer
+            running: false
+            interval: 1000
+            repeat: false
+            onTriggered: {
+                if (toolTip.timeActive) {
+                    toolTip.visible = true
+                }
+            }
+        }
+    }
+
     MouseArea {
 
         anchors.fill: parent
         acceptedButtons: Qt.LeftButton | Qt.RightButton
 
         onClicked: {
-
             //acessoRapido.visible = false
             //acessoRapido.accessBlur.source = ""
             main.arrowAside.text = '\uf106'
@@ -71,6 +106,19 @@ Rectangle {
                 trayShowInfo.requestActivate()
                 neonMenu.textSearch.focus = false
             }
+        }
+
+        hoverEnabled: true
+
+        onHoveredChanged: {
+            toolTip.timeActive = true
+            toolTip.timer.stop()
+            toolTip.timer.start()
+        }
+
+        onExited: {
+            toolTip.visible = false
+            toolTip.timeActive = false
         }
     }
 

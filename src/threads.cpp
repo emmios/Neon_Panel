@@ -138,7 +138,8 @@ void Threads::run()
 
             for (int i = 0; i < trayList.length(); i++)
             {
-                if (ctx->xwindowTrayIcon(trayList[i].id).isNull())
+                //if (ctx->xwindowTrayIcon(trayList[i].id).isNull())
+                if (ctx->xwindowIcon(trayList[i].id, QSize(48, 48)).isNull())
                 {
                     //QMetaObject::invokeMethod(this->main, "removeTryIcon", Q_ARG(QVariant, (int)trayList[i].id));
                     signal->onRemoveTryIcon((int)trayList[i].id);
@@ -240,7 +241,7 @@ void Threads::run()
                     add = false;
                 }
 
-                if (ctx->xwindowTrayIcon(id).isNull())
+                if (ctx->xwindowIcon(id, QSize(48, 48)).isNull())
                 {
                     add = false;
                 }

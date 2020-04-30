@@ -2,6 +2,7 @@
     <qresource prefix="/">
         <file>main.qml</file>
         <file>utils.js</file>
+        <file>BlurEffect.qml</file>
     </qresource>
     <qresource prefix="/launchers">
         <file>Application.qml</file>

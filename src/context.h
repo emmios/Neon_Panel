@@ -30,6 +30,7 @@
 #include <QMatrix>
 #include <QSize>
 #include <QSettings>
+#include <QBuffer>
 //#include <QCryptographicHash>
 //#include <QTextStream>
 //#include <QByteArray>
@@ -94,6 +95,10 @@ public:
     Q_INVOKABLE QString getTheme();
     Q_INVOKABLE void setTheme(QString theme);
     Q_INVOKABLE QString getBrightness();
+    Q_INVOKABLE void setTransparent(int arg);
+    Q_INVOKABLE int getTransparent();
+    Q_INVOKABLE QString blurEffect(QVariant obj, int screeshot = 1);
+    Q_INVOKABLE void windowMove(QVariant obj, int x, int y, int w, int h);
     QPixmap getIconByClass(QString winId, QString wmclass);
     QString defaultIconApplications;
     QString basepath;
@@ -124,6 +129,7 @@ private:
     QString homePath;
     bool noDisplay;
     bool mixHicolor;
+    int transparent;
     QString font;
     QString theme;
     QString brightness;

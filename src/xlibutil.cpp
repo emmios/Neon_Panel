@@ -6,6 +6,39 @@ Xlibutil::Xlibutil()
 
 }
 
+int Xlibutil::xwindowMove(Window win, int x, int y, int w, int h)
+{
+    Display *d = XOpenDisplay(0);
+    Status status;
+    XEvent xevent;
+    Atom moveresize;
+
+    moveresize = XInternAtom(d, "_NET_MOVERESIZE_WINDOW", False);
+
+    if (!moveresize)
+    {
+        return -1;
+    }
+
+    if (y < 0) y = 0;
+
+    xevent.type = ClientMessage;
+    xevent.xclient.window = win;
+    xevent.xclient.message_type = moveresize;
+    xevent.xclient.format = 32;
+    xevent.xclient.data.l[0] = StaticGravity | (1 << 8) | (1 << 9) | (1 << 10) | (1 << 11);
+    xevent.xclient.data.l[1] = x;
+    xevent.xclient.data.l[2] = y;
+    xevent.xclient.data.l[3] = w;
+    xevent.xclient.data.l[4] = h;
+
+    status = XSendEvent(d, DefaultRootWindow(d), False,
+                SubstructureNotifyMask | SubstructureRedirectMask, &xevent);
+
+    XCloseDisplay(d);
+    return status;
+}
+
 int Xlibutil::numberOfscreens()
 {
     Display *d = XOpenDisplay(0); //QX11Info::display();
@@ -811,6 +844,7 @@ void Xlibutil::xaddDesktopFile(Window id, QString arg)
     XCloseDisplay(d);
 }
 
+/*
 QPixmap Xlibutil::xwindowIcon(Window window)
 {
     Display *d = XOpenDisplay(0);
@@ -873,4 +907,123 @@ QPixmap Xlibutil::xwindowTrayIcon(Window window)
     //XFlush(d);
     XCloseDisplay(d);
     return map;
+}
+*/
+
+QPixmap Xlibutil::xwindowScreenShot(Window window, bool argb)
+{
+    Display *d = XOpenDisplay(0);
+    QPixmap map;
+
+    XWindowAttributes attr;
+    XGetWindowAttributes(d, window, &attr);
+
+    XImage* ximage = XGetImage(d, window, 0, 0, attr.width, attr.height, AllPlanes, ZPixmap);
+    //XImage *ximage = XGetImage(d, window, 0, 0, attr.width, attr.height, XAllPlanes(), ZPixmap);
+    /*
+    if(ximage != NULL)
+    {
+        image = QImage((const uchar*) ximage->data, ximage->width, ximage->height, ximage->bytes_per_line,  QImage::Format_ARGB32_Premultiplied);
+        image = image.scaled(QSize(24, 24), Qt::KeepAspectRatio, Qt::SmoothTransformation);
+        map.fromImage(image);
+        return map;
+    }*/
+
+    if (ximage == NULL) return map;
+    if (ximage->data != NULL)
+    {
+        QImage image;
+        if (argb)
+        {
+            image = QImage((const uchar *)ximage->data, ximage->width, ximage->height, QImage::Format_ARGB32);
+        }
+        else
+        {
+            image = QImage((const uchar *)ximage->data, ximage->width, ximage->height, QImage::Format_RGB32);
+        }
+        image = image.scaled(QSize(ximage->width, ximage->height), Qt::KeepAspectRatio, Qt::SmoothTransformation);
+        map.convertFromImage(image);
+        //map = map.scaled(42, 42, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+        //map = map.scaled(42, 42, Qt::KeepAspectRatioByExpanding, Qt::SmoothTransformation);
+    }
+
+    return map;
+}
+
+QPixmap Xlibutil::xwindowIcon(Window window, QSize size, bool smooth)
+{
+    Display *d = XOpenDisplay(0);
+    Atom type;
+    int format;
+    unsigned long bytes_after;
+    ulong* data;
+    unsigned long nitems;
+    QPixmap map;
+
+    Atom prop = this->atom("_NET_WM_ICON");
+    //LONG_MAX
+    XGetWindowProperty(d, window, prop, 0, UINT32_MAX, False, AnyPropertyType,
+                       &type, &format, &nitems, &bytes_after, (uchar**)&data);
+
+    if (data != NULL)
+    {
+        int count = 0;
+        int tam = 0;
+        QVector<int> sizes = {128, 96, 64, 48, 32, 16};
+
+        for (int k = 0; k < sizes.length(); k++)
+        {
+            count = 0;
+            bool stop = false;
+            for (int i = 0; i < nitems; i++)
+            {
+                if (data[i] == sizes[k])
+                {
+                    tam = sizes[k];
+                    stop = true;
+                    break;
+                }
+                count++;
+            }
+            if (stop) break;
+        }
+
+        if (tam > 0)
+        {
+            QImage image(tam, tam, QImage::Format_ARGB32);
+            for (int i = 0; i < image.byteCount() / 4; ++i)
+            {
+                //uint*
+                //((uint32_t *)image.bits())[i] = data[i + 2];
+                ((uint32_t *)image.bits())[i] = data[count + 2];
+                count++;
+            }
+
+            if (smooth)
+            {
+                image = image.scaled(size, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+            }
+            else
+            {
+                image = image.scaled(size, Qt::KeepAspectRatio);
+            }
+            map.convertFromImage(image);
+            //map = map.scaled(42, 42, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+            //map = map.scaled(42, 42, Qt::KeepAspectRatioByExpanding, Qt::SmoothTransformation);
+        }
+    }
+
+    XFree(data);
+    XFlush(d);
+    XCloseDisplay(d);
+    return map;
+}
+
+Atom Xlibutil::atom(const char* atomName)
+{
+    Display *d = XOpenDisplay(0);
+    Atom atom = XInternAtom(d, atomName, false);
+    XFlush(d);
+    XCloseDisplay(d);
+    return atom;
 }

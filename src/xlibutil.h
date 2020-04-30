@@ -58,7 +58,6 @@ public:
     QString xwindowLauncher(Window window);
     void addDesktopFile(int pid, QString arg);
     void xaddDesktopFile(Window id, QString arg);
-    QPixmap xwindowIcon(Window window);
     XWindowAttributes attrWindow(Display *display, Window window);
     void resizeWindow(Display *display, Window window, int x, int y, unsigned int w, unsigned int h);
     void xwindowClose(Window window);
@@ -66,7 +65,12 @@ public:
     void xchangeProperty(Window window, const char * atom, const char * internalAtom, int format);
     void xchangeProperty(Window window, int atom, const char * internalAtom, int format);
     void openboxChange(Window window, long atom);
-    QPixmap xwindowTrayIcon(Window window);
+    int xwindowMove(Window win, int x, int y, int w, int h);
+    //QPixmap xwindowIcon(Window window);
+    //QPixmap xwindowTrayIcon(Window window);
+    QPixmap xwindowScreenShot(Window window, bool argb = false);
+    QPixmap xwindowIcon(Window window, QSize size, bool smooth = false);
+    Atom atom(const char* atomName);
     QString xgetWindowFocused();
     int xgetWindowFocusedId();
     void displayChange(int num);

@@ -22,7 +22,8 @@ public:
        if (id.contains("file://"))
        {
            QPixmap pixel(id.split("file://")[1], "PNG");
-           pixel.scaled(QSize(24, 24), Qt::KeepAspectRatio, Qt::SmoothTransformation);
+           //pixel.scaled(QSize(24, 24), Qt::KeepAspectRatio, Qt::SmoothTransformation);
+           pixel.scaled(QSize(24, 24), Qt::KeepAspectRatio);
            return pixel;
        }
 
@@ -34,7 +35,8 @@ public:
 
            if (pixel.isNull())
            {
-               pixel = ctx->xwindowTrayIcon((Window)QString(id.split(";")[0]).toInt());
+               //pixel = ctx->xwindowTrayIcon((Window)QString(id.split(";")[0]).toInt());
+               pixel = ctx->xwindowIcon((Window)QString(id.split(";")[0]).toInt(), QSize(24, 24), true);
            }
 
            if (pixel.isNull())

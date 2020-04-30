@@ -3,9 +3,9 @@ import QtQuick.Window 2.3
 import QtQuick.Controls 1.4
 import QtGraphicalEffects 1.0
 import QtQuick.Controls.Styles 1.4
+import "../"
 
-
-ApplicationWindow {
+Window {
     id: neonMenu
     visible: false
     x: 0//30
@@ -20,7 +20,7 @@ ApplicationWindow {
     property var menuElements: []
     property var textSearch: textSearch
     property string textColor: "#fff"
-    property alias blur: blur
+    //property alias blur: blur
     property alias aniMenu: aniMenu
     property alias aniMenu2: aniMenu2
 
@@ -70,15 +70,31 @@ ApplicationWindow {
             aniMenu.duration = 100
             aniMenu.stop()
             aniMenu.start()
-            /*
+
             aniMenu2.to = 0
-            aniMenu2.stop()
-            aniMenu2.start()
+            //aniMenu2.stop()
+            //aniMenu2.start()
             main.menuOpened = false
-            */
+
             neonMenu.x = 0
             visible = true
             //opacity = 1
+        }
+    }
+
+    onVisibleChanged: {
+        if (visible) {
+            neonMenu.x = 0
+            aniMenu2.to = 0
+            main.menuOpened = false
+            //aniMenu2.stop()
+            //aniMenu2.start()
+            main.menuOpened = false
+            if (neonMenu.width >= Screen.width - 10) {
+                blur.source = Context.blurEffect(neonMenu)
+            } else {
+                blur.source = Context.blurEffect(neonMenu, 0)
+            }
         }
     }
 
@@ -112,6 +128,25 @@ ApplicationWindow {
         }
     }
 
+
+    BlurEffect {
+        id: blur
+    }
+
+    Rectangle {
+        id: bg
+        anchors.fill: parent
+        color: blurColor
+        opacity: blurColorOpc
+    }
+
+    Image {
+        anchors.fill: parent
+        source: "/Resources/noise.png"
+        opacity: 0.1
+    }
+
+    /*
     Image {
         id: blur
         x: 0
@@ -172,7 +207,7 @@ ApplicationWindow {
         opacity: main.blurColorOpc//0.7
         color: main.blurColor//"#161616"
     }
-
+    */
 
     Rectangle {
         id: resize
@@ -217,6 +252,7 @@ ApplicationWindow {
                     //neonMenu.y = main.y - neonMenu.height//(neonMenu.height + 4)
                     textSearch.focus = false
                     textSearch.text = "Buscar..."
+                    blur.source = Context.blurEffect(neonMenu)
                 }
             }
 
@@ -533,11 +569,11 @@ ApplicationWindow {
 
     PropertyAnimation {id: aniMenu2; target: neonMenu; property: "x"; to: 0; duration: 200;
         onStopped: {
-            if (to === 30) {
-                neonMenu.x = 0
-            }
+            neonMenu.x = 0
+            aniMenu2.to = 0
         }
     }
+
     PropertyAnimation {id: aniMenu; target: neonMenu; property: "opacity"; to: 1; duration: 200;
         onStopped: {
             if (to === 0) {
@@ -548,12 +584,11 @@ ApplicationWindow {
                 main.clickOpc = main.startOpc
                 textSearch.focus = false
                 //addApps()
-                blur.source = ""
+                //blur.source = ""
                 desfocusApps()
                 arrowAside.text = '\uf106'
                 btnCycle.border.color = "#fff"
                 main.activeWindow()
-                neonMenu.x = 0
             }
         }
     }

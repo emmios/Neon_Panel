@@ -4,17 +4,17 @@ import QtQuick.Controls 1.4
 import QtGraphicalEffects 1.0
 import QtQuick.Controls.Styles 1.4
 import "qrc:/Components"
+import "../"
 
-
-ApplicationWindow {
+Window {
     id: acessoRapido
     visible: false
-    x: main.width - 249
+    x: main.width - acessoRapido.width
     y: 0//main.y - 310//(310 + 5)
     width: 250
-    height: Screen.height - main.height
+    height: Screen.height //- main.height
     title: "Synth-Panel"
-    color: "transparent"
+    color: "#00000000"
     opacity: 0
     flags: Qt.Tool | Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint | Qt.Popup
 
@@ -33,7 +33,7 @@ ApplicationWindow {
             aniAcess.stop()
             aniAcess.start()
 
-            aniAcess2.to = (main.width - 249) - 30
+            aniAcess2.to = (main.width - acessoRapido.width) - 30
             aniAcess2.stop()
             aniAcess2.start()
             main.accessOpened = true
@@ -44,14 +44,15 @@ ApplicationWindow {
             aniAcess.duration = 100
             aniAcess.stop()
             aniAcess.start()
-            /*
-            aniAcess2.to = main.width - 249
-            aniAcess2.stop()
-            aniAcess2.start()
-            main.accessOpened = false
-            */
 
-            acessoRapido.x = main.width - 249
+            aniAcess2.to = main.width - acessoRapido.width
+            //aniAcess2.stop()
+            //aniAcess2.start()
+            main.accessOpened = false
+
+            Context.windowMove(acessoRapido, acessoRapido.x, 0, acessoRapido.width, Screen.height)
+            acessoRapido.x = main.width - acessoRapido.width
+            blur.source = Context.blurEffect(acessoRapido, 0)
             visible = true
             //opacity = 1
         }
@@ -69,9 +70,28 @@ ApplicationWindow {
         */
         visible = false
         opacity = 0
-        acessoRapido.x = main.width - 249
+        acessoRapido.x = main.width - acessoRapido.width
     }
 
+
+    BlurEffect {
+        id: blur
+    }
+
+    Rectangle {
+        id: bg
+        anchors.fill: parent
+        color: blurColor
+        opacity: blurColorOpc
+    }
+
+    Image {
+        anchors.fill: parent
+        source: "/Resources/noise.png"
+        opacity: 0.1
+    }
+
+    /*
     Image {
         id: blur
         x: (~Screen.width) + (acessoRapido.width) + 1 //(~(Screen.width - acessoRapido.width)) + 1
@@ -129,7 +149,7 @@ ApplicationWindow {
         anchors.fill: blur
         opacity: main.blurColorOpc//0.7//main.opc
         color: main.blurColor//"#161616"
-    }
+    }*/
 
     Rectangle {
         id: acessUser
@@ -352,19 +372,51 @@ ApplicationWindow {
 
             Switch {
                 x: 182
-                y: 185
+                y: 188
+                height: 10
                 actived: (Context.getTheme() === "light") ? false : true
                 colorDetail: main.detailColor
                 onChange: {
                     if (value) {
                         themaName.text = qsTr("Dark")
-                        main.blurColor = "#161616"
+                        main.blurColor = "#333"//"#161616"
+                        main.detailInfoColor = "#161616"
                     } else {
                         themaName.text = qsTr("Light")
                         main.blurColor = "#999"
+                        main.detailInfoColor = "#999"
                     }
 
                     Context.setTheme(themaName.text)
+                }
+            }
+
+            Label {
+                x: 14
+                y: 216
+                text: qsTr("Transparent Bar")
+                color: "#fff"
+                font.pixelSize: 12
+                font.family: main.fontName
+            }
+
+            Switch {
+                x: 182
+                y: 220
+                height: 10
+                actived: Context.getTransparent() === 1 ? 1 : 0
+                colorDetail: main.detailColor
+                onChange: {
+
+                    if (value) {
+                        //main.bgNormal.visible = true
+                        main.blurArea.visible = false
+                        Context.setTransparent(1)
+                    } else {
+                        main.blurArea.visible = true
+                        //main.bgNormal.visible = false
+                        Context.setTransparent(0)
+                    }
                 }
             }
         }
@@ -1489,23 +1541,21 @@ ApplicationWindow {
         }
     }
 
-    PropertyAnimation {id: aniAcess2; target: acessoRapido; property: "x"; to: main.width - 249; duration: 200;
+    PropertyAnimation {id: aniAcess2; target: acessoRapido; property: "x"; to: main.width - acessoRapido.width; duration: 200;
         onStopped: {
-            if (to = (main.width - 249) - 30) {
-                acessoRapido.x = main.width - 249
-            }
+            acessoRapido.x = main.width - acessoRapido.width
+            aniAcess2.to = main.width - acessoRapido.width
         }
     }
     PropertyAnimation {id: aniAcess; target: acessoRapido; property: "opacity"; to: 1; duration: 200;
         onStopped: {
             if (to === 0) {
                 acessoRapido.visible = false
-                blur.source = ""
+                //blur.source = ""
                 main.arrowAside.text = '\uf106'
                 main.accessOpened = true
                 back()
                 main.activeWindow()
-                acessoRapido.x = main.width - 249
             }
         }
     }
