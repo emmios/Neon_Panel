@@ -20,6 +20,7 @@ Rectangle {
     }
 
     property int value: 0
+    property int max: 0
     property int perValue: 0
     property int percentage: -1
     property int position: -1
@@ -27,14 +28,14 @@ Rectangle {
     signal change
 
     function setPosition() {
-        perValue = parseInt((position * 100) / width)
+        perValue = parseInt((position * max) / width)
         value = position
         controlBtn.x = position - (controlBtn.width / 2)
     }
 
     function setPercentage() {
         perValue = percentage
-        value = parseInt((percentage * width) / 100)
+        value = parseInt((percentage * width) / max)
         controlBtn.x = value - (controlBtn.width / 2)
     }
 
@@ -107,7 +108,7 @@ Rectangle {
         onMouseXChanged: {
             if (move && 0 <= mouseX && parent.width >= mouseX) {
 
-                control.perValue = parseInt((mouseX * 100) / control.width)
+                control.perValue = parseInt((mouseX * max) / control.width)
                 control.value = mouseX
                 percentage = control.perValue
                 position = mouseX
@@ -116,7 +117,7 @@ Rectangle {
         }
 
         onClicked: {
-            control.perValue = parseInt((mouseX * 100) / control.width)
+            control.perValue = parseInt((mouseX * max) / control.width)
             control.value = mouseX
             percentage = control.perValue
             position = mouseX
@@ -125,18 +126,18 @@ Rectangle {
 
         onWheel: {
 
-            var scroll = wheel.angleDelta.y / 100
-            var per = parseInt((2 * control.width) / 100)
+            var scroll = wheel.angleDelta.y / max
+            var per = parseInt((2 * control.width) / max)
 
             if (scroll > 0) {
                 if (controlBtn.x < control.width - (controlBtn.width / 2)) {
                     percentage += per
-                    control.perValue = parseInt((control.value * 100) / control.width)
+                    control.perValue = parseInt((control.value * max) / control.width)
                 }
             } else {
                 if (controlBtn.x > -(controlBtn.width / 2)) {
                     percentage -= per
-                    control.perValue = parseInt((control.value * 100) / control.width)
+                    control.perValue = parseInt((control.value * max) / control.width)
                 }
             }
 

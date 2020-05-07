@@ -1532,6 +1532,7 @@ Window {
             width: 80
             height: 5
             percentage: 92
+            max: 200
             bg.color: "#fff"
             detail: main.detailColor
 
