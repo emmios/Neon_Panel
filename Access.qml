@@ -304,6 +304,7 @@ Window {
                 y: 70
                 width: 220
                 height: 8
+                max: 100
                 percentage: ContextPlugin.changeLight()//50
                 bg.color: "transparent"
                 detail: main.detailColor
@@ -338,6 +339,7 @@ Window {
                 y: 145
                 width: 220
                 height: 8
+                max: 100
                 percentage: ContextPlugin.changeDetail()//60
                 bg.color: "#fff"
                 detail: main.detailColor
@@ -609,6 +611,7 @@ Window {
                 y: 78
                 width: 160
                 height: 8
+                max: 100
                 percentage: ContextPlugin.volume()
                 bg.color: "#fff"
                 detail: main.detailColor
@@ -626,6 +629,7 @@ Window {
                     }
 
                     ContextPlugin.volume(perValue)
+                    percentage = perValue
                     volume2.percentage = perValue
                 }
             }
@@ -654,6 +658,7 @@ Window {
                 y: 140
                 width: 160
                 height: 8
+                max: 100
                 percentage: ContextPlugin.micro()
                 bg.color: "#fff"
                 detail: main.detailColor
@@ -667,6 +672,7 @@ Window {
                     }
 
                     ContextPlugin.micro(perValue)
+                    percentage = perValue
                 }
             }
         }
@@ -1496,6 +1502,7 @@ Window {
             y: (parent.height / 2) - 2
             width: 80
             height: 5
+            max: 100
             percentage: ContextPlugin.volume()
             bg.color: "#fff"
             detail: main.detailColor
@@ -1513,6 +1520,7 @@ Window {
                 }
 
                 ContextPlugin.volume(perValue)
+                percentage = perValue
                 volume.percentage = perValue
             }
         }
@@ -1538,6 +1546,7 @@ Window {
 
             onChange: {
                 ContextPlugin.brightness(perValue)
+                percentage = perValue
             }
         }
     }
